@@ -1,7 +1,7 @@
 const routes = {
   home: '/',
-  village: '/nongho',
-  product: '/sanpham',
+  villages: '/nongho',
+  products: '/sanpham',
 };
 
 export default routes;

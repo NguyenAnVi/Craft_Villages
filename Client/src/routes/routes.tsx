@@ -12,11 +12,11 @@ const publicRoutes = [
     component: Home,
   },
   {
-    path: config.routes.village,
+    path: config.routes.villages,
     component: Village,
   },
   {
-    path: config.routes.product,
+    path: config.routes.products,
     component: Product,
   },
 ];
