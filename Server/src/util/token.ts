@@ -3,7 +3,7 @@ import config from '../config/config'
 import mongoose from 'mongoose'
 
 interface UserProfile {
-    _id?: mongoose.Types.ObjectId
+    _id?: mongoose.Schema.Types.ObjectId
 }
 interface TokenPayload{
     sub: mongoose.Schema.Types.ObjectId

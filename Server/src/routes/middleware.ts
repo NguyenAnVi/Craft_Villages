@@ -1,15 +1,14 @@
 import {token} from '../util/token'
 import { Request, Response, NextFunction } from 'express';
 import { Schema } from 'mongoose';
-import VillageModel, { VillageDocument } from '../models/Village';
+import UserModel, { UserDocument } from '../models/User';
 
 interface TokenPayload{
-  sub: Schema.Types.ObjectId,
-  role: string,
+  sub: Schema.Types.ObjectId
 }
 
 interface ModRequest extends Request{
-  user: VillageDocument
+  user: UserDocument
 }
 
 const loginRequired = (req:ModRequest, res:Response, next:NextFunction) => {
@@ -18,7 +17,7 @@ const loginRequired = (req:ModRequest, res:Response, next:NextFunction) => {
   const tryToken = req.header('Authorization').split(' ')[0];
   token.verifyToken(tryToken, (err:string, payload:TokenPayload) => {
     if (err) return res.status(401).send(err);
-    VillageModel.findById(payload.sub)
+    UserModel.findById(payload.sub)
       .then((result) => {
         if (!result) {
           return res.status(404).send({
