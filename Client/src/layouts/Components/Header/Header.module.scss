@@ -6,7 +6,7 @@
   width: 100% !important;
   height: var(--default-layout-header-height);
   background-color: orange;
-  box-shadow: 0 0 5px rgb(0 0 0 / 18%);
+  box-shadow: 0 0 15px rgb(0 0 0 / 50%);
 }
 
 .inner {
@@ -35,6 +35,7 @@
 .right-header {
   width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -48,6 +49,11 @@
   text-decoration: none;
   color: black;
   &:hover {
+    color: orange;
+    background-color: black;
+  }
+
+  &.active {
     color: orange;
     background-color: black;
   }
