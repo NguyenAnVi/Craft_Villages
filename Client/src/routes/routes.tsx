@@ -5,6 +5,8 @@ import config from 'src/config';
 import Home from 'src/pages/Home';
 import Village from 'src/pages/Village';
 import Product from 'src/pages/Product';
+import Introduce from '~/pages/Introduce';
+import Contact from '~/pages/Contact';
 
 const publicRoutes = [
   {
@@ -18,6 +20,14 @@ const publicRoutes = [
   {
     path: config.routes.products,
     component: Product,
+  },
+  {
+    path: config.routes.introduce,
+    component: Introduce,
+  },
+  {
+    path: config.routes.contact,
+    component: Contact,
   },
 ];
 
