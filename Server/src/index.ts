@@ -1,49 +1,33 @@
-import cors from "cors";
-import dotenv from 'dotenv';
 import express from "express";
-import mongoose from 'mongoose';
+
+import cors from "cors";
+import compression from "compression";
+import cookieParser from "cookie-parser";
 import createError from "http-errors";
 
-import config from "./config/config";
-
-import {loginRequired} from './routes/middleware'
-import {default as testRouter} from "./routes/users";
-import {signin, signup} from './routes/authentication';
-import {default as adminRouter} from './routes/admins';
-import {default as villageRouter} from "./routes/villages";
-
-const app = express();
-dotenv.config();
-
-if(!config.jwt_secret || config.jwt_secret==="unsafe_jwt_secret") {
-  const err = new Error('No JWT_SECRET in env variable');
-}
-
-mongoose.connect(config.db.uri, { useNewUrlParser: false } as mongoose.ConnectOptions)
-  .then(() => console.log('MongoDB Connected \n'+config.db.uri))
-  .catch(err => console.log(err))
+import router from "./router";
+import config from "./config";
+import { Database } from "./provider/database";
 
 const PORT = config.app.PORT;
 
-app.use(cors());
+const app = express();
 
+app.use(cors());
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-app.use("/", testRouter);
+Database.init();
 
-// authentication routes
-app.post('/signup', signup)
-app.post('/signin', signin)
+app.use("/", router());
 
-// need login routes
-app.use("/admin",loginRequired,adminRouter);
-app.use("/village",loginRequired,villageRouter);
-
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
-});
+app.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    next(createError(404));
+  }
+);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on PORT ${PORT} http://localhost:${PORT}`);
