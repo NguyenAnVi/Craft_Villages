@@ -14,8 +14,12 @@
   user-select: none;
   box-shadow: 0 2px 3px 0 rgb(0 0 0 / 30%);
 
+  &:hover {
+    filter: brightness(110%);
+  }
+
   &:active {
-    filter: brightness(120%);
+    filter: brightness(130%);
   }
 }
 
@@ -25,7 +29,7 @@
   color: var(--white);
 }
 .yellow {
-  background-color: var(--yellow);
+  background-color: var(--yellow02);
   color: var(--dark);
 }
 

@@ -7,6 +7,7 @@
   border: 1.5px solid transparent;
   border-radius: 50px;
   background-color: var(--white);
+  box-shadow: 0 2px 3px 0 rgb(0 0 0 / 30%);
 
   input {
     flex: 1;
@@ -35,12 +36,17 @@
     }
   }
   &:focus-within {
-    border-color: var(--gray);
+    border-color: var(--secondary);
     background-color: var(--white);
   }
   &:has(button:focus) {
-    border: 1.5px solid transparent;
+    border-color: white;
   }
+}
+
+// button
+.search-btn {
+  color: var(--yellow);
 }
 
 .loading,

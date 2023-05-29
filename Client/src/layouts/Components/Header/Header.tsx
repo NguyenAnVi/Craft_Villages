@@ -4,6 +4,7 @@ import styles from './Header.module.scss';
 import config from '~/config';
 import { Link, NavLink } from 'react-router-dom';
 import Button from '~/components/Button';
+import Search from '~/components/Search';
 
 const cx = classNames.bind(styles);
 
@@ -43,6 +44,7 @@ function Header() {
           </NavLink>
         </div>
         <div className={cx('right-header')}>
+          <Search />
           <Button color="yellow" border="circle">
             Đăng nhập
           </Button>
