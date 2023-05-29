@@ -62,14 +62,14 @@ const signup = (req: Request, res:Response, next:NextFunction) => {
         .then( (admin) => {
           const user = new UserModel({name, phone, password, email, admin:admin.adminId });
           user.save()
-            .then((savedResult:UserDocument) => {
+            .then((savedResult) => {
               if (!savedResult) {
-                console.log("a document has been added on User");
                 return next(savedResult)
               }
+              console.log("a document has been added on User:", savedResult);
               res.json({
                 success: true,
-                token: token.generateToken(r)
+                token: token.generateToken(savedResult)
               })
             })
             .catch((err:Error) => {

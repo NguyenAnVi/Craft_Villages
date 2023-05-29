@@ -3,7 +3,7 @@ import config from '../config/config'
 import mongoose from 'mongoose'
 
 interface UserProfile {
-    _id?: mongoose.Schema.Types.ObjectId
+    id?: mongoose.Schema.Types.ObjectId
 }
 interface TokenPayload{
     sub: mongoose.Schema.Types.ObjectId
@@ -14,7 +14,7 @@ const token = {
     generateToken (user: UserProfile) {
         const timeStamp = new Date().getTime();
         const payload = {
-            sub: user._id
+            sub: user.id
         }
         return jwt.encode(payload, config.jwt_secret);
     },
