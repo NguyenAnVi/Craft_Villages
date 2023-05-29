@@ -45,7 +45,10 @@ const Search = (props: Props) => {
   return (
     <div className={cx('search')}>
       <Button>
-        <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+        <FontAwesomeIcon
+          className={cx('search-btn')}
+          icon={faSearch}
+        ></FontAwesomeIcon>
       </Button>
       <input
         ref={inputRef}
