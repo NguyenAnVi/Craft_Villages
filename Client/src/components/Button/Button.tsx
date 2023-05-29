@@ -1,9 +1,38 @@
-import React from 'react';
+import classNames from 'classnames/bind';
 
-type Props = {};
+import styles from './Button.module.scss';
 
-const Button = (props: Props) => {
-  return <div>Button</div>;
+const cx = classNames.bind(styles);
+
+type ButtonProps = {
+  className?: String;
+  children?: React.ReactNode;
+  color?: 'primary' | 'yellow';
+  size?: string;
+  border?: 'round' | 'circle';
+} & Omit<React.ComponentProps<'button'>, 'children'>;
+
+const Button = ({
+  className,
+  color,
+  size,
+  border,
+  children,
+  ...rest
+}: ButtonProps) => {
+  const classes = cx(
+    'wrapper',
+    { className: [className] },
+    color,
+    size,
+    border,
+  );
+
+  return (
+    <button className={classes} {...rest}>
+      {children}
+    </button>
+  );
 };
 
 export default Button;
