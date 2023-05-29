@@ -1,0 +1,39 @@
+.wrapper {
+  margin: 0 5px;
+  padding: 8px 14px;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--dark);
+  background-color: var(--white);
+  user-select: none;
+  box-shadow: 0 2px 3px 0 rgb(0 0 0 / 30%);
+
+  &:active {
+    filter: brightness(120%);
+  }
+}
+
+// button types
+.primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.yellow {
+  background-color: var(--yellow);
+  color: var(--dark);
+}
+
+// borders
+.round {
+  border-radius: 8px;
+}
+
+.circle {
+  border-radius: 50px !important;
+}
