@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 import bluebird from "bluebird";
 import { MongoError } from "mongodb";
 
-import config from "../config";
+import Locals from "./locals";
 
 export class Database {
   public static init(): any {
     (mongoose as any).Promise = bluebird;
     mongoose
-      .connect(config.db.MONGO_URL)
+      .connect(Locals.config().mongoUri)
       .then(() => {
         console.log("Connected to MongoDB!");
       })

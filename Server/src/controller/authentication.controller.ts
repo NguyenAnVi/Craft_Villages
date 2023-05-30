@@ -1,95 +1,177 @@
 import { Request, Response, NextFunction } from "express";
-import UsersModel, { IUsersModel } from "../models/users.model";
-import { token } from "../util/token";
+import { body, check, validationResult } from "express-validator";
 
-export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res
-      .status(422)
-      .send({ error: "You must provide email and password." });
-  }
+import UserModel from "../models/user.model";
+import { UserDocument, AuthToken } from "../interfaces/model/users";
+import Locals from "../provider/locals";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import passport from "passport";
+import { IVerifyOptions } from "passport-local";
+import "../config/passport";
+class Authentication {
+  public static async SignIn(
+    req: any,
+    res: any,
+    next: NextFunction
+  ): Promise<void> {
+    await check("email", "E-mail cannot be blank").notEmpty().run(req);
+    await check("email", "E-mail is not valid").isEmail().run(req);
+    await check("password", "Password cannot be blank").notEmpty().run(req);
+    await check("password", "Password length must be atleast 8 characters")
+      .isLength({ min: 8 })
+      .run(req);
+    await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
 
-  try {
-    const user = await UsersModel.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "Not found" });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      //   req.flash("errors", errors.array());
+      return res.status(400).json({
+        errors,
+      });
     }
-    user.comparedPassword(
-      password,
-      user.password,
-      (err: Error, good: boolean) => {
-        if (err || !good) {
-          return res
-            .status(401)
-            .send(err?.message || { error: "Wrong password or phone number" });
+    passport.authenticate(
+      "local",
+      (err: Error, user: UserDocument, info: IVerifyOptions) => {
+        if (err) {
+          return next(err);
         }
-        // let role;
-        // if (user.village !== undefined) {
-        //   console.log(Date.now() + " - a village has logged in");
-        //   role = "VILLAGE";
-        // }
-        // if (user.admin !== undefined) {
-        //   console.log(Date.now() + " - an admin has logged in");
-        //   role = "ADMIN";
-        // }
-        const initToken = token.generateToken(user);
-        res.cookie("AUTH_USER", initToken, {
-          domain: "localhost",
-          path: "/",
+        if (!user) {
+          //   req.flash("errors", { msg: info.message });
+          return res.status(400).json({ info: info.message });
+        }
+        req.logIn(user, (errorLogin: Error) => {
+          if (errorLogin) {
+            return next(errorLogin);
+          }
+          //   req.flash("success", { msg: "Success! You are logged in." });
+          return res.status(200).json({ message: "Login successfully" });
         });
-        return res
-          .status(200)
-          .json({ message: "Login successfully", token: initToken });
       }
-    );
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Error server" });
+    )(req, res, next);
   }
-};
 
-// export const register = (req: Request, res: Response, next: NextFunction) => {
-//   const { phone, password, name, email } = req.body;
-//   if (!phone || !password || !name) {
-//     return res
-//       .status(422)
-//       .send({ error: "You must provide name, phone and password." });
-//   }
-//   try {
-//     UsersModel.findOne({
-//       $or: [{ phone }, { email }],
-//     }).then((r: IUsersModel) => {
-//       if (r) {
-//         return res.status(422).send({ error: "Phone or email is in use" });
-//       } else {
-//         new AdminModel<AdminDocument>().save().then((admin) => {
-//           const user = new UsersModel({
-//             name,
-//             phone,
-//             password,
-//             email,
-//             admin: admin.adminId,
+  public static async SignUp(
+    req: any,
+    res: any,
+    next: NextFunction
+  ): Promise<void> {
+    const { email, password } = req.body;
+
+    await check("email", "E-mail cannot be blank").notEmpty().run(req);
+    await check("email", "E-mail is not valid").isEmail().run(req);
+    await check("password", "Password cannot be blank").notEmpty().run(req);
+    await check("password", "Password must be at least 8 characters long")
+      .isLength({ min: 8 })
+      .run(req);
+
+    // await check("confirmPassword", "Password do not match")
+    //   .equals(password)
+    //   .run(req);
+    await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      req.flash("errors", errors.array());
+      return res.status(400).json({
+        errors,
+      });
+    }
+
+    UserModel.findOne({ email })
+      .then((existingUser) => {
+        if (existingUser) {
+          // req.flash("errors", {
+          //   msg: "Account with that email address already exists.",
+          // });
+          return res.status(422).json({ message: "User existing" });
+        }
+        UserModel.create({ email, password })
+          .then((createUser) => {
+            if (createUser)
+              return res
+                .status(200)
+                .json({ message: "Create user successfully" });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).json({ message: "Error Server" }, err);
+          });
+      })
+      .catch((err) => {
+        return next(err);
+      });
+  }
+}
+
+// let role;
+// if (user.village !== undefined) {
+//   console.log(Date.now() + " - a village has logged in");
+//   role = "VILLAGE";
+// }
+// if (user.admin !== undefined) {
+//   console.log(Date.now() + " - an admin has logged in");
+//   role = "ADMIN";
+// }
+
+export default Authentication;
+
+// const { email, password } = req.body;
+//     await UserModel.findOne({ email })
+//       .then((user) => {
+//         if (!user) {
+//           return res.status(404).json({ message: "Not found" });
+//         }
+//         if (!user.password) {
+//           return res.status(404).json({
+//             message: "Please SignIn using your social creds",
 //           });
-//           user
-//             .save()
-//             .then((savedResult) => {
-//               if (!savedResult) {
-//                 return next(savedResult);
-//               }
-//               console.log("a document has been added on User:", savedResult);
-//               res.json({
-//                 success: true,
-//                 token: token.generateToken(savedResult),
+//         }
+//         user.comparePassword(
+//           password,
+//           (errorCompare: Error, isMatch: boolean) => {
+//             if (errorCompare) {
+//               return res.status(500).json({
+//                 error: errorCompare,
 //               });
-//             })
-//             .catch((err: Error) => {
-//               res.status(500).send({ message: "Error saving :" + err.message });
-//             });
-//         });
-//       } // if (result) else
-//     }); // then
-//   } catch (err) {
-//     res.status(500).send({ message: "Error saving :" + err.message });
-//   }
-// };
+//             }
+
+//             if (!isMatch) {
+//               return res.status(401).json({
+//                 error: "Password does not match!",
+//               });
+//             }
+
+//             const tokenUser = jwt.sign(
+//               { _id: user._id },
+//               Locals.config().appSecret,
+//               {
+//                 expiresIn: Locals.config().expiresIn * 60,
+//               }
+//             );
+
+//             UserModel.findOneAndUpdate(
+//               { _id: user._id },
+//               { accessToken: tokenUser },
+//               (errorUpdate: Error, userUpdate: UserDocument) => {
+//                 if (errorUpdate) {
+//                   return res.status(400).json("Update error...");
+//                 } else if (userUpdate) {
+//                   res.cookie("AUTH_USER", tokenUser, {
+//                     domain: "localhost",
+//                     path: "/",
+//                   });
+//                   return res
+//                     .status(200)
+//                     .json({ message: "SignIn successfully", tokenUser });
+//                 }
+//               }
+//             );
+//           }
+//         );
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         return res.status(500).json({ error: err });
+//       });
