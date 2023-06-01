@@ -1,0 +1,33 @@
+.wrapper {
+  padding: 1% 12%;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--yellow);
+  a,
+  a:hover {
+    text-decoration: none;
+    font-style: italic;
+    color: var(--yellow);
+  }
+}
+
+.line-heading {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  margin: 0 0.5rem;
+  overflow: hidden;
+  border-left: 5px solid var(--yellow);
+  h4 {
+    margin: 0 20px 0;
+  }
+}
+
+.item-list {
+  display: flex;
+  padding: 20px 30px;
+}
