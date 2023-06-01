@@ -9,8 +9,10 @@ class Locals {
     const appScret = process.env.APP_SECRET;
     const jwtExpiresIn = process.env.JWT_EXPIRES_IN;
     const mongoUri = process.env.MONGO_URI;
-    const sessionSecret = process.env.SESSION_SECRET
-    return { port, appScret, jwtExpiresIn, mongoUri, sessionSecret };
+    const sessionSecret = process.env.SESSION_SECRET;
+    const mailerUsername = process.env.MAILER_USERNAME;
+    const mailerPassword = process.env.MAILER_PASSWORD;
+    return { port, appScret, jwtExpiresIn, mongoUri, sessionSecret, mailerUsername, mailerPassword };
   }
 }
 export default Locals;

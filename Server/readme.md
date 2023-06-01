@@ -5,9 +5,12 @@ This project is a Web Server manage , with **Express**, **TypeScript**
 Create file ```/.env``` with contents:
 ```
 PORT=3001
-JWT_SECRET=craftvillages
+JWT_EXPIRES_IN=30
+APP_SECRET=craftvillages
 MONGODB_URI=<YOUR_MONGODB_URI>
-MONGODB_DBNAME=craftvillages
+SESSION_SECRET=craftvillages
+MAILER_PASSWORD=<your_app_token>
+MAILER_USERNAME=<your_email>
 ```
 
 Open terminal run this command:
@@ -23,26 +26,37 @@ npm start
 
 # Usage
 Available routes, use **Postman** for more info
-* POST - **/signup**  with the body look like this:
+* POST - **/signup**, **/signin**  with the body look like this:
   ```
   {
-    "phone":"0123456789",
     "password":"111111",
     "email":"abc@handicraft.vn",
-    "name":"Village1",
-    "address":"152, Ba Thang Hai Str.",
-    "group":"",
-    "ward": "Xuan Khanh",
-    "district":"Ninh Kieu",
-    "city":"Can Tho",
-    "workers":29
-  }
-  ```
-* POST - **/signin**  with the body look like this:
-  ```
-  {
-    phone: < user's phone number >,
-    password: < user's password >
   }
   ```
 nav122333 - 27/05/2023
+* POST - **/notification/create**  with the body look like this:
+  ```
+  {
+    "sender":"<sender UID 1>",
+    "sendemail":"<true | false>",
+    "receivers":[
+      "<receiver UID 1>", 
+      "<receiver UID 2>",
+      ...
+    ],
+    "header":"This is title",
+    "body":"Bodytext"
+  }
+  ```
+* POST - **/notification/fetch**  with the body look like this:
+  ```
+  {
+    "id":"<reveicer uid>",
+    "filter":{ //this is optional
+      "read": "true",
+      ...
+    }
+  }
+  ```
+* GET - **/notification/read/\<notificationID>** will get the notification has _id = \<notificationID>
+nav122333 - 01/06/2023
