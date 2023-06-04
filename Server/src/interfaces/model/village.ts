@@ -12,8 +12,8 @@ export type VillageDocument = mongoose.Document & {
   district: string;
   city: string;
   majorWork: string;
-  materials: [string];
-  product_id: [mongoose.Schema.Types.ObjectId];
+  materials: Array<String>;
+  product_id: Array<mongoose.Schema.Types.ObjectId>;
   workers: string;
   qrCode: string;
   description: string;
