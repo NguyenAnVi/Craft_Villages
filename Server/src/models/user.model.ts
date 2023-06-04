@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema<UserDocument>(
     phone: {
       type: String,
       unique: true,
+      sparse: true,
       validate: {
         validator (v: string) {
           return /^[0-9]{10}$/.test(v);
