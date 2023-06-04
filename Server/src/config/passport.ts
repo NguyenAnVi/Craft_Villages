@@ -2,7 +2,7 @@ import passport from "passport";
 import passportLocal from "passport-local";
 import { find } from "lodash";
 
-import { UserDocument } from "../interfaces/model/users";
+import { UserDocument } from "../interfaces/model/user";
 import UserModel from "../models/user.model";
 
 import { Request, Response, NextFunction } from "express";
@@ -67,23 +67,24 @@ export const isAuthenticated = (
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login");
+  res.status(401).json("You have no permission to access this page");
 };
 
 /**
  * Authorization Required middleware.
  */
-export const isAuthorized = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const provider = req.path.split("/").slice(-1)[0];
+// export const isAuthorized = (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   const provider = req.path.split("/").slice(-1)[0];
+//   console.log(provider);
 
-  const user = req.user as UserDocument;
-  if (find(user.tokens, { kind: provider })) {
-    next();
-  } else {
-    res.redirect(`/auth/${provider}`);
-  }
-};
+//   const user = req.user as UserDocument;
+//   if (find(user.tokens, { kind: provider })) {
+//     next();
+//   } else {
+//     res.status(401).json("You have no permission to access this page");
+//   }
+// };

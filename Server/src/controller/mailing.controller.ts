@@ -4,7 +4,7 @@ import NotificationsModel from "../models/notifications.model";
 import INotifications from '../interfaces/model/notifications';
 import userModel from '../models/user.model';
 import notificationMailForm from '../config/notificationMailForm';
-import UserDocument from '../interfaces/model/users';
+import UserDocument from '../interfaces/model/user';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',

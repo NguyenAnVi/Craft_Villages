@@ -23,7 +23,7 @@ export type UserDocument = mongoose.Document & {
   };
   roleAdmin: string;
   isAdmin: boolean;
-  village_id: mongoose.Schema.Types.ObjectId | null;
+  village_id: mongoose.Schema.Types.ObjectId;
   tokens: AuthToken[];
   comparePassword: comparePasswordFunction;
 };

@@ -2,10 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { body, check, validationResult } from "express-validator";
 
 import UserModel from "../models/user.model";
-import { UserDocument, AuthToken } from "../interfaces/model/users";
+import { UserDocument, AuthToken } from "../interfaces/model/user";
 import Locals from "../provider/locals";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import passport from "passport";
 import { IVerifyOptions } from "passport-local";
 import "../config/passport";
@@ -25,7 +24,6 @@ class Authentication {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      //   req.flash("errors", errors.array());
       return res.status(400).json({
         errors,
       });
@@ -37,19 +35,24 @@ class Authentication {
           return next(err);
         }
         if (!user) {
-          //   req.flash("errors", { msg: info.message });
-          return res.status(400).json({ info: info.message });
+          return res.status(400).json({ message: info.message, status: false });
         }
         req.logIn(user, (errorLogin: Error) => {
           if (errorLogin) {
             return next(errorLogin);
           }
-          //   req.flash("success", { msg: "Success! You are logged in." });
-          return res.status(200).json({ message: "Login successfully" });
+          return res
+            .status(200)
+            .json({ message: "Login successfully", status: true });
         });
       }
     )(req, res, next);
   }
+
+  public static logout = (req: any, res: any, next: NextFunction) => {
+    req.logout();
+    res.status(200).json({ message: "Logout successfully", status: true });
+  };
 
   public static async SignUp(
     req: any,
@@ -73,30 +76,30 @@ class Authentication {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      req.flash("errors", errors.array());
       return res.status(400).json({
         errors,
       });
     }
 
     UserModel.findOne({ email })
-      .then((existingUser) => {
+      .then((existingUser: UserDocument) => {
         if (existingUser) {
-          // req.flash("errors", {
-          //   msg: "Account with that email address already exists.",
-          // });
-          return res.status(422).json({ message: "User existing" });
+          return res
+            .status(422)
+            .json({ message: "User existing", status: false });
         }
         UserModel.create({ email, password })
           .then((createUser) => {
             if (createUser)
               return res
                 .status(200)
-                .json({ message: "Create user successfully" });
+                .json({ message: "Create user successfully", status: true });
           })
           .catch((err) => {
             console.log(err);
-            return res.status(500).json({ message: "Error Server" }, err);
+            return res
+              .status(500)
+              .json({ message: "Error Server", status: false, err });
           });
       })
       .catch((err) => {
@@ -116,62 +119,3 @@ class Authentication {
 // }
 
 export default Authentication;
-
-// const { email, password } = req.body;
-//     await UserModel.findOne({ email })
-//       .then((user) => {
-//         if (!user) {
-//           return res.status(404).json({ message: "Not found" });
-//         }
-//         if (!user.password) {
-//           return res.status(404).json({
-//             message: "Please SignIn using your social creds",
-//           });
-//         }
-//         user.comparePassword(
-//           password,
-//           (errorCompare: Error, isMatch: boolean) => {
-//             if (errorCompare) {
-//               return res.status(500).json({
-//                 error: errorCompare,
-//               });
-//             }
-
-//             if (!isMatch) {
-//               return res.status(401).json({
-//                 error: "Password does not match!",
-//               });
-//             }
-
-//             const tokenUser = jwt.sign(
-//               { _id: user._id },
-//               Locals.config().appSecret,
-//               {
-//                 expiresIn: Locals.config().expiresIn * 60,
-//               }
-//             );
-
-//             UserModel.findOneAndUpdate(
-//               { _id: user._id },
-//               { accessToken: tokenUser },
-//               (errorUpdate: Error, userUpdate: UserDocument) => {
-//                 if (errorUpdate) {
-//                   return res.status(400).json("Update error...");
-//                 } else if (userUpdate) {
-//                   res.cookie("AUTH_USER", tokenUser, {
-//                     domain: "localhost",
-//                     path: "/",
-//                   });
-//                   return res
-//                     .status(200)
-//                     .json({ message: "SignIn successfully", tokenUser });
-//                 }
-//               }
-//             );
-//           }
-//         );
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//         return res.status(500).json({ error: err });
-//       });

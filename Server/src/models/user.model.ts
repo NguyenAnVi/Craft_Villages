@@ -1,7 +1,7 @@
 import mongoose from "../provider/database";
 import UserDocument, {
   comparePasswordFunction,
-} from "../interfaces/model/users";
+} from "../interfaces/model/user";
 import bcrypt from "bcrypt";
 
 // Define the model
@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema<UserDocument>(
       lowercase: true,
       unique: true,
       validate: {
-        validator (v: string) {
+        validator(v: string) {
           return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
         },
         message: (props: { value: any }) =>
@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema<UserDocument>(
       unique: true,
       sparse: true,
       validate: {
-        validator (v: string) {
+        validator(v: string) {
           return /^[0-9]{10}$/.test(v);
         },
         message: (props: { value: any }) =>
@@ -98,4 +98,5 @@ const comparePassword: comparePasswordFunction = function (
 UserSchema.methods.comparePassword = comparePassword;
 
 // Export the model
-export default mongoose.model<UserDocument>("user", UserSchema);
+const UserModel = mongoose.model<UserDocument>("user", UserSchema);
+export default UserModel;
