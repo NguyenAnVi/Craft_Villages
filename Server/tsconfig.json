@@ -7,11 +7,11 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
       "*": ["node_modules/*"],
-      "@controller/*": ["controllers/*"], // alias cho đường dẫn đến các file trong thư mục /src/controllers
-      "@models/*": ["models/*"], // alias cho đường dẫn đến các file trong thư mục /src/models
+      "@controller/*": ["controller/*"], 
+      "@models/*": ["models/*"],
       "@ỉnterfaces/*": ["interfaces/*"],
       "@middleware/*": ["middleware/*"],
       "@router/*": ["router/*"],

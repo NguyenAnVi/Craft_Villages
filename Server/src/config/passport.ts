@@ -9,11 +9,11 @@ import { Request, Response, NextFunction } from "express";
 
 const LocalStrategy = passportLocal.Strategy;
 
-passport.serializeUser<any, any>((req, user, done) => {
-  done(undefined, user);
+passport.serializeUser<any, any>((req, user: UserDocument, done) => {
+  done(undefined, user._id);
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((id: string, done) => {
   UserModel.findById(id)
     .then((user) => {
       done(null, user);
@@ -67,7 +67,7 @@ export const isAuthenticated = (
   if (req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json("You have no permission to access this page");
+  return res.status(401).json("You have no permission to access this page");
 };
 
 /**

@@ -1,3 +1,5 @@
+import 'module-alias/register';
+
 import express from "express";
 
 import cors from "cors";
@@ -9,10 +11,12 @@ import MongoStore from "connect-mongo";
 
 import cookieParser from "cookie-parser";
 import createError from "http-errors";
+import moment from "moment";
 
-import router from "./router";
+import router from "@router/index";
 import Locals from "./provider/locals";
 import { Database } from "./provider/database";
+import { mongo } from "mongoose";
 
 const PORT = Locals.config().port;
 const MONGO_URI = Locals.config().mongoUri;
@@ -24,26 +28,28 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 Database.init();
+const store = MongoStore.create({
+  mongoUrl: MONGO_URI,
+  touchAfter: 24 * 3600, // time period in seconds
+  autoRemove: "interval",
+  autoRemoveInterval: 60, // In minutes. Default
+  ttl: 60 * 60 * 24, // Thời gian sống của session là 1 ngày
+});
 app.use(
   session({
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 3600000, // Thời gian sống của session là 1 giờ (1 tiếng)
+    },
     secret: Locals.config().sessionSecret,
-    store: new MongoStore({
-      mongoUrl: MONGO_URI,
-      // mongoOptions: {
-      //   autoReconnect: true,
-      // },
-    }),
+    store,
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
-});
 app.use("/", router());
 
 app.use(

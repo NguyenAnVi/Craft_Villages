@@ -2,21 +2,23 @@ import { comparePasswordFunction } from "./../interfaces/model/user";
 import { NextFunction } from "express";
 import UserModel from "@models/user.model";
 import VillageModel from "@models/village.model";
+import ProductModel from "@models/product.model";
 import UserDocument from "@ỉnterfaces/model/user";
 import VillageDocument from "@ỉnterfaces/model/village";
+import ProductDocument from "@ỉnterfaces/model/product";
 import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
 
-export const createVillage = async (
+export const createProduct = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.create(...req.body)
-    .then((village) => {
-      if (village) {
-        return res.status(200).json({ message: "Create village successfully" });
+  ProductModel.create(...req.body)
+    .then((product) => {
+      if (product) {
+        return res.status(200).json({ message: "Create product successfully" });
       }
     })
     .catch((err) => {
@@ -25,14 +27,14 @@ export const createVillage = async (
     });
 };
 
-export const getVillage = async (
+export const getProduct = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.find({ _id: req.param.id })
-    .then((village) => {
-      return res.status(200).json({ data: village });
+  ProductModel.find({ _id: req.param.id })
+    .then((product) => {
+      return res.status(200).json({ data: product });
     })
     .catch((err) => {
       console.log(err);
@@ -40,14 +42,14 @@ export const getVillage = async (
     });
 };
 
-export const getAllVillage = async (
+export const getAllProduct = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.find({})
-    .then((village) => {
-      return res.status(200).json({ data: village });
+  ProductModel.find({})
+    .then((product) => {
+      return res.status(200).json({ data: product });
     })
     .catch((err) => {
       console.log(err);
@@ -55,18 +57,18 @@ export const getAllVillage = async (
     });
 };
 
-export const updateVillage = async (
+export const updateProduct = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.findById(req.param.id)
-    .then((village) => {
-      if (village) {
-        UserModel.updateOne({ _id: village._id }, req.body)
+  ProductModel.findById(req.param.id)
+    .then((product) => {
+      if (product) {
+        ProductModel.updateOne({ _id: product._id }, req.body)
           .then(() => {
             return res.status(200).json({
-              message: "Village information has been updated.",
+              message: "Product information has been updated.",
               status: true,
             });
           })
@@ -82,12 +84,12 @@ export const updateVillage = async (
     });
 };
 
-export const deleteVillage = (req: any, res: any, next: NextFunction): void => {
-  VillageModel.deleteOne({ _id: req.param.id })
+export const deleteProduct = (req: any, res: any, next: NextFunction): void => {
+  ProductModel.deleteOne({ _id: req.param.id })
     .then(() => {
       return res
         .status(200)
-        .json({ message: "Village has been deleted.", status: true });
+        .json({ message: "Product has been deleted.", status: true });
     })
     .catch((err) => {
       console.log(err);

@@ -8,6 +8,6 @@ export type ProductDocument = mongoose.Document & {
   buyingPrice: string;
   productType: string;
   description: string;
-  productImage: string;
+  productImage: string[];
 };
 export default ProductDocument;

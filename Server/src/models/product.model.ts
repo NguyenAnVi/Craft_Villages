@@ -9,7 +9,7 @@ const ProductScheme = new mongoose.Schema<ProductDocument>({
   buyingPrice: { type: String },
   productType: { type: String },
   description: { type: String },
-  productImage: { type: String },
+  productImage: [{ type: String }],
 });
 
 const ProductModel = mongoose.model("product", ProductScheme);
