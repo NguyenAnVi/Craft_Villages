@@ -7,7 +7,8 @@ const cx = classNames.bind(styles);
 type ButtonProps = {
   className?: String;
   children?: React.ReactNode;
-  color?: 'primary' | 'yellow';
+  to?: String;
+  color?: 'primary' | 'secondary' | 'white' | 'yellow';
   size?: string;
   border?: 'round' | 'circle';
 } & Omit<React.ComponentProps<'button'>, 'children'>;
