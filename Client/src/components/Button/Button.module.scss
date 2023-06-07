@@ -28,6 +28,14 @@
   background-color: var(--primary);
   color: var(--white);
 }
+.secondary {
+  background-color: #cbbf99;
+  color: var(--dark);
+}
+.white {
+  background-color: var(--white);
+  color: var(--dark);
+}
 .yellow {
   background-color: var(--yellow02);
   color: var(--dark);
@@ -39,5 +47,11 @@
 }
 
 .circle {
-  border-radius: 50px !important;
+  border-radius: 50px;
+}
+
+@media screen and (max-width: 46.1875em) {
+  .wrapper {
+    font-size: 1.2rem;
+  }
 }

@@ -71,3 +71,18 @@
     transform: translateY(-50%) rotate(360deg);
   }
 }
+
+// tablet: 740<= width < 1024px
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+  .search {
+    width: 220px;
+  }
+}
+// pc:  width >= 1024px and width < 1680px
+@media screen and (min-width: 64em) and (max-width: 104.9375em) {
+  .search {
+    width: 260px;
+  }
+}
+@media screen and (min-width: 105em) {
+}
