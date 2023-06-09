@@ -13,8 +13,10 @@
   background-color: var(--white);
   user-select: none;
   box-shadow: 0 2px 3px 0 rgb(0 0 0 / 30%);
+  text-decoration: none;
 
   &:hover {
+    color: var(--dark);
     filter: brightness(110%);
   }
 

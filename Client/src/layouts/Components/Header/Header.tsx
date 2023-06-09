@@ -7,10 +7,17 @@ import Button from '~/components/Button';
 import Search from '~/components/Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+  const [navBarMobile, setNavBarMobile] = useState(false);
+
+  const isNavMobile = () => {
+    setNavBarMobile(!navBarMobile);
+  };
+
   return (
     <div className={cx('navbar')}>
       <div className={cx('inner')}>
@@ -47,26 +54,32 @@ function Header() {
         </div>
         <div className={cx('right-header')}>
           <Search />
-          <Button color="yellow" border="circle">
+          <Button color="yellow" border="circle" to={config.routes.signin}>
             Đăng nhập
           </Button>
         </div>
-        <label htmlFor="nav-mobile-input" className={cx('navbars-btn')}>
+        <Button className={cx('navbars-btn')} onClick={isNavMobile}>
           <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
-        </label>
-        <input
-          type="checkbox"
-          name=""
-          className={cx('nav-input')}
-          id="nav-mobile-input"
-        ></input>
-        <label htmlFor="nav-mobile-input" className={cx('nav-overlay')}></label>
-        <div className={cx('nav-mobile')}>
-          <label htmlFor="nav-mobile-input" className={cx('nav-mobile-close')}>
+        </Button>
+        {navBarMobile && (
+          <div onClick={isNavMobile} className={cx('nav-overlay')}></div>
+        )}
+        <div
+          className={
+            navBarMobile === true
+              ? cx('nav-mobile', 'active')
+              : cx('nav-mobile')
+          }
+        >
+          <Button className={cx('nav-mobile-close')} onClick={isNavMobile}>
             <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-          </label>
+          </Button>
 
-          <NavLink to={config.routes.home} className={cx('logo')}>
+          <NavLink
+            to={config.routes.home}
+            onClick={isNavMobile}
+            className={cx('logo')}
+          >
             CraftVillages
           </NavLink>
           <div className={cx('search-mobile')}>
@@ -74,30 +87,39 @@ function Header() {
           </div>
           <NavLink
             to={config.routes.villages}
+            onClick={isNavMobile}
             className={(nav) => cx('navlink-mobile', { active: nav.isActive })}
           >
             Làng nghề
           </NavLink>
           <NavLink
             to={config.routes.products}
+            onClick={isNavMobile}
             className={(nav) => cx('navlink-mobile', { active: nav.isActive })}
           >
             Sản phẩm
           </NavLink>
           <NavLink
             to={config.routes.introduce}
+            onClick={isNavMobile}
             className={(nav) => cx('navlink-mobile', { active: nav.isActive })}
           >
             Giới thiệu
           </NavLink>
           <NavLink
             to={config.routes.contact}
+            onClick={isNavMobile}
             className={(nav) => cx('navlink-mobile', { active: nav.isActive })}
           >
             Liên hệ
           </NavLink>
           <div className={cx('auth-btn')}>
-            <Button color="secondary" border="circle">
+            <Button
+              to={config.routes.signin}
+              color="secondary"
+              border="circle"
+              onClick={isNavMobile}
+            >
               Đăng nhập
             </Button>
             <Button color="white" border="circle">
