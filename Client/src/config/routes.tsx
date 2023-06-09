@@ -3,7 +3,9 @@ const routes = {
   villages: '/nongho',
   products: '/sanpham',
   introduce: '/gioithieu',
-  contact: '/lien he',
+  contact: '/lienhe',
+  signin: '/dangnhap',
+  signup: '/dangky',
 };
 
 export default routes;
