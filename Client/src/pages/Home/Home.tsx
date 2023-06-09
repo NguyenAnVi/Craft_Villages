@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function Home() {
   return (
     <>
-      <Slider type="heading" space={0} perView={3} autoPlay={true} />
+      <Slider carousel />
       <div className={cx('wrapper')}>
         <div className={cx('list')}>
           <div className={cx('heading')}>
@@ -21,7 +21,7 @@ function Home() {
             <Link to={config.routes.villages}>Xem tất cả</Link>
           </div>
           <div className={cx('item-list')}>
-            <Slider type="villages" space={100} perView={3} />
+            <Slider type="villages" space={0} perView={3} />
           </div>
         </div>
         <div className={cx('list')}>
@@ -33,7 +33,7 @@ function Home() {
           </div>
         </div>
         <div className={cx('item-list')}>
-          <Slider type="products" space={70} perView={4} />
+          <Slider type="products" space={0} perView={4} />
         </div>
       </div>
     </>
