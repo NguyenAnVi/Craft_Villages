@@ -1,12 +1,12 @@
 //config
-import config from 'src/config';
+import config from '~/config';
 
 //Pages
-import Home from 'src/pages/Home';
-import SignIn from 'src/pages/SignIn';
-import SignUp from 'src/pages/SignUp';
-import Village from 'src/pages/Village';
-import Product from 'src/pages/Product';
+import Home from '~/pages/Home';
+import SignIn from '~/pages/SignIn';
+import SignUp from '~/pages/SignUp';
+import Village from '~/pages/Village';
+import Product from '~/pages/Product';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
 
@@ -20,7 +20,7 @@ const publicRoutes = [
     component: SignIn,
   },
   {
-    path: config.routes.signin,
+    path: config.routes.signup,
     component: SignUp,
   },
   {

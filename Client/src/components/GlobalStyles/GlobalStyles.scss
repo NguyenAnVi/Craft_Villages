@@ -39,8 +39,9 @@
   box-sizing: border-box;
 }
 
+html,
 body {
-  overflow-y: overlay;
+  height: 100%;
 }
 
 // Scrollbar
