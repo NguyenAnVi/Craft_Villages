@@ -26,14 +26,15 @@ npm start
 
 # Usage
 Available routes, use **Postman** for more info
-* POST - **/signup**, **/signin**  with the body look like this:
+* POST - **/auth/signup**, **/auth/signin**  with the body look like this:
   ```
   {
-    "password":"111111",
+    "password":"11111111",
+    "confirmPassword":"11111111",
     "email":"abc@handicraft.vn",
   }
   ```
-nav122333 - 27/05/2023
+nav122333 - 12/06/2023
 * POST - **/notification/create**  with the body look like this:
   ```
   {
@@ -59,4 +60,9 @@ nav122333 - 27/05/2023
   }
   ```
 * GET - **/notification/read/\<notificationID>** will get the notification has _id = \<notificationID>
+  
 nav122333 - 01/06/2023
+
+* POST - **/notification/markunread/\<notificationID>** will set the notification has _id = \<notificationID> as _Unread message_
+
+nav122333 - 12/06/2023
