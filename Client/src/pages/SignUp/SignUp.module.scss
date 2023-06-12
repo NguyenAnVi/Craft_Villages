@@ -1,0 +1,116 @@
+@import '~bootstrap/scss/bootstrap-grid';
+
+.wrapper {
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url('https://i.pinimg.com/originals/60/27/5e/60275ea7cd25dbd07d9db70b6841340b.jpg');
+}
+
+.form-card {
+  margin: 60px auto;
+  padding: 80px 100px;
+  width: 550px;
+  max-height: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--white);
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='50' ry='50' stroke='%23FFC107FF' stroke-width='8' stroke-dasharray='28%2c 31' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+  border-radius: 50px;
+  background-color: transparent;
+
+  h1 {
+    margin-bottom: 36px !important;
+    font-size: 50px !important;
+  }
+
+  h4,
+  input[type='text'],
+  input[type='password'],
+  button,
+  .pass-wrap {
+    width: 100%;
+  }
+
+  h4,
+  input[type='text'] {
+    text-align: left;
+  }
+  h4 {
+    color: var(--yellow);
+    font-weight: 400;
+  }
+  input[type='text'],
+  input[type='password'] {
+    margin: 10px 0 15px;
+    padding: 0 20px;
+    height: 50px;
+    font-size: 24px;
+    border: 1px solid transparent;
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+  input:focus {
+    outline: none;
+    background-color: var(--white);
+  }
+  input[type='checkbox'] {
+    margin-right: 10px;
+    border: 1px solid var(--yellow);
+    border-radius: 20px !important;
+    width: 30px !important;
+    height: 20px !important;
+    background-color: transparent;
+
+    &:focus-within,
+    &:checked {
+      border: 1px solid var(--yellow);
+      background-color: transparent;
+    }
+  }
+  button {
+    margin: 15px 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  a {
+    color: var(--yellow);
+    text-decoration: none;
+    &:hover {
+      color: var(--yellow02);
+    }
+  }
+}
+
+.pass-wrap {
+  position: relative;
+  .show-pass {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.footer {
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--yellow);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  a {
+    font-style: italic;
+  }
+}
