@@ -6,22 +6,17 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import { Formik, useFormik } from 'formik';
 
 import styles from './SignIn.module.scss';
 import config from '~/config';
 import Button from '~/components/Button';
 import { signIn, reset } from '~/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
-import { Formik, useFormik } from 'formik';
 
 const cx = classNames.bind(styles);
 
 type Props = {};
-
-interface FormData {
-  email: string;
-  password: string;
-}
 
 const SignIn = (props: Props) => {
   const [showPass, setShowPass] = useState(false);
@@ -48,7 +43,7 @@ const SignIn = (props: Props) => {
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
-  let userSchema: yup.ObjectSchema<FormData> = yup.object().shape({
+  let userSchema = yup.object().shape({
     email: yup
       .string()
       .email('Nhập sai định dạng email')
@@ -79,7 +74,7 @@ const SignIn = (props: Props) => {
         onSubmit={() => formik.handleSubmit()}
       >
         <form className={cx('form-card')} onSubmit={formik.handleSubmit}>
-          <div className={cx('heading')}>Đăng nhập</div>
+          <h1 className={cx('heading')}>Đăng nhập</h1>
           <h4>Tên đăng nhập</h4>
           <input
             type="text"
@@ -129,12 +124,8 @@ const SignIn = (props: Props) => {
             <p className={cx('mess-error')}>{formik.errors.password}</p>
           )}
           <div className="d-flex w-100 form-check">
-            <input
-              type="checkbox"
-              id="keepSignIn"
-              className="form-check-input"
-            />
-            <label htmlFor="keepSignIn">Duy trì đăng nhập</label>
+            <input type="checkbox" className="form-check-input" />
+            <p>Duy trì đăng nhập</p>
           </div>
           <Button type="submit" color="shadeYellow" border="circle">
             Đăng nhập
