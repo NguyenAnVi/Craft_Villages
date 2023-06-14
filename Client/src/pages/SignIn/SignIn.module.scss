@@ -7,15 +7,15 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
     url('https://i.pinimg.com/originals/60/27/5e/60275ea7cd25dbd07d9db70b6841340b.jpg');
 }
 
 .form-card {
   margin: 60px auto;
-  padding: 80px 100px;
+  padding: 60px 100px;
   width: 550px;
-  max-height: 700px;
+  max-height: 900px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,15 +25,16 @@
   border-radius: 50px;
   background-color: transparent;
 
-  h1 {
-    margin-bottom: 36px !important;
-    font-size: 50px !important;
+  .heading {
+    margin-bottom: 36px;
+    font-size: 50px;
   }
 
   h4,
   input[type='text'],
   input[type='password'],
   button,
+  .mess-error,
   .pass-wrap {
     width: 100%;
   }
@@ -53,7 +54,7 @@
     padding: 0 20px;
     height: 50px;
     font-size: 24px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     border-radius: 50px;
     background-color: rgba(255, 255, 255, 0.7);
   }
@@ -97,6 +98,14 @@
   }
 }
 
+.input-error {
+  border-color: var(--red) !important;
+}
+.mess-error {
+  color: var(--red);
+  font-size: 18px;
+}
+
 .footer {
   margin-top: 10px;
   padding-top: 20px;
@@ -110,6 +119,57 @@
     font-style: italic;
     &:hover {
       color: var(--yellow02);
+    }
+  }
+}
+
+// mobile: width < 740px
+@media screen and (max-width: 46.1875em) {
+  .form-card {
+    padding: 20px 40px;
+    width: 350px;
+    background-image: none;
+    border: 1px solid var(--yellow);
+    border-radius: 20px;
+    .heading {
+      margin-bottom: 20px !important;
+      font-size: 30px !important;
+    }
+    h4,
+    input[type='text'],
+    input[type='password'],
+    button {
+      font-size: 20px;
+    }
+    input[type='text'],
+    input[type='password'],
+    button {
+      height: 40px;
+    }
+    .mess-error {
+      font-size: 16px;
+    }
+  }
+}
+
+// tablet: width < 1024px
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+  .form-card {
+    padding: 40px 80px;
+    width: 550px;
+
+    .heading {
+      margin-bottom: 28px;
+      font-size: 40px;
+    }
+    h4,
+    input[type='text'],
+    input[type='password'],
+    button {
+      font-size: 22px;
+    }
+    .mess-error {
+      font-size: 16px;
     }
   }
 }

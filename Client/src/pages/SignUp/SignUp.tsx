@@ -28,7 +28,7 @@ const SignUp = (props: Props) => {
       <form className={cx('form-card')}>
         <h1>Đăng ký</h1>
         <h4>Tên đăng nhập</h4>
-        <input type="text" />
+        <input type="text" name="email" id="email" />
         <label className={cx('pass-wrap')}>
           <h4>Mật khẩu</h4>
           <input
