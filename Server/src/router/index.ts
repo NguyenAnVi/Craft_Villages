@@ -4,6 +4,7 @@ import notificationRouter from "./notification.router";
 import userRoute from "@router/user.router";
 import villageRoute from "./village.router";
 import productRoute from "./product.router";
+import reportRoute from "./report.router";
 const router = express.Router();
 
 export default (): express.Router => {
@@ -12,5 +13,6 @@ export default (): express.Router => {
   userRoute(router);
   villageRoute(router);
   productRoute(router);
+  reportRoute(router);
   return router;
 };
