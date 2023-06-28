@@ -1,114 +1,164 @@
-import { Request, Response, NextFunction } from "express";
-import { default as Notification, INotificationsModel } from "../models/notifications.model";
-import { sendEmail } from "./mailing.controller";
-import { FilterQuery } from "mongoose";
 import UserModel from "@models/user.model";
+import mongoose, { FilterQuery } from "mongoose";
+import { INotificationFull } from "@ỉnterfaces/model/notifications";
+import { sendEmail as doSendEmail } from "@controller/mailing.controller";
+import {
+  default as Notification,
+  INotificationsModel,
+} from "@models/notifications.model";
 
-export const create = async (req: Request, res: Response) => {
-  if (!req.body.sender ) return res.status(422).json({status:false, message: "missing sender"});
-  if (!req.body.receivers ) return res.status(422).json({status:false, message: "missing receivers"});
-  if (!req.body.header || !req.body.body ) return res.status(422).json({status:false, message: "missing header or body"});
-
-  const senderId = req.body.sender;
-  const receiverIds = req.body.receivers as string[];
-  const { header, body } = req.body;
-
-  await UserModel.findById(senderId)
-  .then(sender=>{
-    if(!sender) return res.status(404).json({status:false, message:`Sender id not found`});
-    else {
-      new Notification<INotificationsModel>({
-        sender : senderId,
-        receivers : receiverIds,
-        header, body,
-        read: false
-      }).save()
-      .then( (noti)=>{
-        const response = {
-          status:undefined as boolean,
-          message:"",
-          failedEmails:[] as string[]
-        }
-
-        // created Notification document successfully
-        if(noti){
-          response.status = true;
-          response.message = `Created notification`;
-          // if Send mails is included
-          if(req.body.sendemail){
-            sendEmail(noti)
-            .then((failedEmails:string[])=>{
-              response.failedEmails = failedEmails; // receiverId[] which is not in Users collection
-            })
-            .catch(error=>{
-              response.message += ` but send emails failed: ${error.message}`;
-            });
-          }
-        } else {
-          response.status = false;
-          response.message = `Error saving notification.`
-        }
-        return res.send(response);
-      } )
-      .catch(err=>res.status(500).send(err.message));
-    }
-  })
-  .catch(err=>res.status(500).json({status:false, message:err.message}));
+export type NotificationResponse = {
+  status: boolean;
+  message: string;
+  failedEmails: string[];
 };
 
-export const fetch = async (req:Request, res:Response) => {
+const checkValidObjectId = (objectid: any): mongoose.Types.ObjectId => {
+  return mongoose.Types.ObjectId.isValid(objectid) ? objectid : null;
+};
+
+export const createNewNotification = (
+  data: INotificationFull
+): Promise<NotificationResponse> => {
+  return new Promise(async (resolve, reject) => {
+    if (!checkValidObjectId(data.sender)) reject(Error("Invalid sender id!"));
+    const senderResults = await UserModel.find({
+      $or: [{ _id: data.sender }, { village_id: data.sender }],
+    }).exec();
+    if (!senderResults) reject(Error(`Sender id not found: ${data.sender}`));
+    else {
+      new Notification<INotificationsModel>({
+        ...(data as INotificationsModel),
+        read: false,
+      })
+        .save()
+        .then((noti) => {
+          const response: NotificationResponse = {
+            status: undefined,
+            message: "",
+            failedEmails: [],
+          };
+
+          // created Notification document successfully
+          if (noti) {
+            response.status = true;
+            response.message = `Created notification`;
+            // if Send mails is included
+            if (data.sendEmail) {
+              doSendEmail(noti)
+                .then((failedEmails: string[]) => {
+                  response.failedEmails = failedEmails; // receiverId[] which is not in Users collection
+                })
+                .catch((error) => {
+                  response.message += ` but send emails failed: ${error.message}`;
+                });
+            }
+          } else {
+            response.status = false;
+            response.message = `Error saving notification.`;
+          }
+          resolve(response);
+        })
+        .catch((err) => reject(Error(err.message)));
+    }
+  });
+};
+
+export const create = async (req: any, res: any) => {
+  if (!req.body.sender)
+    return res.status(422).json({ status: false, message: "missing sender" });
+  if (!req.body.receivers)
+    return res
+      .status(422)
+      .json({ status: false, message: "missing receivers" });
+  if (!req.body.header || !req.body.body)
+    return res
+      .status(422)
+      .json({ status: false, message: "missing header or body" });
+
+  const receivers = req.body.receivers as string[];
+  const { sender, header, body, sendemail } = req.body;
+
+  await createNewNotification({
+    sender,
+    receivers,
+    header,
+    body,
+    sendEmail: sendemail,
+  } as INotificationFull)
+    .then((response: NotificationResponse) => res.json(response))
+    .catch((err: Error) =>
+      res.status(500).json({ status: false, message: err.message })
+    );
+};
+
+export const fetch = async (req: any, res: any) => {
   const uid = req.body.id;
-  const filter:INotificationsModel = req.body.filter;
+  const filter: INotificationsModel = req.body.filter;
 
   const filters: FilterQuery<INotificationsModel> = filter;
   const options = { projection: { _id: 0 }, limit: 10 };
   try {
-    await Notification.find({
-      receivers: {
-        $in: [uid]
+    await Notification.find(
+      {
+        receivers: {
+          $in: [uid],
+        },
+        ...filters,
       },
-      ...filters
-    }, {}, options).exec()
-    .then( result=>res.json({status:true,result}))
-    .catch( error=>res.status(500).send(error))
+      {},
+      options
+    )
+      .exec()
+      .then((result) => res.json({ status: true, result }))
+      .catch((error) => res.status(500).send(error));
   } catch (error) {
-    return res.status(500).send({message: "Error while retrieving notifications: "+error.message})
+    return res.status(500).send({
+      message: "Error while retrieving notifications: " + error.message,
+    });
   }
 };
 
-export const read = async (req:Request, res:Response) => {
+export const read = async (req: any, res: any) => {
   const nid = req.params.notificationid;
   try {
-    await Notification.findByIdAndUpdate(nid, {read:true})
-    .then( (result:INotificationsModel) =>{
-      if(result){
-        // this result still has read = false
-        result.read = true;
-        res.json({status:true,result});
-      } else {
-        res.status(404).send({message:"Notification not found"})
-      }
-    })
-    .catch( error=>res.status(500).send(error))
+    await Notification.findByIdAndUpdate(nid, { read: true })
+      .then((result: INotificationsModel) => {
+        if (result) {
+          // this result still has read = false
+          result.read = true;
+          res.json({ status: true, result });
+        } else {
+          res.status(404).send({ message: "Notification not found" });
+        }
+      })
+      .catch((error) => res.status(500).send(error));
   } catch (error) {
-    return res.status(500).send({message: "Error while retrieving notification: "+error.message})
+    return res.status(500).send({
+      message: "Error while retrieving notification: " + error.message,
+    });
   }
 };
-export const markUnread = async (req:Request, res:Response) => {
+export const markUnread = async (req: any, res: any) => {
   const nid = req.params.notificationid;
   try {
-    await Notification.findByIdAndUpdate(nid, {read:false})
-    .then( (result:INotificationsModel) =>{
-      if(result){
-        // this result still has read = false
-        result.read = false;
-        res.json({status:true,result});
-      } else {
-        res.status(404).json({status:false, message:"Notification not found"})
-      }
-    })
-    .catch( error=>res.status(500).send(error))
+    await Notification.findByIdAndUpdate(nid, { read: false })
+      .then((result: INotificationsModel) => {
+        if (result) {
+          // this result still has read = false
+          result.read = false;
+          res.json({ status: true, result });
+        } else {
+          res
+            .status(404)
+            .json({ status: false, message: "Notification not found" });
+        }
+      })
+      .catch((error) => res.status(500).send(error));
   } catch (error) {
-    return res.status(500).send({status: false, message: "Error while retrieving notification: "+error.message})
+    return res.status(500).send({
+      status: false,
+      message: "Error while retrieving notification: " + error.message,
+    });
   }
-}
+};

@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "cls & npm run build",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
+    "build": "",
     "start": "nodemon"
   },
   "dependencies": {

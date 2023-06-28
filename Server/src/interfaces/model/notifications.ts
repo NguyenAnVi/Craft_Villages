@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 export interface INotifications {
   sender: string;
   receivers: string[];
@@ -7,4 +5,9 @@ export interface INotifications {
   body: string;
   read: boolean;
 }
+
+export interface INotificationFull extends INotifications {
+  sendEmail: boolean;
+}
+
 export default INotifications;
