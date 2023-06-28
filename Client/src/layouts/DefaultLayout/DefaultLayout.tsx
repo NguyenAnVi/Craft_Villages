@@ -11,12 +11,12 @@ interface Props {
 
 function DefaultLayout({ children }: Props) {
   return (
-    <div>
+    <>
       <Header />
       <div className={cx('container')}>
         <div className={cx('content')}>{children}</div>
       </div>
-    </div>
+    </>
   );
 }
 
