@@ -1,6 +1,14 @@
-import INotifications from "../../interfaces/model/notifications";
-type NotificationMailForm = (name1:string, name2:string, notiDocument:INotifications)=>string;
-const notificationMailForm:NotificationMailForm = (senderName:string, receiverName:string, notification: INotifications) => {
+import INotifications from "@interfaces/model/notifications";
+type NotificationMailForm = (
+  name1: string,
+  name2: string,
+  notiDocument: INotifications
+) => string;
+const notificationMailForm: NotificationMailForm = (
+  senderName: string,
+  receiverName: string,
+  notification: INotifications
+) => {
   return `
   <!doctype html>
   <html lang="vi-VN">
@@ -72,5 +80,5 @@ const notificationMailForm:NotificationMailForm = (senderName:string, receiverNa
   </body>
 
   </html>`;
-}
+};
 export default notificationMailForm;

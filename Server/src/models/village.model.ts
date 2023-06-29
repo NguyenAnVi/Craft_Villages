@@ -1,5 +1,5 @@
-import mongoose from "../provider/database";
-import VillageDocument from "../interfaces/model/village";
+import mongoose from "@provider/database";
+import VillageDocument from "@interfaces/model/village";
 
 // Define the model
 const VillageSchema = new mongoose.Schema<VillageDocument>({

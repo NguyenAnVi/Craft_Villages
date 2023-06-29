@@ -1,5 +1,5 @@
-import mongoose from "../provider/database";
-import ProductDocument from "@ỉnterfaces/model/product";
+import mongoose from "@provider/database";
+import ProductDocument from "@interfaces/model/product";
 
 const ProductScheme = new mongoose.Schema<ProductDocument>({
   village_id: { type: mongoose.Schema.Types.ObjectId },

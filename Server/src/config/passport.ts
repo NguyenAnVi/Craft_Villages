@@ -1,13 +1,15 @@
 import passport from "passport";
 import passportLocal from "passport-local";
-import { find } from "lodash";
+import passportJwt from "passport-jwt";
 
-import { UserDocument } from "../interfaces/model/user";
-import UserModel from "../models/user.model";
-
+import { UserDocument } from "@interfaces/model/user";
+import UserModel from "@models/user.model";
+import Locals from "@provider/locals";
 import { Request, Response, NextFunction } from "express";
 
 const LocalStrategy = passportLocal.Strategy;
+const JwtStrategy = passportJwt.Strategy;
+const ExtractJwt = passportJwt.ExtractJwt;
 
 passport.serializeUser<any, any>((req, user: UserDocument, done) => {
   done(undefined, user._id);
@@ -29,6 +31,7 @@ passport.deserializeUser((id: string, done) => {
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
     UserModel.findOne({ email: email.toLowerCase() })
+      .select("+password")
       .then((user) => {
         if (!user) {
           return done(undefined, false, {
@@ -55,20 +58,28 @@ passport.use(
       });
   })
 );
-
-/**
- * Login Required middleware.
- */
-export const isAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.status(401).json("You have no permission to access this page");
+type opts = {
+  jwtFromRequest: any;
+  secretOrKey: string;
 };
+const opts: opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: Locals.config().jwtSecretKey,
+};
+
+passport.use(
+  new JwtStrategy(opts, (jwtPayload, done) => {
+    UserModel.findById(jwtPayload.id)
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      })
+      .catch((err) => console.log(err));
+  })
+);
 
 /**
  * Authorization Required middleware.

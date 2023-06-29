@@ -1,7 +1,5 @@
 import mongoose from "../provider/database";
-import UserDocument, {
-  comparePasswordFunction,
-} from "../interfaces/model/user";
+import UserDocument, { comparePasswordFunction } from "@interfaces/model/user";
 import bcrypt from "bcrypt";
 
 // Define the model
@@ -36,9 +34,8 @@ const UserSchema = new mongoose.Schema<UserDocument>(
     password: {
       type: String,
       required: true,
+      select: false,
     },
-    passwordResetToken: { type: String },
-    passwordResetExpires: { type: Date },
 
     profile: {
       fullName: {
@@ -59,7 +56,6 @@ const UserSchema = new mongoose.Schema<UserDocument>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "village",
     },
-    tokens: Array,
   },
   { timestamps: true }
 );

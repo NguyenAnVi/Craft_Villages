@@ -61,8 +61,7 @@ const SignIn = (props: Props) => {
     },
     validationSchema: userSchema,
     onSubmit: (values): void => {
-      console.log('Form data', values);
-      // dispatch(signIn(values));
+      dispatch(signIn(values));
     },
   });
 
@@ -113,11 +112,7 @@ const SignIn = (props: Props) => {
               className={cx('show-pass')}
               onClick={handelShowPass}
             >
-              {showPass ? (
-                <FontAwesomeIcon icon={faEyeSlash}></FontAwesomeIcon>
-              ) : (
-                <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
-              )}
+              <FontAwesomeIcon icon={showPass ? faEyeSlash : faEye} />
             </Button>
           </label>
           {formik.errors.password && formik.touched.password && (

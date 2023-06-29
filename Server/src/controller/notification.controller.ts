@@ -1,6 +1,6 @@
 import UserModel from "@models/user.model";
 import mongoose, { FilterQuery } from "mongoose";
-import { INotificationFull } from "@ỉnterfaces/model/notifications";
+import { INotificationFull } from "@interfaces/model/notifications";
 import { sendEmail as doSendEmail } from "@controller/mailing.controller";
 import {
   default as Notification,

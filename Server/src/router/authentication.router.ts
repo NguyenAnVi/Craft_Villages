@@ -4,7 +4,7 @@ import {
   signIn,
   signUp,
   logout,
-} from "../controller/authentication.controller";
+} from "@controller/authentication.controller";
 
 export default (router: express.Router) => {
   router.post("/auth/signIn", signIn);

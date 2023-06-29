@@ -1,11 +1,10 @@
-import { comparePasswordFunction } from "./../interfaces/model/user";
 import { NextFunction } from "express";
 import UserModel from "@models/user.model";
 import VillageModel from "@models/village.model";
 import ProductModel from "@models/product.model";
-import UserDocument from "@ỉnterfaces/model/user";
-import VillageDocument from "@ỉnterfaces/model/village";
-import ProductDocument from "@ỉnterfaces/model/product";
+import UserDocument from "@interfaces/model/user";
+import VillageDocument from "@interfaces/model/village";
+import ProductDocument from "@interfaces/model/product";
 import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";

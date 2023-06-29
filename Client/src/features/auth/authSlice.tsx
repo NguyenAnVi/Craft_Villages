@@ -5,16 +5,27 @@ import {
   AnyAction,
 } from '@reduxjs/toolkit';
 import authService from './authService';
-
 type User = {
+  email: string,
+  password: string,
+}
+type DataUser = {
   email: string;
-  password: string;
-};
+  phone: string;
+  profile: {
+    fullName: string,
+    gender: string,
+    picture: string,
+  },
+  roleAdmin: string,
+  isAdmin: boolean,
+  village_id: string,
+}
 // Get user from localStorage
-const user: User = JSON.parse(localStorage.getItem('user')!);
+const user: DataUser = JSON.parse(localStorage.getItem('user')!);
 
 type InitialState = {
-  user: User | null;
+  user: DataUser | null;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -86,7 +97,7 @@ export const authSlice = createSlice({
       .addCase(signUp.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(signUp.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(signUp.fulfilled, (state, action: PayloadAction<DataUser>) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.user = action.payload;
@@ -100,7 +111,7 @@ export const authSlice = createSlice({
       .addCase(signIn.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(signIn.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(signIn.fulfilled, (state, action: PayloadAction<DataUser>) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.user = action.payload;

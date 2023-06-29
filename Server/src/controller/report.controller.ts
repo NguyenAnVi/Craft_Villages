@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import { NextFunction } from "express";
 import ReportModel from "@models/report.model";
 import VillageModel from "@models/village.model";
-import VillageDocument from "@ỉnterfaces/model/village";
-import { INotificationFull } from "@ỉnterfaces/model/notifications";
+import VillageDocument from "@interfaces/model/village";
+import { INotificationFull } from "@interfaces/model/notifications";
 import { createNewNotification } from "@controller/notification.controller";
 
 const checkValidObjectId = (objectid: any): mongoose.Types.ObjectId => {
@@ -41,10 +41,14 @@ export const getAllReports = async (
         await Promise.all([
           ...villageResults.map(async (villageResult: any): Promise<any> => {
             console.log(villageResult.id + ":");
-            let village_id = new mongoose.Types.ObjectId(villageResult.id);
-            const reportResult = await ReportModel.find({ village_id }, null, {
-              limit: -1,
-            });
+            const villageId = new mongoose.Types.ObjectId(villageResult.id);
+            const reportResult = await ReportModel.find(
+              { village_id: villageId },
+              null,
+              {
+                limit: -1,
+              }
+            );
             console.log(reportResult);
             reportResults = [...reportResults, ...reportResult];
           }),

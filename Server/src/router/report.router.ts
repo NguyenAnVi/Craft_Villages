@@ -5,7 +5,7 @@ import {
   getAllReports,
   createNewReport,
   deleteReport,
-} from "../controller/report.controller";
+} from "@controller/report.controller";
 
 export default (router: express.Router) => {
   router.get("/report/getReport/:id", getReport);

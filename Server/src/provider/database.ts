@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bluebird from "bluebird";
 import { MongoError } from "mongodb";
 
-import Locals from "./locals";
+import Locals from "@provider/locals";
 
 export class Database {
   public static init(): any {

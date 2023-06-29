@@ -1,6 +1,6 @@
 import mongoose from "@provider/database";
 
-import { ReportDocument } from "@ỉnterfaces/model/report";
+import { ReportDocument } from "@interfaces/model/report";
 
 const ReportSchema = new mongoose.Schema<ReportDocument>({
   village_id: {

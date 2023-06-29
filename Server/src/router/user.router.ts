@@ -1,6 +1,6 @@
 import express from "express";
-import * as passportConfig from "../config/passport";
-
+import * as passportConfig from "@config/passport";
+import passport from "passport";
 import {
   getAllUser,
   updateProfile,
@@ -9,20 +9,24 @@ import {
 } from "@controller/user.controller";
 
 export default (router: express.Router) => {
-  router.get("/user/getAllUser", passportConfig.isAuthenticated, getAllUser);
+  router.get(
+    "/user/getAllUser",
+    passport.authenticate("jwt", { session: false }),
+    getAllUser
+  );
   router.post(
     "/user/updateProfile",
-    passportConfig.isAuthenticated,
+    passport.authenticate("jwt", { session: false }),
     updateProfile
   );
   router.post(
     "/user/updatePassword",
-    passportConfig.isAuthenticated,
+    passport.authenticate("jwt", { session: false }),
     updatePassword
   );
   router.delete(
     "/user/deleteAccount",
-    passportConfig.isAuthenticated,
+    passport.authenticate("jwt", { session: false }),
     deleteAccount
   );
 };

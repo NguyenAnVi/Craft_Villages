@@ -10,12 +10,13 @@
     "baseUrl": "./src",
     "paths": {
       "*": ["node_modules/*"],
-      "@controller/*": ["controller/*"], 
+      "@controller/*": ["controller/*"],
       "@models/*": ["models/*"],
-      "@ỉnterfaces/*": ["interfaces/*"],
+      "@interfaces/*": ["interfaces/*"],
       "@middleware/*": ["middleware/*"],
       "@router/*": ["router/*"],
-      "@provider/*": ["provider/*"]
+      "@provider/*": ["provider/*"],
+      "@config/*": ["config/*"]
     }
   },
   "include": ["src/**/*"]

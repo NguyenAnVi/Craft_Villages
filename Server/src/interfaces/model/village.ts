@@ -1,4 +1,4 @@
-import { Database } from "./../../provider/database";
+import { Database } from "@provider/database";
 import mongoose from "mongoose";
 
 export type VillageDocument = mongoose.Document & {

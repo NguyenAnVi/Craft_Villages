@@ -8,7 +8,7 @@ import SignUp from '~/pages/SignUp';
 import Village from '~/pages/Village';
 import AdminSmallHolder from '~/pages/Admin/SmallHolder';
 import AdminOrders from '~/pages/Admin/Orders';
-import DetailVillage from '~/pages/DetailVillage';
+// import DetailVillage from '~/pages/DetailVillage';
 import Product from '~/pages/Product';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
@@ -34,10 +34,10 @@ const publicRoutes = [
     path: config.routes.villages,
     component: Village,
   },
-  {
-    path: config.routes.detailvillage,
-    component: DetailVillage,
-  },
+  // {
+  //   path: config.routes.detailvillage,
+  //   component: DetailVillage,
+  // },
   {
     path: config.routes.products,
     component: Product,

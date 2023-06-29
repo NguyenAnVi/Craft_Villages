@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { body, check, validationResult } from "express-validator";
 
-import UserModel from "../models/user.model";
-import { UserDocument, AuthToken } from "../interfaces/model/user";
-import Locals from "../provider/locals";
+import UserModel from "@models/user.model";
+import { UserDocument } from "@interfaces/model/user";
+import Locals from "@provider/locals";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { IVerifyOptions } from "passport-local";
-import "../config/passport";
+import "@config/passport";
 
 export const signIn = async (
   req: any,
@@ -31,6 +31,7 @@ export const signIn = async (
 
   passport.authenticate(
     "local",
+    { session: false },
     (err: Error, user: UserDocument, info: IVerifyOptions) => {
       if (err) {
         return next(err);
@@ -38,13 +39,30 @@ export const signIn = async (
       if (!user) {
         return res.status(400).json({ message: info.message, status: false });
       }
-      req.logIn(user, (errorLogin: Error) => {
+      req.logIn(user, { session: false }, (errorLogin: Error) => {
         if (errorLogin) {
           return next(errorLogin);
         }
-        return res
-          .status(200)
-          .json({ message: "Login successfully", status: true });
+
+        const token = jwt.sign({ id: user._id }, Locals.config().jwtSecretKey, {
+          expiresIn: "10m",
+        });
+
+        const { email, phone, profile, roleAdmin, isAdmin, village_id } = user;
+
+        return res.status(200).json({
+          message: "Login successfully",
+          status: true,
+          data: {
+            email,
+            phone,
+            profile,
+            roleAdmin,
+            isAdmin,
+            village_id,
+            accessToken: token,
+          },
+        });
       });
     }
   )(req, res, next);
@@ -120,4 +138,3 @@ export const signUp = async (
 //   console.log(Date.now() + " - an admin has logged in");
 //   role = "ADMIN";
 // }
-
