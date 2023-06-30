@@ -7,16 +7,31 @@ import Button from '~/components/Button';
 import Search from '~/components/Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
+import { logout, reset } from '~/features/auth/authSlice';
+import { toast } from "react-toastify"
 const cx = classNames.bind(styles);
 
 function Header() {
+  const { user, message, isSuccessLogout } = useAppSelector(
+    (state) => state.auth,
+  );
   const [navBarMobile, setNavBarMobile] = useState(false);
-
+  const dispatch = useAppDispatch()
   const isNavMobile = () => {
     setNavBarMobile(!navBarMobile);
   };
+
+  useEffect(() => {
+    if (isSuccessLogout) {
+      toast.success(message)
+    }
+    dispatch(reset())
+  }, [message, isSuccessLogout, dispatch])
+  const handleLogout = () => {
+    dispatch(logout());
+  }
 
   return (
     <div className={cx('navbar')}>
@@ -54,9 +69,10 @@ function Header() {
         </div>
         <div className={cx('right-header')}>
           <Search />
-          <Button color="yellow" border="circle" to={config.routes.signin}>
+          {user ? (<Button color="yellow" border="circle" onClick={handleLogout} > Logout </Button>) : (<Button color="yellow" border="circle" to={config.routes.signin}>
             Đăng nhập
-          </Button>
+          </Button>)
+          }
         </div>
         <Button className={cx('navbars-btn')} onClick={isNavMobile}>
           <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>

@@ -32,14 +32,18 @@ const SignIn = (props: Props) => {
   );
 
   useEffect(() => {
+    let i = 3;
+    console.log(i);
+    i++
+
     if (isError) {
       toast.error(message);
     }
 
-    if (isSuccess || user) {
+    if (isSuccess) {
+      toast.success(message);
       navigate('/');
     }
-
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 

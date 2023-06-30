@@ -68,16 +68,17 @@ const opts: opts = {
 };
 
 passport.use(
-  new JwtStrategy(opts, (jwtPayload, done) => {
-    UserModel.findById(jwtPayload.id)
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      })
-      .catch((err) => console.log(err));
+  new JwtStrategy(opts, async (jwtPayload, done) => {
+    try {
+      const user = await UserModel.findById(jwtPayload.id);
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   })
 );
 

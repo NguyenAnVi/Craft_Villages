@@ -73,7 +73,6 @@ export const logout = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  req.logout();
   return res.status(200).json({ message: "Logout successfully", status: true });
 };
 

@@ -1,5 +1,4 @@
 import express from "express";
-import * as passportConfig from "@config/passport";
 import passport from "passport";
 import {
   getAllUser,

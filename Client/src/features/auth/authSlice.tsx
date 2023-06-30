@@ -4,7 +4,9 @@ import {
   PayloadAction,
   AnyAction,
 } from '@reduxjs/toolkit';
-import authService from './authService';
+import * as httpRequest from '~/utils/httpRequest';
+const API_URL = '/auth/';
+
 type User = {
   email: string,
   password: string,
@@ -21,6 +23,24 @@ type DataUser = {
   isAdmin: boolean,
   village_id: string,
 }
+
+type Payload = {
+  message: string;
+  status: boolean;
+  data: {
+    email: string;
+    phone: string;
+    profile: {
+      fullName: string,
+      gender: string,
+      picture: string,
+    },
+    roleAdmin: string,
+    isAdmin: boolean,
+    village_id: string,
+  },
+
+}
 // Get user from localStorage
 const user: DataUser = JSON.parse(localStorage.getItem('user')!);
 
@@ -30,6 +50,8 @@ type InitialState = {
   isSuccess: boolean;
   isLoading: boolean;
   message: string;
+  isSuccessLogout: boolean;
+
 };
 
 const initialState: InitialState = {
@@ -38,15 +60,23 @@ const initialState: InitialState = {
   isSuccess: false,
   isLoading: false,
   message: '',
+  isSuccessLogout: false,
+
 };
 
 // signUp user
 export const signUp = createAsyncThunk(
   'auth/signUp',
-  async (user: User, thunkAPI) => {
+  async (userData: User, thunkAPI) => {
     try {
-      return await authService.signUp(user);
+      const response = await httpRequest.post(API_URL + 'signUp', userData);
+      if (response) {
+        localStorage.setItem('user', JSON.stringify(response));
+        return response;
+      }
     } catch (error) {
+      console.log(error);
+
       const message =
         (error.response &&
           error.response.data &&
@@ -61,16 +91,17 @@ export const signUp = createAsyncThunk(
 // signIn user
 export const signIn = createAsyncThunk(
   'auth/signIn',
-  async (user: User, thunkAPI) => {
+  async (userData: User, thunkAPI) => {
     try {
-      return await authService.signIn(user);
+      const response = await httpRequest.post(API_URL + 'signIn', userData);
+      if (response) {
+        localStorage.setItem('user', JSON.stringify(response));
+        return response;
+      }
     } catch (error) {
+
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   },
@@ -78,8 +109,17 @@ export const signIn = createAsyncThunk(
 
 // Logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
-});
+  try {
+    const response = await httpRequest.post(API_URL + 'logout');
+    if (response) {
+      localStorage.removeItem('user');
+      return response;
+    }
+  }
+  catch (err) {
+    console.log(err);
+  }
+})
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -89,7 +129,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
-      state.message = '';
+      state.isSuccessLogout = false;
     },
   },
   extraReducers: (builder) => {
@@ -97,10 +137,11 @@ export const authSlice = createSlice({
       .addCase(signUp.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(signUp.fulfilled, (state, action: PayloadAction<DataUser>) => {
+      .addCase(signUp.fulfilled, (state, action: PayloadAction<Payload>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.user = action.payload.data;
+        state.message = action.payload.message;
       })
       .addCase(signUp.rejected, (state, action: AnyAction) => {
         state.isLoading = false;
@@ -111,10 +152,11 @@ export const authSlice = createSlice({
       .addCase(signIn.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(signIn.fulfilled, (state, action: PayloadAction<DataUser>) => {
+      .addCase(signIn.fulfilled, (state, action: PayloadAction<Payload>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.message = action.payload.message
+        state.user = action.payload.data;
       })
       .addCase(signIn.rejected, (state, action: AnyAction) => {
         state.isLoading = false;
@@ -122,8 +164,10 @@ export const authSlice = createSlice({
         state.message = action.payload;
         state.user = null;
       })
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(logout.fulfilled, (state, action: AnyAction) => {
         state.user = null;
+        state.isSuccessLogout = true;
+        state.message = action.payload.message;
       });
   },
 });

@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 import { publicRoutes, privateRoutes } from '~/routes';
 import DefaultLayout from '~/layouts/DefaultLayout';
@@ -8,10 +10,11 @@ function App() {
   const isAdmin = true;
 
   return (
-    <div className="App">
-      <Routes>
-        {isAdmin
-          ? privateRoutes.map((route, index) => {
+    <>
+      <div className="App">
+        <Routes>
+          {isAdmin
+            ? privateRoutes.map((route, index) => {
               let Page = route.component;
               let Layout = AdminLayout;
 
@@ -30,7 +33,7 @@ function App() {
                 />
               );
             })
-          : publicRoutes.map((route, index) => {
+            : publicRoutes.map((route, index) => {
               let Page = route.component;
               let Layout = DefaultLayout;
               return (
@@ -45,8 +48,22 @@ function App() {
                 />
               );
             })}
-      </Routes>
-    </div>
+        </Routes>
+      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </>
+
   );
 }
 
