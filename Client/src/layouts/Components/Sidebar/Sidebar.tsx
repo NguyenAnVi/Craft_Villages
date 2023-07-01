@@ -9,7 +9,7 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-interface ISidebarProps {}
+interface ISidebarProps { }
 
 function Sidebar() {
   return (
@@ -20,7 +20,7 @@ function Sidebar() {
       </Link>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routes.adminSmallHolder}
+        to={config.routesAdmin.adminSmallHolder}
       >
         Nông hộ quản lý
       </NavLink>
@@ -29,7 +29,7 @@ function Sidebar() {
       </NavLink>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routes.adminOrders}
+        to={config.routesAdmin.adminOrders}
       >
         Đơn hàng
       </NavLink>

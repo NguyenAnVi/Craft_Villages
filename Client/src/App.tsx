@@ -2,12 +2,13 @@ import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-import { publicRoutes, privateRoutes } from '~/routes';
+import { publicRoutes, privateRoutes, privateRoutesAdminSmallHolder } from '~/routes';
 import DefaultLayout from '~/layouts/DefaultLayout';
 import AdminLayout from '~/layouts/AdminLayout';
 
 function App() {
   const isAdmin = true;
+  const isAdminSmallHolder = true;
 
   return (
     <>
