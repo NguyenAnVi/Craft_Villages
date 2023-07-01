@@ -1,0 +1,140 @@
+.wrapper {
+  width: 100%;
+  margin-top: 20px;
+  padding: 0 5%;
+  button {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  form {
+    margin-top: 40px;
+    margin-right: 200px;
+    label {
+      margin-bottom: 20px;
+      width: 100%;
+      height: auto;
+      display: flex;
+      justify-content: flex-start;
+      text-align: center;
+      p,
+      input[type='text'],
+      textarea,
+      .thumbnails {
+        margin-left: 40px;
+        width: 80%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+      p,
+      h6 {
+        margin-bottom: 0;
+      }
+      h6 {
+        margin-top: 5px;
+        width: 20%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+      }
+      input[type='text'],
+      textarea {
+        padding: 0 10px;
+        border: 0.2px solid var(--gray);
+        &:focus {
+          border-color: red;
+        }
+      }
+      input[type='text'] {
+        height: 35px;
+        border-radius: 50px;
+      }
+      textarea {
+        min-height: 80px;
+        border-radius: 10px;
+      }
+      .input-error {
+        border-color: var(--red);
+      }
+      img {
+        width: 160px;
+        border: 0.5px solid var(--yellow02);
+        border-radius: 20px;
+        object-fit: cover;
+        + img {
+          margin-left: 30px;
+        }
+      }
+    }
+    .form-btn {
+      margin: 10px calc(20% + 30px);
+      width: 100%;
+      height: 40px;
+      button {
+        width: 200px;
+        height: 40px;
+        border-radius: 14px;
+      }
+    }
+  }
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.mess-error {
+  width: 100%;
+  margin: -10px calc(20% + 30px) 10px;
+  color: var(--red);
+  font-size: 16px;
+}
+
+.thumbnails {
+  width: 200px;
+  flex-direction: column;
+}
+
+.images {
+  width: 100%;
+  display: flex;
+}
+
+.custom-file-input {
+  color: transparent;
+  margin-left: 0;
+  width: 150px;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  margin-top: 20px;
+  content: 'Thêm ảnh';
+  color: black;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #999;
+  border-radius: 50px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 600;
+  font-size: 18px;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
