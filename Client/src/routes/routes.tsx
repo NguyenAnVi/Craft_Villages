@@ -12,6 +12,7 @@ import Product from '~/pages/Product';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
 import DetailVillage from '~/pages/DetailVillage';
+import DetailSmallHolder from '~/pages/DetailSmallHolder';
 
 //Admin
 import AdminMail from '~/pages/Admin/Mail';
@@ -60,6 +61,10 @@ const publicRoutes = [
   {
     path: config.routes.detailVillage,
     component: DetailVillage,
+  },
+  {
+    path: config.routes.detailSmallHolder,
+    component: DetailSmallHolder,
   },
   {
     path: config.routes.products,
