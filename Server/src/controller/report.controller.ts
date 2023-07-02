@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { NextFunction } from "express";
 import ReportModel from "@models/report.model";
-import VillageModel from "@models/village.model";
-import VillageDocument from "@interfaces/model/village";
+import VillageModel from "@models/smallHolder.model";
+import VillageDocument from "@interfaces/model/smallHolder";
 import { INotificationFull } from "@interfaces/model/notifications";
 import { createNewNotification } from "@controller/notification.controller";
 

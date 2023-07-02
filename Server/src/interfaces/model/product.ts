@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 export type ProductDocument = mongoose.Document & {
-  village_id: mongoose.Schema.Types.ObjectId;
-  productName: string;
+  smallHolderId: mongoose.Schema.Types.ObjectId;
+  name: string;
   materials: string;
-  sellingPrice: string;
-  buyingPrice: string;
-  productType: string;
+  price: number;
+  type: string;
+  avatar: string;
+  photos: string[];
   description: string;
-  productImage: string[];
 };
 export default ProductDocument;

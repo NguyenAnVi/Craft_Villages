@@ -1,16 +1,19 @@
 import mongoose from "@provider/database";
 import ProductDocument from "@interfaces/model/product";
 
-const ProductScheme = new mongoose.Schema<ProductDocument>({
-  village_id: { type: mongoose.Schema.Types.ObjectId },
-  productName: { type: String },
-  materials: { type: String },
-  sellingPrice: { type: String },
-  buyingPrice: { type: String },
-  productType: { type: String },
-  description: { type: String },
-  productImage: [{ type: String }],
-});
+const ProductScheme = new mongoose.Schema<ProductDocument>(
+  {
+    smallHolderId: { type: mongoose.Schema.Types.ObjectId, ref: "SmallHolder" },
+    name: { type: String },
+    materials: { type: String },
+    price: { type: Number },
+    type: { type: String },
+    avatar: { type: String },
+    photos: [{ type: String }],
+    description: { type: String },
+  },
+  { timestamps: true, collection: "Product" }
+);
 
-const ProductModel = mongoose.model("product", ProductScheme);
+const ProductModel = mongoose.model("Product", ProductScheme);
 export default ProductModel;

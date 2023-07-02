@@ -1,22 +1,17 @@
-import { Database } from "@provider/database";
 import mongoose from "mongoose";
 
 export type VillageDocument = mongoose.Document & {
-  villageName: string;
-  villagePhone: string;
-  villageEmail: string;
-  admin_id: mongoose.Schema.Types.ObjectId;
+  name: string;
   address: string;
-  group: string;
-  ward: string;
-  district: string;
-  city: string;
   majorWork: string;
+  quantitySmallHolder: string;
   materials: string[];
-  product_id: mongoose.Schema.Types.ObjectId[];
-  workers: string;
-  qrCode: string;
+  avatar: string;
+  photos: string[];
   description: string;
+  smallHolderId: mongoose.Schema.Types.ObjectId;
+  adminId: mongoose.Schema.Types.ObjectId;
+  group: string;
 };
 
 export default VillageDocument;

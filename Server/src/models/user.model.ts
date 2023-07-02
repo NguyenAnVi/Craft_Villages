@@ -5,6 +5,14 @@ import bcrypt from "bcrypt";
 // Define the model
 const UserSchema = new mongoose.Schema<UserDocument>(
   {
+    villageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Village",
+    },
+    smallHolderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SmallHolder",
+    },
     email: {
       type: String,
       required: true,
@@ -18,7 +26,11 @@ const UserSchema = new mongoose.Schema<UserDocument>(
           `${props.value} is not a valid email address!`,
       },
     },
-
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
     phone: {
       type: String,
       unique: true,
@@ -31,33 +43,12 @@ const UserSchema = new mongoose.Schema<UserDocument>(
           `${props.value} is not a valid phone number!`,
       },
     },
-    password: {
-      type: String,
-      required: true,
-      select: false,
-    },
-
-    profile: {
-      fullName: {
-        type: String,
-      },
-      gender: { type: String },
-
-      picture: { type: String },
-    },
-
-    roleAdmin: {
-      type: String,
-    },
-    isAdmin: {
-      type: Boolean,
-    },
-    village_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "village",
-    },
+    fullName: { type: String },
+    gender: { type: String },
+    roleAdmin: { type: String },
+    isAdmin: { type: Boolean },
   },
-  { timestamps: true }
+  { timestamps: true, collection: "User" }
 );
 
 UserSchema.pre("save", function save(next) {
@@ -94,5 +85,5 @@ const comparePassword: comparePasswordFunction = function (
 UserSchema.methods.comparePassword = comparePassword;
 
 // Export the model
-const UserModel = mongoose.model<UserDocument>("user", UserSchema);
+const UserModel = mongoose.model<UserDocument>("User", UserSchema);
 export default UserModel;

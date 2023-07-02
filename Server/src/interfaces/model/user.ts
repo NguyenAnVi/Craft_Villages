@@ -6,17 +6,15 @@ export type comparePasswordFunction = (
 ) => void;
 
 export type UserDocument = mongoose.Document & {
+  villageId: mongoose.Schema.Types.ObjectId;
+  smallHolderId: mongoose.Schema.Types.ObjectId;
   email: string;
-  phone: string;
   password: string;
-  profile: {
-    fullName: string;
-    gender: string;
-    picture: string;
-  };
+  fullName: string;
+  gender: string;
+  phone: string;
   roleAdmin: string;
   isAdmin: boolean;
-  village_id: mongoose.Schema.Types.ObjectId;
   comparePassword: comparePasswordFunction;
 };
 export default UserDocument;
