@@ -48,18 +48,29 @@ export const signIn = async (
           expiresIn: "10m",
         });
 
-        const { email, phone, profile, roleAdmin, isAdmin, village_id } = user;
+        const {
+          villageId,
+          smallHolderId,
+          email,
+          phone,
+          fullName,
+          gender,
+          roleAdmin,
+          isAdmin,
+        } = user;
 
         return res.status(200).json({
           message: "Login successfully",
           status: true,
           data: {
+            villageId,
+            smallHolderId,
             email,
             phone,
-            profile,
+            fullName,
+            gender,
             roleAdmin,
             isAdmin,
-            village_id,
             accessToken: token,
           },
         });
@@ -90,9 +101,7 @@ export const signUp = async (
   await check("password", "Password must be at least 8 characters long")
     .isLength({ min: 8 })
     .run(req);
-  await check("confirmPassword", "Password do not match")
-    .equals(password)
-    .run(req);
+  await check("cPassword", "Password do not match").equals(password).run(req);
 
   const errors = validationResult(req);
 
@@ -117,10 +126,7 @@ export const signUp = async (
               .json({ message: "Create user successfully", status: true });
         })
         .catch((err) => {
-          console.log(err);
-          return res
-            .status(500)
-            .json({ message: "Error Server", status: false, err });
+          return next(err);
         });
     })
     .catch((err) => {

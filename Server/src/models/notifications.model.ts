@@ -23,7 +23,7 @@ const NotificationsSchema = new mongoose.Schema<INotifications>(
       type: Boolean,
     },
   },
-  { timestamps: true }
+  { timestamps: true, collection: "Notifications" }
 );
 
 // NotificationsSchema.pre("save", function (next) {
@@ -32,6 +32,6 @@ const NotificationsSchema = new mongoose.Schema<INotifications>(
 
 // Export the model
 export default mongoose.model<INotifications>(
-  "notifications",
+  "Notifications",
   NotificationsSchema
 );

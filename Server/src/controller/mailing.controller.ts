@@ -23,9 +23,7 @@ const sendEmail = (notification: INotifications) => {
       .findById(notification.sender)
       .then((user) => {
         sender = user;
-        senderName = sender.profile.fullName
-          ? sender.profile.fullName
-          : sender.email;
+        senderName = sender.fullName ? sender.fullName : sender.email;
       })
       .catch((err) => reject(Error(err.message || "Sender not found.")));
     notification.receivers.map(async (receiverId) => {
@@ -36,9 +34,7 @@ const sendEmail = (notification: INotifications) => {
         .exec()
         .then((user) => {
           if (user) {
-            const receiverName = user.profile.fullName
-              ? user.profile.fullName
-              : user.email;
+            const receiverName = user.fullName ? user.fullName : user.email;
             const mail = {
               from: `${mailServer.name} <${mailServer.address}>`, // sender address
               to: user.email, // list of receivers

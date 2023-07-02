@@ -1,21 +1,23 @@
 import { NextFunction } from "express";
 import UserModel from "@models/user.model";
-import VillageModel from "@models/village.model";
+import SmallHolderModel from "@models/smallHolder.model";
 import UserDocument from "@interfaces/model/user";
-import VillageDocument from "@interfaces/model/village";
+import SmallHolderDocument from "@interfaces/model/smallHolder";
 import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
 
-export const createVillage = async (
+export const createSmallHolder = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.create(...req.body)
-    .then((village) => {
-      if (village) {
-        return res.status(200).json({ message: "Create village successfully" });
+  SmallHolderModel.create(...req.body)
+    .then((SmallHolder) => {
+      if (SmallHolder) {
+        return res
+          .status(200)
+          .json({ message: "Create smallHolder successfully" });
       }
     })
     .catch((err) => {
@@ -24,14 +26,14 @@ export const createVillage = async (
     });
 };
 
-export const getVillage = async (
+export const getSmallHolder = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.find({ _id: req.param.id })
-    .then((village) => {
-      return res.status(200).json({ data: village });
+  SmallHolderModel.find({ _id: req.param.id })
+    .then((SmallHolder) => {
+      return res.status(200).json({ data: SmallHolder });
     })
     .catch((err) => {
       console.log(err);
@@ -39,14 +41,14 @@ export const getVillage = async (
     });
 };
 
-export const getAllVillage = async (
+export const getAllSmallHolder = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.find({})
-    .then((village) => {
-      return res.status(200).json({ data: village });
+  SmallHolderModel.find({})
+    .then((SmallHolder) => {
+      return res.status(200).json({ data: SmallHolder });
     })
     .catch((err) => {
       console.log(err);
@@ -54,18 +56,18 @@ export const getAllVillage = async (
     });
 };
 
-export const updateVillage = async (
+export const updateSmallHolder = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.findById(req.param.id)
-    .then((village) => {
-      if (village) {
-        UserModel.updateOne({ _id: village._id }, req.body)
+  SmallHolderModel.findById(req.param.id)
+    .then((SmallHolder) => {
+      if (SmallHolder) {
+        UserModel.updateOne({ _id: SmallHolder._id }, req.body)
           .then(() => {
             return res.status(200).json({
-              message: "Village information has been updated.",
+              message: "SmallHolder information has been updated.",
               status: true,
             });
           })
@@ -81,12 +83,16 @@ export const updateVillage = async (
     });
 };
 
-export const deleteVillage = (req: any, res: any, next: NextFunction): void => {
-  VillageModel.deleteOne({ _id: req.param.id })
+export const deleteSmallHolder = (
+  req: any,
+  res: any,
+  next: NextFunction
+): void => {
+  SmallHolderModel.deleteOne({ _id: req.param.id })
     .then(() => {
       return res
         .status(200)
-        .json({ message: "Village has been deleted.", status: true });
+        .json({ message: "SmallHolder has been deleted.", status: true });
     })
     .catch((err) => {
       console.log(err);

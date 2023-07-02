@@ -71,7 +71,7 @@ export const signUp = createAsyncThunk(
     try {
       const response = await httpRequest.post(API_URL + 'signUp', userData);
       if (response) {
-        localStorage.setItem('user', JSON.stringify(response));
+        // localStorage.setItem('user', JSON.stringify(response));
         return response;
       }
     } catch (error) {
@@ -140,7 +140,7 @@ export const authSlice = createSlice({
       .addCase(signUp.fulfilled, (state, action: PayloadAction<Payload>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload.data;
+        // state.user = action.payload.data;
         state.message = action.payload.message;
       })
       .addCase(signUp.rejected, (state, action: AnyAction) => {

@@ -32,7 +32,7 @@ const SignUp = (props: Props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { user, isError, isSuccess, message } = useAppSelector(
+  const { isError, isSuccess, message } = useAppSelector(
     (state) => state.auth,
   );
 
@@ -41,12 +41,13 @@ const SignUp = (props: Props) => {
       toast.error(message);
     }
 
-    if (isSuccess || user) {
-      navigate('/');
+    if (isSuccess) {
+      toast.success(message)
+      navigate('/dangnhap');
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  }, [isError, isSuccess, message, navigate, dispatch]);
 
   let userSchema = yup.object().shape({
     email: yup
@@ -70,8 +71,7 @@ const SignUp = (props: Props) => {
     },
     validationSchema: userSchema,
     onSubmit: (values): void => {
-      console.log('Form data', values);
-      // dispatch(signUp(values));
+      dispatch(signUp(values));
     },
   });
 
