@@ -9,7 +9,7 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-interface ISidebarProps { }
+interface ISidebarProps {}
 
 function Sidebar() {
   return (
@@ -20,9 +20,9 @@ function Sidebar() {
       </Link>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routesAdmin.adminSmallHolder}
+        to={config.routesAdmin.adminDetailVillage}
       >
-        Nông hộ quản lý
+        Quản lý làng nghề
       </NavLink>
       <NavLink className={cx('navlink')} to="#">
         Sản phẩm
