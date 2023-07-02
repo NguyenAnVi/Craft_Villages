@@ -14,28 +14,27 @@ import Contact from '~/pages/Contact';
 import DetailVillage from '~/pages/DetailVillage';
 
 //Admin
-import AdminMail from "~/pages/Admin/Mail";
+import AdminMail from '~/pages/Admin/Mail';
 import AdminOrders from '~/pages/Admin/Orders';
-import AdminProduct from "~/pages/Admin/Product"
-import AdminReport from "~/pages/Admin/Report";
-import AdminSmallHolder from '~/pages/Admin/SmallHolder';
-import AdminUser from "~/pages/Admin/User";
-import AdminUserCreate from "~/pages/Admin/User/components/UserCreate";
+import AdminProduct from '~/pages/Admin/Product';
+import AdminReport from '~/pages/Admin/Report';
+import AdminDetailVillage from '~/pages/Admin/Village/components/DetailVillage';
+import AdminUser from '~/pages/Admin/User';
+import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
 
 // AdminSmallHolder
 
-import adminSmallHolderMain from "~/pages/AdminSmallHolder/SmallHolder";
-import adminSmallHolderMainDetail from "~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderDetail";
-import adminSmallHolderMainEdit from "~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderEdit";
-import adminSmallHolderMail from "~/pages/AdminSmallHolder/Mail";
-import adminSmallHolderReport from "~/pages/AdminSmallHolder/Report"
-import adminSmallHolderProduct from "~/pages/AdminSmallHolder/Product";
-import adminSmallHolderProductEdit from "~/pages/AdminSmallHolder/Product/components/ProductEdit";
-import adminSmallHolderProductDetail from "~/pages/AdminSmallHolder/Product/components/ProductDetail";
-import adminSmallHolderUser from "~/pages/AdminSmallHolder/User"
-import adminSmallHolderUserEdit from "~/pages/AdminSmallHolder/User/components/UserEdit"
-import adminSmallHolderUserDetail from "~/pages/AdminSmallHolder/User/components/UserDetail"
-
+import adminSmallHolderMain from '~/pages/AdminSmallHolder/SmallHolder';
+import adminSmallHolderMainDetail from '~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderDetail';
+import adminSmallHolderMainEdit from '~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderEdit';
+import adminSmallHolderMail from '~/pages/AdminSmallHolder/Mail';
+import adminSmallHolderReport from '~/pages/AdminSmallHolder/Report';
+import adminSmallHolderProduct from '~/pages/AdminSmallHolder/Product';
+import adminSmallHolderProductEdit from '~/pages/AdminSmallHolder/Product/components/ProductEdit';
+import adminSmallHolderProductDetail from '~/pages/AdminSmallHolder/Product/components/ProductDetail';
+import adminSmallHolderUser from '~/pages/AdminSmallHolder/User';
+import adminSmallHolderUserEdit from '~/pages/AdminSmallHolder/User/components/UserEdit';
+import adminSmallHolderUserDetail from '~/pages/AdminSmallHolder/User/components/UserDetail';
 
 const publicRoutes = [
   {
@@ -98,15 +97,16 @@ const privateRoutes = [
     admin: true,
   },
   {
-    path: config.routesAdmin.adminSmallHolder,
-    component: AdminSmallHolder,
+    path: config.routesAdmin.adminDetailVillage,
+    component: AdminDetailVillage,
     admin: true,
   },
   {
     path: config.routesAdmin.adminUser,
     component: AdminUser,
     admin: true,
-  }, {
+  },
+  {
     path: config.routesAdmin.adminUserCreate,
     component: AdminUserCreate,
     admin: true,

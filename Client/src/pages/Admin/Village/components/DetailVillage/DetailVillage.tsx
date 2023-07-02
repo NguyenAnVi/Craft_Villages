@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import * as yup from 'yup';
 import { Formik, useFormik } from 'formik';
 
-import styles from './SmallHolder.module.scss';
+import styles from './DetailVillage.module.scss';
 import Button from '~/components/Button';
 import { useEffect, useState } from 'react';
 
@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 
 type Props = {};
 
-const Village = (props: Props) => {
+const DetailVillage = (props: Props) => {
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {});
@@ -20,7 +20,7 @@ const Village = (props: Props) => {
   };
 
   let smallHolderSchema = yup.object().shape({
-    name: yup.string().required('Tên nông hộ không được trống'),
+    name: yup.string().required('Tên làng nghề không được trống'),
     address: yup.string().required('Địa chỉ không được trống'),
     username: yup.string().required('Tên người đại diện không được trống'),
     phone: yup.string().required('Số điện thoại không được trống'),
@@ -75,7 +75,7 @@ const Village = (props: Props) => {
       >
         <form>
           <label>
-            <h6>Tên nông hộ:</h6>
+            <h6>Tên làng nghề:</h6>
             {isEdit ? (
               <textarea
                 name="name"
@@ -101,7 +101,7 @@ const Village = (props: Props) => {
             <p className={cx('mess-error')}>{formik.errors.name}</p>
           )}
           <label>
-            <h6>Địa chỉ nông hộ:</h6>
+            <h6>Địa chỉ làng nghề:</h6>
             {isEdit ? (
               <textarea
                 name="address"
@@ -196,7 +196,7 @@ const Village = (props: Props) => {
             <p className={cx('mess-error')}>{formik.errors.email}</p>
           )}
           <label>
-            <h6>Chuyên môn nông hộ:</h6>
+            <h6>Chuyên môn làng nghề:</h6>
             {isEdit ? (
               <input
                 type="text"
@@ -268,7 +268,7 @@ const Village = (props: Props) => {
             <p className={cx('mess-error')}>{formik.errors.materials}</p>
           )}
           <label>
-            <h6>Ảnh nông hộ:</h6>
+            <h6>Ảnh làng nghề:</h6>
             {isEdit ? (
               <div className={cx('thumbnails')}>
                 <div className={cx('images')}>
@@ -345,4 +345,4 @@ const Village = (props: Props) => {
   );
 };
 
-export default Village;
+export default DetailVillage;
