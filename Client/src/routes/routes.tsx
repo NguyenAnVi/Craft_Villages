@@ -29,9 +29,9 @@ import adminSmallHolderMainDetail from "~/pages/AdminSmallHolder/SmallHolder/com
 import adminSmallHolderMainEdit from "~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderEdit";
 import adminSmallHolderMail from "~/pages/AdminSmallHolder/Mail";
 import adminSmallHolderReport from "~/pages/AdminSmallHolder/Report"
-import adminSmallHolderProduct from "~/pages/AdminSmallHolder/Prouduct";
-import adminSmallHolderProductEdit from "~/pages/AdminSmallHolder/Prouduct/components/ProductEdit";
-import adminSmallHolderProductDetail from "~/pages/AdminSmallHolder/Prouduct/components/ProductDetail";
+import adminSmallHolderProduct from "~/pages/AdminSmallHolder/Product";
+import adminSmallHolderProductEdit from "~/pages/AdminSmallHolder/Product/components/ProductEdit";
+import adminSmallHolderProductDetail from "~/pages/AdminSmallHolder/Product/components/ProductDetail";
 import adminSmallHolderUser from "~/pages/AdminSmallHolder/User"
 import adminSmallHolderUserEdit from "~/pages/AdminSmallHolder/User/components/UserEdit"
 import adminSmallHolderUserDetail from "~/pages/AdminSmallHolder/User/components/UserDetail"
