@@ -8,12 +8,12 @@ import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-type Props = {};
+type props = {};
 
-const Village = (props: Props) => {
+const Village = (props: props) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  useEffect(() => {});
+  useEffect(() => { });
 
   const handleIsEdit = () => {
     setIsEdit(!isEdit);

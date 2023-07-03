@@ -151,15 +151,15 @@ const privateRoutesAdminSmallHolder = [
     admin: true,
   },
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderReport,
-    components: adminSmallHolderReport,
-    admin: true,
-  },
-  {
     path: config.routesAdminSmallHolder.adminSmallHolderProductEdit,
     component: adminSmallHolderProductEdit,
     admin: true,
   },
+  // {
+  //   path: config.routesAdminSmallHolder.adminSmallHolderReport,
+  //   components: adminSmallHolderReport,
+  //   admin: true,
+  // },
   {
     path: config.routesAdminSmallHolder.adminSmallHolderUser,
     component: adminSmallHolderUser,

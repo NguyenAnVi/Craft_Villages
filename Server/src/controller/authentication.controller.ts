@@ -54,8 +54,9 @@ export const signIn = async (
           phone,
           fullName,
           gender,
-          roleAdmin,
           isAdmin,
+          isAdminWebsite,
+          isAdminSmallHolder,
         } = user;
 
         return res.status(200).json({
@@ -68,8 +69,9 @@ export const signIn = async (
             phone,
             fullName,
             gender,
-            roleAdmin,
             isAdmin,
+            isAdminWebsite,
+            isAdminSmallHolder,
             accessToken: token,
           },
         });
