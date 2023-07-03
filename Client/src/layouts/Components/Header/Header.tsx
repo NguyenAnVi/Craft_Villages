@@ -9,12 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
-import { logout, reset } from '~/features/auth/authSlice';
+import { logout, reset, clearData } from '~/features/auth/authSlice';
 import { toast } from "react-toastify"
 const cx = classNames.bind(styles);
 
 function Header() {
-  const { user, message, isSuccessLogout } = useAppSelector(
+  const { user, message, isSuccessLogout, isError } = useAppSelector(
     (state) => state.auth,
   );
   const [navBarMobile, setNavBarMobile] = useState(false);
@@ -27,10 +27,16 @@ function Header() {
     if (isSuccessLogout) {
       toast.success(message)
     }
+    if (isError) {
+      toast.error(message)
+    }
     dispatch(reset())
-  }, [message, isSuccessLogout, dispatch])
+  }, [message, isSuccessLogout, isError, dispatch])
   const handleLogout = () => {
-    dispatch(logout());
+    // dispatch(clearData())
+    if (user?.accessToken) {
+      dispatch(logout(user.accessToken));
+    }
   }
 
   return (

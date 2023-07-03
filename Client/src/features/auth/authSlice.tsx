@@ -5,6 +5,7 @@ import {
   AnyAction,
 } from '@reduxjs/toolkit';
 import * as httpRequest from '~/utils/httpRequest';
+import axios from 'axios';
 const API_URL = '/auth/';
 
 type User = {
@@ -12,33 +13,21 @@ type User = {
   password: string,
 }
 type DataUser = {
+  villageId: string,
+  smallHolderId: string,
   email: string;
   phone: string;
-  profile: {
-    fullName: string,
-    gender: string,
-    picture: string,
-  },
+  fullName: string,
+  gender: string,
   roleAdmin: string,
   isAdmin: boolean,
-  village_id: string,
+  accessToken: string,
 }
 
 type Payload = {
   message: string;
   status: boolean;
-  data: {
-    email: string;
-    phone: string;
-    profile: {
-      fullName: string,
-      gender: string,
-      picture: string,
-    },
-    roleAdmin: string,
-    isAdmin: boolean,
-    village_id: string,
-  },
+  data: DataUser
 
 }
 // Get user from localStorage
@@ -95,7 +84,7 @@ export const signIn = createAsyncThunk(
     try {
       const response = await httpRequest.post(API_URL + 'signIn', userData);
       if (response) {
-        localStorage.setItem('user', JSON.stringify(response));
+        localStorage.setItem('user', JSON.stringify(response.data));
         return response;
       }
     } catch (error) {
@@ -108,18 +97,27 @@ export const signIn = createAsyncThunk(
 );
 
 // Logout user
-export const logout = createAsyncThunk('auth/logout', async () => {
-  try {
-    const response = await httpRequest.post(API_URL + 'logout');
-    if (response) {
-      localStorage.removeItem('user');
-      return response;
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (accessToken: string, thunkAPI) => {
+    try {
+      const response = await httpRequest.post(API_URL + 'logout', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      });
+      if (response) {
+        localStorage.removeItem('user');
+        return response;
+      }
+    } catch (error) {
+      console.log(error);
+      const message =
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
-  }
-  catch (err) {
-    console.log(err);
-  }
-})
+  },
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -131,6 +129,9 @@ export const authSlice = createSlice({
       state.isError = false;
       state.isSuccessLogout = false;
     },
+    clearData: (state) => {
+      state.user = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -164,13 +165,20 @@ export const authSlice = createSlice({
         state.message = action.payload;
         state.user = null;
       })
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(logout.fulfilled, (state, action: AnyAction) => {
         state.user = null;
         state.isSuccessLogout = true;
         state.message = action.payload.message;
+      })
+      .addCase(logout.rejected, (state, action: AnyAction) => {
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, clearData } = authSlice.actions;
 export default authSlice.reducer;

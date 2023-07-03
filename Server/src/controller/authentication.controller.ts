@@ -5,9 +5,8 @@ import UserModel from "@models/user.model";
 import { UserDocument } from "@interfaces/model/user";
 import Locals from "@provider/locals";
 import jwt from "jsonwebtoken";
-import passport from "passport";
+import passport from "@config/passport";
 import { IVerifyOptions } from "passport-local";
-import "@config/passport";
 
 export const signIn = async (
   req: any,
@@ -45,7 +44,7 @@ export const signIn = async (
         }
 
         const token = jwt.sign({ id: user._id }, Locals.config().jwtSecretKey, {
-          expiresIn: "10m",
+          expiresIn: Locals.config().jwtExpiresIn,
         });
 
         const {
@@ -84,7 +83,13 @@ export const logout = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  return res.status(200).json({ message: "Logout successfully", status: true });
+  try {
+    return res
+      .status(200)
+      .json({ message: "Logout successfully", status: true });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const signUp = async (
