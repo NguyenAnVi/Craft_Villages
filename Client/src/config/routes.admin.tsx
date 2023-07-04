@@ -5,6 +5,7 @@ const routesAdmin = {
   adminReport: '/admin/report',
   adminVillage: '/admin/village',
   adminDetailVillage: '/admin/village/detail',
+  adminSmallHolder: '/admin/smallholder',
   adminUser: '/admin/user',
   adminUserCreate: '/admin/userCreate',
 };

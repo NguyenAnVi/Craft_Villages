@@ -21,6 +21,7 @@ import AdminProduct from '~/pages/Admin/Product';
 import AdminReport from '~/pages/Admin/Report';
 import AdminVillage from '~/pages/Admin/Village';
 import AdminDetailVillage from '~/pages/Admin/Village/components/DetailVillage';
+import AdminSmallHolder from '~/pages/Admin/SmallHolder';
 import AdminUser from '~/pages/Admin/User';
 import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
 
@@ -113,6 +114,11 @@ const privateRoutes = [
   {
     path: config.routesAdmin.adminDetailVillage,
     component: AdminDetailVillage,
+    admin: true,
+  },
+  {
+    path: config.routesAdmin.adminSmallHolder,
+    component: AdminSmallHolder,
     admin: true,
   },
   {

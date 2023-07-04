@@ -2,14 +2,14 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Stack, Typography, Pagination } from '@mui/material';
 
-import styles from './User.module.scss';
+import styles from './SmallHolder.module.scss';
 import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 
 type Props = {};
 
-const UserList = (props: Props) => {
+const SmallHolderList = (props: Props) => {
   let smallHolders = [];
   const [table, setTable] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -27,10 +27,11 @@ const UserList = (props: Props) => {
         </td>
 
         <td>chị 9 Nê</td>
+        <td>0386666707</td>
         <td>chi9ne@gmail.com</td>
-        <td>user</td>
-        <td>001</td>
-        <td>07/04/2023</td>
+        <td>10 người</td>
+        <td>Tre, trúc, mây</td>
+        <td>5 sản phẩm/ngày</td>
         <td>
           <Button color="yellow" border="round">
             Xem chi tiết
@@ -48,10 +49,10 @@ const UserList = (props: Props) => {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('smallholder')}>
-        <h3>Quản lý tài khoản</h3>
+        <h3>Quản lý nông hộ</h3>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button color="green" border="round">
-            Thêm tài khoản
+            Thêm nông hộ
           </Button>
         </div>
 
@@ -60,12 +61,13 @@ const UserList = (props: Props) => {
             <table className={cx('table-custom')}>
               <thead>
                 <tr>
-                  <th style={{ width: '10%' }}>ID</th>
-                  <th style={{ width: '10%' }}>Họ và tên</th>
+                  <th style={{ width: '10%' }}>Mã nông hộ</th>
+                  <th style={{ width: '12%' }}>Người đại diện</th>
+                  <th style={{ width: '10%' }}>Số điện thoại</th>
                   <th style={{ width: '10%' }}>Email</th>
-                  <th style={{ width: '10%' }}>Role</th>
-                  <th style={{ width: '10%' }}>Nông hộ quản lý</th>
-                  <th style={{ width: '10%' }}>Ngày tạo</th>
+                  <th style={{ width: '10%' }}>Số thành viên</th>
+                  <th style={{ width: '10%' }}>Nguyên liệu</th>
+                  <th style={{ width: '10%' }}>Sản lượng</th>
                   <th style={{ width: '10%' }}></th>
                   <th style={{ width: '10%' }}></th>
                 </tr>
@@ -92,4 +94,4 @@ const UserList = (props: Props) => {
   );
 };
 
-export default UserList;
+export default SmallHolderList;

@@ -20,18 +20,27 @@ function Sidebar() {
       </Link>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
+        to={config.routesAdmin.adminUser}
+      >
+        Quản lý tài khoản
+      </NavLink>
+      <NavLink
+        className={(nav) => cx('navlink', { active: nav.isActive })}
         to={config.routesAdmin.adminVillage}
       >
         Quản lý làng nghề
       </NavLink>
-      <NavLink className={cx('navlink')} to="#">
-        Sản phẩm
+      <NavLink
+        className={(nav) => cx('navlink', { active: nav.isActive })}
+        to={config.routesAdmin.adminSmallHolder}
+      >
+        Quản lý nông hộ
       </NavLink>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
         to={config.routesAdmin.adminOrders}
       >
-        Đơn hàng
+        Báo cáo
       </NavLink>
     </div>
   );
