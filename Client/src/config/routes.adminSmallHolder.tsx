@@ -10,8 +10,6 @@ const routesAdminSmallHolder = {
     adminSmallHolderWorkersEdit: '/adminSmallHolder/WorkersEdit',
     adminSmallHolderWorkersDetail: '/adminSmallHolder/WorkersDetail',
     adminSmallHolderReport: '/adminSmallHolder/Report',
-    adminSmallHolderUser: '/adminSmallHolder/User',
-    adminSmallHolderUserEdit: '/adminSmallHolder/UserEdit',
     adminSmallHolderUserDetail: '/adminSmallHolder/UserDetail',
 };
 

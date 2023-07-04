@@ -38,9 +38,7 @@ import adminSmallHolderProductDetail from '~/pages/AdminSmallHolder/Product/comp
 import adminSmallHolderWorkers from '~/pages/AdminSmallHolder/Workers';
 import adminSmallHolderWorkersEdit from '~/pages/AdminSmallHolder/Workers/components/WorkersEdit';
 import adminSmallHolderWorkersDetail from '~/pages/AdminSmallHolder/Workers/components/WorkersDetail';
-import adminSmallHolderUser from '~/pages/AdminSmallHolder/User';
-import adminSmallHolderUserEdit from '~/pages/AdminSmallHolder/User/components/UserEdit';
-import adminSmallHolderUserDetail from '~/pages/AdminSmallHolder/User/components/UserDetail';
+import adminSmallHolderUserDetail from '~/pages/AdminSmallHolder/User';
 
 const publicRoutes = [
   {
@@ -191,18 +189,8 @@ const privateRoutesAdminSmallHolder = [
   //   admin: true,
   // },
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderUser,
-    component: adminSmallHolderUser,
-    admin: true,
-  },
-  {
     path: config.routesAdminSmallHolder.adminSmallHolderUserDetail,
     component: adminSmallHolderUserDetail,
-    admin: true,
-  },
-  {
-    path: config.routesAdminSmallHolder.adminSmallHolderUserEdit,
-    component: adminSmallHolderUserEdit,
     admin: true,
   },
   ...publicRoutes.map((a) => ({ ...a, admin: false })),

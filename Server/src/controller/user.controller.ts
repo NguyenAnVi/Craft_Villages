@@ -22,21 +22,25 @@ export const getAllUser = async (
     });
 };
 
+export const getUser = async (
+  req: any,
+  res: any,
+  next: NextFunction
+): Promise<void> => {
+  UserModel.find({ _id: req.params.id })
+    .then((user) => {
+      return res.status(200).json({ data: user });
+    })
+    .catch((err) => {
+      console.log(err);
+      return next(err);
+    });
+};
 export const updateProfile = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  await check("email", "Please enter a valid email address.")
-    .isEmail()
-    .run(req);
-  await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(404).json({ errors: errors.array(), status: false });
-  }
-
   const user = req.user as UserDocument;
   console.log(user);
 
@@ -44,11 +48,38 @@ export const updateProfile = async (
     .then((userResult: UserDocument) => {
       if (userResult) {
         UserModel.updateOne({ _id: userResult._id }, req.body)
-          .then((userResultUpdate) => {
-            return res.status(200).json({
-              message: "Profile information has been updated.",
-              status: true,
-            });
+          .then((userResultUpdate: any) => {
+            UserModel.findOne({ _id: user._id })
+              .then((userAfter) => {
+                const {
+                  _id,
+                  villageId,
+                  smallHolderId,
+                  email,
+                  phone,
+                  fullName,
+                  isAdmin,
+                  isAdminWebsite,
+                  isAdminSmallHolder,
+                } = userAfter;
+                return res.status(200).json({
+                  message: "Profile information has been updated.",
+                  data: {
+                    _id,
+                    villageId,
+                    smallHolderId,
+                    email,
+                    phone,
+                    fullName,
+                    isAdmin,
+                    isAdminWebsite,
+                    isAdminSmallHolder,
+                    accessToken: req.headers.Authoraization,
+                  },
+                  status: true,
+                });
+              })
+              .catch((err) => next(err));
           })
           .catch((err: WriteError & CallbackError) => {
             console.log(err);

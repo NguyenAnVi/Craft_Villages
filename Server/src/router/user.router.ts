@@ -9,12 +9,21 @@ import {
 
 export default (router: express.Router) => {
   router.get(
+    "/user/getUser/:id",
+    passport.authenticate("jwt", { session: false }),
+    getAllUser
+  );
+  router.get(
     "/user/getAllUser",
     passport.authenticate("jwt", { session: false }),
     getAllUser
   );
   router.post(
     "/user/updateProfile",
+    (req, res, next) => {
+      console.log(req.headers.Authorization);
+      next();
+    },
     passport.authenticate("jwt", { session: false }),
     updateProfile
   );

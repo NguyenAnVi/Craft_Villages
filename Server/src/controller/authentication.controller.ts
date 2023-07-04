@@ -48,12 +48,12 @@ export const signIn = async (
         });
 
         const {
+          _id,
           villageId,
           smallHolderId,
           email,
           phone,
           fullName,
-          gender,
           isAdmin,
           isAdminWebsite,
           isAdminSmallHolder,
@@ -63,12 +63,12 @@ export const signIn = async (
           message: "Login successfully",
           status: true,
           data: {
+            _id,
             villageId,
             smallHolderId,
             email,
             phone,
             fullName,
-            gender,
             isAdmin,
             isAdminWebsite,
             isAdminSmallHolder,
@@ -86,6 +86,7 @@ export const logout = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    req.user = null;
     return res
       .status(200)
       .json({ message: "Logout successfully", status: true });

@@ -12,6 +12,7 @@ type User = {
   password: string,
 }
 type DataUser = {
+  _id: string,
   villageId: string,
   smallHolderId: string,
   email: string;
@@ -119,6 +120,20 @@ export const logout = createAsyncThunk(
   },
 );
 
+export const updateUser = createAsyncThunk(
+  'user/updateProfile',
+  async (dataUser: DataUser, thunkAPI) => {
+    try {
+      return dataUser
+    } catch (error) {
+      console.log(error);
+      const message =
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -131,7 +146,7 @@ export const authSlice = createSlice({
     },
     clearData: (state) => {
       state.user = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -176,7 +191,10 @@ export const authSlice = createSlice({
       .addCase(logout.rejected, (state, action: AnyAction) => {
         state.isError = true;
         state.message = action.payload;
-      });
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
   },
 });
 

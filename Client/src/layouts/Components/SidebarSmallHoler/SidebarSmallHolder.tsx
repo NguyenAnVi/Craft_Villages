@@ -20,7 +20,7 @@ function SidebarSmallHolder() {
       </Link>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routesAdminSmallHolder.adminSmallHolderUser}
+        to={config.routesAdminSmallHolder.adminSmallHolderUserDetail}
       >
         Account
       </NavLink>

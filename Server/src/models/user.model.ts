@@ -44,7 +44,6 @@ const UserSchema = new mongoose.Schema<UserDocument>(
       },
     },
     fullName: { type: String },
-    gender: { type: String },
     isAdmin: { type: Boolean, default: false },
     isAdminWebsite: { type: Boolean, default: false },
     isAdminSmallHolder: { type: Boolean, default: false },
