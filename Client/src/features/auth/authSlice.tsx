@@ -5,7 +5,6 @@ import {
   AnyAction,
 } from '@reduxjs/toolkit';
 import * as httpRequest from '~/utils/httpRequest';
-import axios from 'axios';
 const API_URL = '/auth/';
 
 type User = {
@@ -19,8 +18,9 @@ type DataUser = {
   phone: string;
   fullName: string,
   gender: string,
-  roleAdmin: string,
   isAdmin: boolean,
+  isAdminWebsite: boolean,
+  isAdminSmallHolder: boolean,
   accessToken: string,
 }
 
@@ -58,7 +58,7 @@ export const signUp = createAsyncThunk(
   'auth/signUp',
   async (userData: User, thunkAPI) => {
     try {
-      const response = await httpRequest.post(API_URL + 'signUp', userData);
+      const response = await httpRequest.post(API_URL + 'signUp', userData, undefined);
       if (response) {
         // localStorage.setItem('user', JSON.stringify(response));
         return response;
@@ -82,7 +82,7 @@ export const signIn = createAsyncThunk(
   'auth/signIn',
   async (userData: User, thunkAPI) => {
     try {
-      const response = await httpRequest.post(API_URL + 'signIn', userData);
+      const response = await httpRequest.post(API_URL + 'signIn', userData, undefined);
       if (response) {
         localStorage.setItem('user', JSON.stringify(response.data));
         return response;
@@ -101,7 +101,7 @@ export const logout = createAsyncThunk(
   'auth/logout',
   async (accessToken: string, thunkAPI) => {
     try {
-      const response = await httpRequest.post(API_URL + 'logout', {
+      const response = await httpRequest.post(API_URL + 'logout', undefined, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         },

@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 
 import styles from './Header.module.scss';
 import config from '~/config';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import Search from '~/components/Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,6 +19,7 @@ function Header() {
   );
   const [navBarMobile, setNavBarMobile] = useState(false);
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const isNavMobile = () => {
     setNavBarMobile(!navBarMobile);
   };
@@ -37,6 +38,12 @@ function Header() {
     if (user?.accessToken) {
       dispatch(logout(user.accessToken));
     }
+  }
+  const handleNav = () => {
+    if (user?.isAdmin && user?.isAdminWebsite)
+      navigate(config.routesAdmin.adminUserCreate)
+    else if (user?.isAdmin && user?.isAdminSmallHolder)
+      navigate(config.routesAdminSmallHolder.adminSmallHolderMain)
   }
 
   return (
@@ -75,9 +82,22 @@ function Header() {
         </div>
         <div className={cx('right-header')}>
           <Search />
-          {user ? (<Button color="yellow" border="circle" onClick={handleLogout} > Logout </Button>) : (<Button color="yellow" border="circle" to={config.routes.signin}>
-            Đăng nhập
-          </Button>)
+          {user ?
+            (
+              <div className={cx('right-header-nav')}>
+                <Button color="yellow" border="circle" onClick={handleNav} >
+                  Admin
+                </Button>
+                <Button color="yellow" border="circle" onClick={handleLogout} >
+                  Logout
+                </Button>
+              </div>
+            ) :
+            (
+              <Button color="yellow" border="circle" to={config.routes.signin}>
+                Đăng nhập
+              </Button>
+            )
           }
         </div>
         <Button className={cx('navbars-btn')} onClick={isNavMobile}>

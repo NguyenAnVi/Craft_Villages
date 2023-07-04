@@ -34,6 +34,9 @@ import adminSmallHolderReport from '~/pages/AdminSmallHolder/Report';
 import adminSmallHolderProduct from '~/pages/AdminSmallHolder/Product';
 import adminSmallHolderProductEdit from '~/pages/AdminSmallHolder/Product/components/ProductEdit';
 import adminSmallHolderProductDetail from '~/pages/AdminSmallHolder/Product/components/ProductDetail';
+import adminSmallHolderWorkers from '~/pages/AdminSmallHolder/Workers';
+import adminSmallHolderWorkersEdit from '~/pages/AdminSmallHolder/Workers/components/WorkersEdit';
+import adminSmallHolderWorkersDetail from '~/pages/AdminSmallHolder/Workers/components/WorkersDetail';
 import adminSmallHolderUser from '~/pages/AdminSmallHolder/User';
 import adminSmallHolderUserEdit from '~/pages/AdminSmallHolder/User/components/UserEdit';
 import adminSmallHolderUserDetail from '~/pages/AdminSmallHolder/User/components/UserDetail';
@@ -127,7 +130,7 @@ const privateRoutes = [
 
 const privateRoutesAdminSmallHolder = [
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderMail,
+    path: config.routesAdminSmallHolder.adminSmallHolderMain,
     component: adminSmallHolderMain,
     admin: true,
   },
@@ -157,15 +160,30 @@ const privateRoutesAdminSmallHolder = [
     admin: true,
   },
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderReport,
-    components: adminSmallHolderReport,
-    admin: true,
-  },
-  {
     path: config.routesAdminSmallHolder.adminSmallHolderProductEdit,
     component: adminSmallHolderProductEdit,
     admin: true,
   },
+  {
+    path: config.routesAdminSmallHolder.adminSmallHolderWorkers,
+    component: adminSmallHolderWorkers,
+    admin: true,
+  },
+  {
+    path: config.routesAdminSmallHolder.adminSmallHolderWorkersDetail,
+    component: adminSmallHolderWorkersDetail,
+    admin: true,
+  },
+  {
+    path: config.routesAdminSmallHolder.adminSmallHolderWorkersEdit,
+    component: adminSmallHolderWorkersEdit,
+    admin: true,
+  },
+  // {
+  //   path: config.routesAdminSmallHolder.adminSmallHolderReport,
+  //   components: adminSmallHolderReport,
+  //   admin: true,
+  // },
   {
     path: config.routesAdminSmallHolder.adminSmallHolderUser,
     component: adminSmallHolderUser,
