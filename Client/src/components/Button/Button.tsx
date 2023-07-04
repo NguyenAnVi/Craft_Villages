@@ -9,7 +9,14 @@ type ButtonProps = {
   className?: string;
   children?: React.ReactNode;
   to?: string;
-  color?: 'primary' | 'secondary' | 'white' | 'shadeYellow' | 'yellow';
+  color?:
+    | 'primary'
+    | 'secondary'
+    | 'white'
+    | 'shadeYellow'
+    | 'yellow'
+    | 'red'
+    | 'green';
   size?: string;
   border?: 'round' | 'circle';
 } & Omit<React.ComponentProps<'button'>, 'children'>;

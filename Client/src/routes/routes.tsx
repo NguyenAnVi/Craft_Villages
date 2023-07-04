@@ -19,6 +19,7 @@ import AdminMail from '~/pages/Admin/Mail';
 import AdminOrders from '~/pages/Admin/Orders';
 import AdminProduct from '~/pages/Admin/Product';
 import AdminReport from '~/pages/Admin/Report';
+import AdminVillage from '~/pages/Admin/Village';
 import AdminDetailVillage from '~/pages/Admin/Village/components/DetailVillage';
 import AdminUser from '~/pages/Admin/User';
 import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
@@ -102,6 +103,11 @@ const privateRoutes = [
   {
     path: config.routesAdmin.adminReport,
     component: AdminReport,
+    admin: true,
+  },
+  {
+    path: config.routesAdmin.adminVillage,
+    component: AdminVillage,
     admin: true,
   },
   {
