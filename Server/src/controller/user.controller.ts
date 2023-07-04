@@ -27,7 +27,7 @@ export const getUser = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  UserModel.find({ _id: req.params.id })
+  UserModel.findOne({ _id: req.params.id })
     .then((user) => {
       return res.status(200).json({ data: user });
     })
@@ -42,44 +42,16 @@ export const updateProfile = async (
   next: NextFunction
 ): Promise<void> => {
   const user = req.user as UserDocument;
-  console.log(user);
-
   UserModel.findById(user._id)
     .then((userResult: UserDocument) => {
       if (userResult) {
         UserModel.updateOne({ _id: userResult._id }, req.body)
           .then((userResultUpdate: any) => {
-            UserModel.findOne({ _id: user._id })
-              .then((userAfter) => {
-                const {
-                  _id,
-                  villageId,
-                  smallHolderId,
-                  email,
-                  phone,
-                  fullName,
-                  isAdmin,
-                  isAdminWebsite,
-                  isAdminSmallHolder,
-                } = userAfter;
-                return res.status(200).json({
-                  message: "Profile information has been updated.",
-                  data: {
-                    _id,
-                    villageId,
-                    smallHolderId,
-                    email,
-                    phone,
-                    fullName,
-                    isAdmin,
-                    isAdminWebsite,
-                    isAdminSmallHolder,
-                    accessToken: req.headers.Authoraization,
-                  },
-                  status: true,
-                });
-              })
-              .catch((err) => next(err));
+            return res.status(200).json({
+              message: "Profile information has been updated.",
+              data: userResultUpdate,
+              status: true,
+            });
           })
           .catch((err: WriteError & CallbackError) => {
             console.log(err);

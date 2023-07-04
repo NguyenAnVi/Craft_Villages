@@ -5,20 +5,37 @@ import { Formik, useFormik } from 'formik';
 import styles from './UserDetail.module.scss';
 import Button from '~/components/Button';
 import { useState, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '~/app/hooks';
-import { updateProfile } from "~/features/user/userService"
-import { updateUser } from "~/features/auth/authSlice"
+import { useAppSelector } from '~/app/hooks';
+import { updateProfile, getUser } from "~/features/user/userService"
 import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 type props = {};
 
+
 const UserDetail = (props: props) => {
     const [isEdit, setIsEdit] = useState(false);
-    const dispatch = useAppDispatch();
+    const [userData, setUserData] = useState<any | null>(null);
     const { user } = useAppSelector(
         (state) => state.auth,
     );
+    const fetchData = async () => {
+        try {
+            if (user?.accessToken) {
+                const res = await getUser(user?._id, user?.accessToken)
+                setUserData(res.data)
+            }
+        }
+        catch (err) {
+            console.log(err);
+            if (err)
+                toast.error(err.response.data.message)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
     const handleIsEdit = () => {
         setIsEdit(!isEdit);
     };
@@ -57,8 +74,7 @@ const UserDetail = (props: props) => {
                 }
                 if (user?.accessToken) {
                     const res = await updateProfile(dataUser, user.accessToken)
-                    console.log(res);
-                    dispatch(updateUser(res.data))
+                    fetchData();
                     toast.success(res.message);
                     setIsEdit(!isEdit);
                     resetForm();
@@ -109,7 +125,7 @@ const UserDetail = (props: props) => {
                             />
                         ) : (
                             <p>
-                                {user?.email}
+                                {userData?.email}
                             </p>
                         )}
                     </label>
@@ -134,7 +150,7 @@ const UserDetail = (props: props) => {
                                 placeholder="ex:0883264567"
                             />
                         ) : (
-                            <p>{user?.phone}</p>
+                            <p>{userData?.phone}</p>
                         )}
                     </label>
                     {formik.errors.phone && formik.touched.phone && (
@@ -158,7 +174,7 @@ const UserDetail = (props: props) => {
                                 placeholder="ex:Trong Nhan"
                             />
                         ) : (
-                            <p>{user?.fullName}</p>
+                            <p>{userData?.fullName}</p>
                         )}
                     </label>
                     {formik.errors.fullName && formik.touched.fullName && (

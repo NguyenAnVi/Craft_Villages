@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "@config/passport";
 import {
+  getUser,
   getAllUser,
   updateProfile,
   updatePassword,
@@ -11,7 +12,7 @@ export default (router: express.Router) => {
   router.get(
     "/user/getUser/:id",
     passport.authenticate("jwt", { session: false }),
-    getAllUser
+    getUser
   );
   router.get(
     "/user/getAllUser",
@@ -20,10 +21,6 @@ export default (router: express.Router) => {
   );
   router.post(
     "/user/updateProfile",
-    (req, res, next) => {
-      console.log(req.headers.Authorization);
-      next();
-    },
     passport.authenticate("jwt", { session: false }),
     updateProfile
   );
