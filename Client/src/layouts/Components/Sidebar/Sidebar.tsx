@@ -20,7 +20,7 @@ function Sidebar() {
       </Link>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routesAdmin.adminDetailVillage}
+        to={config.routesAdmin.adminVillage}
       >
         Quản lý làng nghề
       </NavLink>

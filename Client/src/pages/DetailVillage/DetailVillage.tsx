@@ -79,9 +79,9 @@ const DetailSmallHolder = (props: Props) => {
           </div>
         </div>
         <div className={cx('title')}>
-          <img className={cx('line')} src={left} />
+          <img className={cx('line', 'line-left')} src={left} />
           Thành tích
-          <img className={cx('line')} src={right} />
+          <img className={cx('line', 'line-right')} src={right} />
         </div>
         <div className={cx('achievement')}>
           <div className={cx('achievement-subtitle')}>
@@ -106,9 +106,9 @@ const DetailSmallHolder = (props: Props) => {
           </div>
         </div>
         <div className={cx('title')}>
-          <img className={cx('line')} src={left} />
+          <img className={cx('line', 'line-left')} src={left} />
           Sản phẩm chính
-          <img className={cx('line')} src={right} />
+          <img className={cx('line', 'line-right')} src={right} />
         </div>
         <div className={cx('products')}>
           <Link className={cx('product-item')} to="#">
@@ -163,9 +163,9 @@ const DetailSmallHolder = (props: Props) => {
           </Link>
         </div>
         <div className={cx('title')}>
-          <img className={cx('line')} src={left} />
+          <img className={cx('line', 'line-left')} src={left} />
           Hình ảnh nổi bật
-          <img className={cx('line')} src={right} />
+          <img className={cx('line', 'line-right')} src={right} />
         </div>
         <div className={cx('village-images')}></div>
       </div>
