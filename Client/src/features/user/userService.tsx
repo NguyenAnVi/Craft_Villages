@@ -1,8 +1,22 @@
 import * as httpRequest from '~/utils/httpRequest';
 const API_URL = '/user/';
 
+export const createUser = (data: object, accessToken: string) => {
+    return httpRequest.post(API_URL + `createUser`, data, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+};
 export const getUser = (_id: string, accessToken: string) => {
     return httpRequest.get(API_URL + `getUser/${_id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+};
+export const getAllUser = (accessToken: string) => {
+    return httpRequest.get(API_URL + `getAllUser/`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }

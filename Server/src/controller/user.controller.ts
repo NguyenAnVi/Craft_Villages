@@ -3,9 +3,83 @@ import UserModel from "@models/user.model";
 import UserDocument from "@interfaces/model/user";
 import VillageModel from "@models/smallHolder.model";
 import VillageDocument from "@interfaces/model/smallHolder";
+import SmallHolderModel from "@models/smallHolder.model";
+import SmallHolderDocument from "@interfaces/model/smallHolder";
 import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
+
+export const createUser = async (
+  req: any,
+  res: any,
+  next: NextFunction
+): Promise<void> => {
+  const { email, password } = req.body;
+
+  await check("email", "E-mail cannot be blank").notEmpty().run(req);
+  await check("email", "E-mail is not valid").isEmail().run(req);
+  await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
+  await check("password", "Password cannot be blank").notEmpty().run(req);
+  await check("password", "Password must be at least 8 characters long")
+    .isLength({ min: 8 })
+    .run(req);
+  await check("cPassword", "Password do not match").equals(password).run(req);
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors,
+    });
+  }
+
+  UserModel.findOne({ email })
+    .then((existingUser: UserDocument) => {
+      if (existingUser) {
+        return res
+          .status(422)
+          .json({ message: "User existing", status: false });
+      }
+      UserModel.create({
+        email,
+        password,
+        isAdmin: true,
+        isAdminSmallHolder: true,
+        ...req.body,
+      })
+        .then((createUser) => {
+          if (createUser) {
+            SmallHolderModel.create({ adminId: createUser._id })
+              .then((createSmallHolder) => {
+                if (createSmallHolder) {
+                  UserModel.updateOne(
+                    { _id: createUser._id },
+                    { $set: { smallHolderId: createSmallHolder._id } }
+                  )
+                    .then(() => {
+                      return res.status(200).json({
+                        message: "Create user successfully",
+                        status: true,
+                      });
+                    })
+                    .catch((err) => {
+                      next(err);
+                    });
+                }
+              })
+              .catch((err) => {
+                next(err);
+              });
+          }
+        })
+        .catch((err) => {
+          return next(err);
+        });
+    })
+    .catch((err) => {
+      return next(err);
+    });
+};
 export const getAllUser = async (
   req: any,
   res: any,
@@ -70,46 +144,46 @@ export const updateProfile = async (
     });
 };
 
-export const updatePassword = async (
-  req: any,
-  res: any,
-  next: NextFunction
-): Promise<void> => {
-  await check("password", "Password must be at least 8 characters long")
-    .isLength({ min: 8 })
-    .run(req);
-  await check("confirmPassword", "Passwords do not match")
-    .equals(req.body.password)
-    .run(req);
+// export const updatePassword = async (
+//   req: any,
+//   res: any,
+//   next: NextFunction
+// ): Promise<void> => {
+//   await check("password", "Password must be at least 8 characters long")
+//     .isLength({ min: 8 })
+//     .run(req);
+//   await check("confirmPassword", "Passwords do not match")
+//     .equals(req.body.password)
+//     .run(req);
 
-  const errors = validationResult(req);
+//   const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array(), status: false });
-  }
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array(), status: false });
+//   }
 
-  const user = req.user as UserDocument;
-  UserModel.findById(user._id)
-    .then((userResult: UserDocument) => {
-      UserModel.updateOne(
-        { _id: userResult._id },
-        { password: req.body.password }
-      )
-        .then((userResultUpdate) => {
-          return res
-            .status(200)
-            .json({ message: "Password has been changed.", status: true });
-        })
-        .catch((err: WriteError & CallbackError) => {
-          console.log(err);
-          return next(err);
-        });
-    })
-    .catch((err: NativeError) => {
-      console.log(err);
-      return next(err);
-    });
-};
+//   const user = req.user as UserDocument;
+//   UserModel.findById(user._id)
+//     .then((userResult: UserDocument) => {
+//       UserModel.updateOne(
+//         { _id: userResult._id },
+//         { password: req.body.password }
+//       )
+//         .then((userResultUpdate) => {
+//           return res
+//             .status(200)
+//             .json({ message: "Password has been changed.", status: true });
+//         })
+//         .catch((err: WriteError & CallbackError) => {
+//           console.log(err);
+//           return next(err);
+//         });
+//     })
+//     .catch((err: NativeError) => {
+//       console.log(err);
+//       return next(err);
+//     });
+// };
 
 export const deleteAccount = (req: any, res: any, next: NextFunction): void => {
   const user = req.user as UserDocument;

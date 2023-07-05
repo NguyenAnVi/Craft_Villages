@@ -3,13 +3,19 @@ import passport from "@config/passport";
 import bcrypt from "bcrypt";
 import {
   getUser,
+  createUser,
   getAllUser,
   updateProfile,
-  updatePassword,
+  // updatePassword,
   deleteAccount,
 } from "@controller/user.controller";
 
 export default (router: express.Router) => {
+  router.post(
+    "/user/createUser/",
+    passport.authenticate("jwt", { session: false }),
+    createUser
+  );
   router.get(
     "/user/getUser/:id",
     passport.authenticate("jwt", { session: false }),
@@ -41,11 +47,11 @@ export default (router: express.Router) => {
     passport.authenticate("jwt", { session: false }),
     updateProfile
   );
-  router.post(
-    "/user/updatePassword",
-    passport.authenticate("jwt", { session: false }),
-    updatePassword
-  );
+  // router.post(
+  //   "/user/updatePassword",
+  //   passport.authenticate("jwt", { session: false }),
+  //   updatePassword
+  // );
   router.delete(
     "/user/deleteAccount",
     passport.authenticate("jwt", { session: false }),
