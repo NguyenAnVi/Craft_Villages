@@ -14,7 +14,7 @@ import { toast } from "react-toastify"
 const cx = classNames.bind(styles);
 
 function Header() {
-  const { user, message, isSuccessLogout, isError } = useAppSelector(
+  const { user, message, isSuccessLogout, isErrorLogout } = useAppSelector(
     (state) => state.auth,
   );
   const [navBarMobile, setNavBarMobile] = useState(false);
@@ -28,11 +28,11 @@ function Header() {
     if (isSuccessLogout) {
       toast.success(message)
     }
-    if (isError) {
+    if (isErrorLogout) {
       toast.error(message)
     }
     dispatch(reset())
-  }, [message, isSuccessLogout, isError, dispatch])
+  }, [message, isSuccessLogout, isErrorLogout, dispatch])
   const handleLogout = () => {
     // dispatch(clearData())
     if (user?.accessToken) {

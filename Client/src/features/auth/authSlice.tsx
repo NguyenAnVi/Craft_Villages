@@ -35,6 +35,7 @@ type InitialState = {
   isLoading: boolean;
   message: string;
   isSuccessLogout: boolean;
+  isErrorLogout: boolean;
 
 };
 
@@ -45,6 +46,7 @@ const initialState: InitialState = {
   isLoading: false,
   message: '',
   isSuccessLogout: false,
+  isErrorLogout: false,
 
 };
 
@@ -123,6 +125,7 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.isSuccessLogout = false;
+      state.isErrorLogout = false;
     },
     clearData: (state) => {
       state.user = null;
@@ -169,7 +172,7 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(logout.rejected, (state, action: AnyAction) => {
-        state.isError = true;
+        state.isErrorLogout = true;
         state.message = action.payload;
       })
   },
