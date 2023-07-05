@@ -1,7 +1,6 @@
 import express from "express";
-
+import passport from "@config/passport";
 import {
-  createSmallHolder,
   getSmallHolder,
   getAllSmallHolder,
   updateSmallHolder,
@@ -9,9 +8,24 @@ import {
 } from "@controller/smallHolder.controller";
 
 export default (router: express.Router) => {
-  router.post("/SmallHolder/createSmallHolder", createSmallHolder);
-  router.get("/SmallHolder/getSmallHolder/:id", getSmallHolder);
-  router.get("/SmallHolder/getAllSmallHolder", getAllSmallHolder);
-  router.post("/SmallHolder/updateSmallHolder/:id", updateSmallHolder);
-  router.delete("/SmallHolder/deleteSmallHolder/:id", deleteSmallHolder);
+  router.get(
+    "/SmallHolder/getSmallHolder/:id",
+    passport.authenticate("jwt", { session: false }),
+    getSmallHolder
+  );
+  router.get(
+    "/SmallHolder/getAllSmallHolder",
+    passport.authenticate("jwt", { session: false }),
+    getAllSmallHolder
+  );
+  router.post(
+    "/SmallHolder/updateSmallHolder/:id",
+    passport.authenticate("jwt", { session: false }),
+    updateSmallHolder
+  );
+  router.delete(
+    "/SmallHolder/deleteSmallHolder/:id",
+    passport.authenticate("jwt", { session: false }),
+    deleteSmallHolder
+  );
 };

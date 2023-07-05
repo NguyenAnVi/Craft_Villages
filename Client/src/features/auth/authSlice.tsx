@@ -13,6 +13,8 @@ type User = {
 }
 type DataUser = {
   _id: string,
+  villageId: string,
+  smallHolderId: string,
   isAdmin: boolean,
   isAdminWebsite: boolean,
   isAdminSmallHolder: boolean,

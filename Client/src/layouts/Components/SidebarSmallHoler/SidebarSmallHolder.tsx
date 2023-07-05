@@ -26,7 +26,7 @@ function SidebarSmallHolder() {
       </NavLink>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routesAdminSmallHolder.adminSmallHolderMain}
+        to={config.routesAdminSmallHolder.adminSmallHolderMainDetail}
       >
         Nông hộ
       </NavLink>

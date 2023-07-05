@@ -1,6 +1,4 @@
 const routesAdminSmallHolder = {
-    adminSmallHolderMain: '/adminSmallHolder/Main',
-    adminSmallHolderMainEdit: '/adminSmallHolder/MainEdit',
     adminSmallHolderMainDetail: '/adminSmallHolder/MainDetail',
     adminSmallHolderMail: '/adminSmallHolder/Mail',
     adminSmallHolderProduct: '/adminSmallHolder/Product',

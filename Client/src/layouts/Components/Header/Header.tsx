@@ -34,7 +34,7 @@ function Header() {
     dispatch(reset())
   }, [message, isSuccessLogout, isErrorLogout, dispatch])
   const handleLogout = () => {
-    // dispatch(clearData())
+    dispatch(clearData())
     if (user?.accessToken) {
       dispatch(logout(user.accessToken));
     }
@@ -43,7 +43,7 @@ function Header() {
     if (user?.isAdmin && user?.isAdminWebsite)
       navigate(config.routesAdmin.adminUserCreate)
     else if (user?.isAdmin && user?.isAdminSmallHolder)
-      navigate(config.routesAdminSmallHolder.adminSmallHolderMain)
+      navigate(config.routesAdminSmallHolder.adminSmallHolderUserDetail)
   }
 
   return (

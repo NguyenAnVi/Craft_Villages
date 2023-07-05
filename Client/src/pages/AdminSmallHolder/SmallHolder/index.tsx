@@ -1,1 +1,1 @@
-export { default } from './SmallHolder';
+export { default } from './SmallHolderDetail';

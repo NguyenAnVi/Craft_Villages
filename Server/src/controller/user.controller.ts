@@ -118,6 +118,9 @@ export const updateProfile = async (
   UserModel.findById(user._id)
     .then((userResult: UserDocument) => {
       if (userResult) {
+        if (Object.values(req.body).length === 0) {
+          return res.status(400).json({ message: "Missing something???" });
+        }
         UserModel.updateOne({ _id: userResult._id }, { ...req.body })
           .then((userResultUpdate: any) => {
             return res.status(200).json({

@@ -27,9 +27,7 @@ import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
 
 // AdminSmallHolder
 
-import adminSmallHolderMain from '~/pages/AdminSmallHolder/SmallHolder';
-import adminSmallHolderMainDetail from '~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderDetail';
-import adminSmallHolderMainEdit from '~/pages/AdminSmallHolder/SmallHolder/components/SmallHolderEdit';
+import adminSmallHolderMainDetail from '~/pages/AdminSmallHolder/SmallHolder';
 import adminSmallHolderMail from '~/pages/AdminSmallHolder/Mail';
 import adminSmallHolderReport from '~/pages/AdminSmallHolder/Report';
 import adminSmallHolderProduct from '~/pages/AdminSmallHolder/Product';
@@ -134,18 +132,8 @@ const privateRoutes = [
 
 const privateRoutesAdminSmallHolder = [
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderMain,
-    component: adminSmallHolderMain,
-    admin: true,
-  },
-  {
     path: config.routesAdminSmallHolder.adminSmallHolderMainDetail,
     component: adminSmallHolderMainDetail,
-    admin: true,
-  },
-  {
-    path: config.routesAdminSmallHolder.adminSmallHolderMainEdit,
-    component: adminSmallHolderMainEdit,
     admin: true,
   },
   {

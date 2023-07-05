@@ -6,32 +6,12 @@ import SmallHolderDocument from "@interfaces/model/smallHolder";
 import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
-
-export const createSmallHolder = async (
-  req: any,
-  res: any,
-  next: NextFunction
-): Promise<void> => {
-  SmallHolderModel.create(...req.body)
-    .then((SmallHolder) => {
-      if (SmallHolder) {
-        return res
-          .status(200)
-          .json({ message: "Create smallHolder successfully" });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      next(err);
-    });
-};
-
 export const getSmallHolder = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  SmallHolderModel.find({ _id: req.param.id })
+  SmallHolderModel.find({ _id: req.params.id })
     .then((SmallHolder) => {
       return res.status(200).json({ data: SmallHolder });
     })
@@ -61,7 +41,7 @@ export const updateSmallHolder = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  SmallHolderModel.findById(req.param.id)
+  SmallHolderModel.findById(req.params.id)
     .then((SmallHolder) => {
       if (SmallHolder) {
         UserModel.updateOne({ _id: SmallHolder._id }, req.body)
@@ -88,7 +68,7 @@ export const deleteSmallHolder = (
   res: any,
   next: NextFunction
 ): void => {
-  SmallHolderModel.deleteOne({ _id: req.param.id })
+  SmallHolderModel.deleteOne({ _id: req.params.id })
     .then(() => {
       return res
         .status(200)

@@ -28,8 +28,7 @@ const UserDetail = (props: props) => {
         }
         catch (err) {
             console.log(err);
-            if (err)
-                toast.error(err.response.data.message)
+            if (err) { toast.error(err.response.data.message) }
         }
     }
 
@@ -225,9 +224,20 @@ const UserDetail = (props: props) => {
                     {formik.errors.cPassword && formik.touched.cPassword && (
                         <p className={cx('mess-error')}>{formik.errors.cPassword}</p>
                     )}
-                    {isEdit ? (<Button type='submit' color="shadeYellow" border="round">
-                        Save
-                    </Button>) : ""}
+                    {isEdit && (
+                        <div className={cx('form-btn')}>
+                            <Button
+                                type="submit"
+                                color="shadeYellow"
+                                border="round"
+                            >
+                                Lưu
+                            </Button>
+                            <Button color="secondary" border="round" onClick={handleIsEdit}>
+                                Hủy
+                            </Button>
+                        </div>
+                    )}
                 </form>
             </Formik>
         </div>
