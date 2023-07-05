@@ -47,13 +47,13 @@ export const createUser = async (
         isAdminSmallHolder: true,
         ...req.body,
       })
-        .then((createUser) => {
-          if (createUser) {
-            SmallHolderModel.create({ adminId: createUser._id })
+        .then((createUserData) => {
+          if (createUserData) {
+            SmallHolderModel.create({ adminId: createUserData._id })
               .then((createSmallHolder) => {
                 if (createSmallHolder) {
                   UserModel.updateOne(
-                    { _id: createUser._id },
+                    { _id: createUserData._id },
                     { $set: { smallHolderId: createSmallHolder._id } }
                   )
                     .then(() => {
