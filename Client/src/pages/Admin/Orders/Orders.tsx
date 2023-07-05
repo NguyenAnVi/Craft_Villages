@@ -1,13 +1,13 @@
 import classNames from 'classnames/bind';
 import Button from '~/components/Button';
 
-import styles from './Order.module.scss';
+import styles from './Orders.module.scss';
 
 const cx = classNames.bind(styles);
 
 type Props = {};
 
-const Village = (props: Props) => {
+const Orders = (props: Props) => {
   return (
     <div className={cx('wrapper')}>
       <div style={{ minWidth: '30%' }}>
@@ -116,4 +116,4 @@ const Village = (props: Props) => {
   );
 };
 
-export default Village;
+export default Orders;

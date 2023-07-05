@@ -12,33 +12,17 @@ type User = {
   password: string,
 }
 type DataUser = {
-  email: string;
-  phone: string;
-  profile: {
-    fullName: string,
-    gender: string,
-    picture: string,
-  },
-  roleAdmin: string,
+  _id: string,
   isAdmin: boolean,
-  village_id: string,
+  isAdminWebsite: boolean,
+  isAdminSmallHolder: boolean,
+  accessToken: string,
 }
 
 type Payload = {
   message: string;
   status: boolean;
-  data: {
-    email: string;
-    phone: string;
-    profile: {
-      fullName: string,
-      gender: string,
-      picture: string,
-    },
-    roleAdmin: string,
-    isAdmin: boolean,
-    village_id: string,
-  },
+  data: DataUser
 
 }
 // Get user from localStorage
@@ -51,6 +35,7 @@ type InitialState = {
   isLoading: boolean;
   message: string;
   isSuccessLogout: boolean;
+  isErrorLogout: boolean;
 
 };
 
@@ -61,6 +46,7 @@ const initialState: InitialState = {
   isLoading: false,
   message: '',
   isSuccessLogout: false,
+  isErrorLogout: false,
 
 };
 
@@ -69,7 +55,7 @@ export const signUp = createAsyncThunk(
   'auth/signUp',
   async (userData: User, thunkAPI) => {
     try {
-      const response = await httpRequest.post(API_URL + 'signUp', userData);
+      const response = await httpRequest.post(API_URL + 'signUp', userData, undefined);
       if (response) {
         // localStorage.setItem('user', JSON.stringify(response));
         return response;
@@ -93,9 +79,9 @@ export const signIn = createAsyncThunk(
   'auth/signIn',
   async (userData: User, thunkAPI) => {
     try {
-      const response = await httpRequest.post(API_URL + 'signIn', userData);
+      const response = await httpRequest.post(API_URL + 'signIn', userData, undefined);
       if (response) {
-        localStorage.setItem('user', JSON.stringify(response));
+        localStorage.setItem('user', JSON.stringify(response.data));
         return response;
       }
     } catch (error) {
@@ -108,18 +94,27 @@ export const signIn = createAsyncThunk(
 );
 
 // Logout user
-export const logout = createAsyncThunk('auth/logout', async () => {
-  try {
-    const response = await httpRequest.post(API_URL + 'logout');
-    if (response) {
-      localStorage.removeItem('user');
-      return response;
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (accessToken: string, thunkAPI) => {
+    try {
+      const response = await httpRequest.post(API_URL + 'logout', undefined, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      });
+      if (response) {
+        localStorage.removeItem('user');
+        return response;
+      }
+    } catch (error) {
+      console.log(error);
+      const message =
+        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
-  }
-  catch (err) {
-    console.log(err);
-  }
-})
+  },
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -130,6 +125,10 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.isSuccessLogout = false;
+      state.isErrorLogout = false;
+    },
+    clearData: (state) => {
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
@@ -164,13 +163,20 @@ export const authSlice = createSlice({
         state.message = action.payload;
         state.user = null;
       })
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(logout.fulfilled, (state, action: AnyAction) => {
         state.user = null;
         state.isSuccessLogout = true;
         state.message = action.payload.message;
-      });
+      })
+      .addCase(logout.rejected, (state, action: AnyAction) => {
+        state.isErrorLogout = true;
+        state.message = action.payload;
+      })
   },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, clearData } = authSlice.actions;
 export default authSlice.reducer;

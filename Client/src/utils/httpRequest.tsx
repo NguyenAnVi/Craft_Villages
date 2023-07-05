@@ -10,13 +10,13 @@ export const get = async (path: string, options = {}) => {
   return response.data;
 };
 
-export const post = async (path: string, options = {}) => {
-  const response = await httpRequest.post(path, options);
+export const post = async (path: string, data = {}, options = {}) => {
+  const response = await httpRequest.post(path, data, options);
   return response.data;
 };
 
-export const patch = async (path: string, options = {}) => {
-  const response = await httpRequest.patch(path, options);
+export const patch = async (path: string, data = {}, options = {}) => {
+  const response = await httpRequest.patch(path, data, options);
   return response.data;
 };
 

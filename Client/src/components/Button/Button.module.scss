@@ -16,7 +16,6 @@
   text-decoration: none;
 
   &:hover {
-    color: var(--dark);
     filter: brightness(110%);
   }
 
@@ -45,6 +44,14 @@
 .yellow {
   background-color: var(--yellow02);
   color: var(--dark);
+}
+.red {
+  background-color: var(--red);
+  color: var(--white);
+}
+.green {
+  background-color: var(--success);
+  color: var(--white);
 }
 
 // borders

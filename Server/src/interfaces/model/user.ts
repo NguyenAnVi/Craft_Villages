@@ -11,10 +11,10 @@ export type UserDocument = mongoose.Document & {
   email: string;
   password: string;
   fullName: string;
-  gender: string;
   phone: string;
-  roleAdmin: string;
   isAdmin: boolean;
+  isAdminWebsite: boolean;
+  isAdminSmallHolder: boolean;
   comparePassword: comparePasswordFunction;
 };
 export default UserDocument;

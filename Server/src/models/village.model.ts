@@ -4,8 +4,10 @@ import VillageDocument from "@interfaces/model/village";
 // Define the model
 const VillageSchema = new mongoose.Schema<VillageDocument>(
   {
-    smallHolderId: { type: mongoose.Schema.Types.ObjectId, ref: "SmallHolder" },
-    adminId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    smallHolderId: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "SmallHolder" },
+    ],
+    adminId: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     name: { type: String },
     address: { type: String },
     majorWork: { type: String },

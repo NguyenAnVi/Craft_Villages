@@ -81,7 +81,7 @@ passport.use(
     }
   })
 );
-
+export default passport;
 /**
  * Authorization Required middleware.
  */

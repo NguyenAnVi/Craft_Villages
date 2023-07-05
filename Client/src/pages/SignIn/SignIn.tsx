@@ -30,22 +30,21 @@ const SignIn = (props: Props) => {
   const { user, isError, isSuccess, message } = useAppSelector(
     (state) => state.auth,
   );
-
   useEffect(() => {
-    let i = 3;
-    console.log(i);
-    i++
-
     if (isError) {
       toast.error(message);
     }
-
     if (isSuccess) {
       toast.success(message);
+    }
+    if (user) {
       navigate('/');
     }
     dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  }, [user, isSuccess, message, isError, navigate, dispatch]);
+
+
+
 
   let userSchema = yup.object().shape({
     email: yup

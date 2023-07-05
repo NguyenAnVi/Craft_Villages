@@ -9,8 +9,8 @@ export type VillageDocument = mongoose.Document & {
   avatar: string;
   photos: string[];
   description: string;
-  smallHolderId: mongoose.Schema.Types.ObjectId;
-  adminId: mongoose.Schema.Types.ObjectId;
+  smallHolderId: mongoose.Schema.Types.ObjectId[];
+  adminId: mongoose.Schema.Types.ObjectId[];
   group: string;
 };
 

@@ -2,23 +2,24 @@ import classNames from 'classnames/bind';
 
 import styles from './Header.module.scss';
 import config from '~/config';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import Search from '~/components/Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
-import { logout, reset } from '~/features/auth/authSlice';
+import { logout, reset, clearData } from '~/features/auth/authSlice';
 import { toast } from "react-toastify"
 const cx = classNames.bind(styles);
 
 function Header() {
-  const { user, message, isSuccessLogout } = useAppSelector(
+  const { user, message, isSuccessLogout, isErrorLogout } = useAppSelector(
     (state) => state.auth,
   );
   const [navBarMobile, setNavBarMobile] = useState(false);
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const isNavMobile = () => {
     setNavBarMobile(!navBarMobile);
   };
@@ -27,10 +28,22 @@ function Header() {
     if (isSuccessLogout) {
       toast.success(message)
     }
+    if (isErrorLogout) {
+      toast.error(message)
+    }
     dispatch(reset())
-  }, [message, isSuccessLogout, dispatch])
+  }, [message, isSuccessLogout, isErrorLogout, dispatch])
   const handleLogout = () => {
-    dispatch(logout());
+    // dispatch(clearData())
+    if (user?.accessToken) {
+      dispatch(logout(user.accessToken));
+    }
+  }
+  const handleNav = () => {
+    if (user?.isAdmin && user?.isAdminWebsite)
+      navigate(config.routesAdmin.adminUserCreate)
+    else if (user?.isAdmin && user?.isAdminSmallHolder)
+      navigate(config.routesAdminSmallHolder.adminSmallHolderMain)
   }
 
   return (
@@ -69,9 +82,22 @@ function Header() {
         </div>
         <div className={cx('right-header')}>
           <Search />
-          {user ? (<Button color="yellow" border="circle" onClick={handleLogout} > Logout </Button>) : (<Button color="yellow" border="circle" to={config.routes.signin}>
-            Đăng nhập
-          </Button>)
+          {user ?
+            (
+              <div className={cx('right-header-nav')}>
+                <Button color="yellow" border="circle" onClick={handleNav} >
+                  Admin
+                </Button>
+                <Button color="yellow" border="circle" onClick={handleLogout} >
+                  Logout
+                </Button>
+              </div>
+            ) :
+            (
+              <Button color="yellow" border="circle" to={config.routes.signin}>
+                Đăng nhập
+              </Button>
+            )
           }
         </div>
         <Button className={cx('navbars-btn')} onClick={isNavMobile}>
