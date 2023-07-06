@@ -100,12 +100,19 @@ export const updateProduct = async (
     });
 };
 
-export const deleteProduct = (req: any, res: any, next: NextFunction): void => {
+export const deleteProduct = (req: any, res: any, next: NextFunction): any => {
   ProductModel.deleteOne({ _id: req.params.id })
-    .then(() => {
-      return res
-        .status(200)
-        .json({ message: "Product has been deleted.", status: true });
+    .then((deleteProductResult: any) => {
+      SmallHolderModel.updateOne(
+        { _id: deleteProductResult.smallHolderId },
+        { $pull: { productId: deleteProductResult._id } }
+      )
+        .then(() => {
+          return res
+            .status(200)
+            .json({ message: "Product has been deleted.", status: true });
+        })
+        .catch((err) => next(err));
     })
     .catch((err) => {
       console.log(err);
