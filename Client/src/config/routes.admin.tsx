@@ -7,6 +7,7 @@ const routesAdmin = {
   adminDetailVillage: '/admin/village/detail',
   adminSmallHolder: '/admin/smallholder',
   adminUser: '/admin/user',
-  adminUserCreate: '/admin/userCreate',
+  adminUserDetail: '/admin/user/detail/:id',
+  adminUserCreate: '/admin/user/create',
 };
 export default routesAdmin;

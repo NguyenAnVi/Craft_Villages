@@ -11,7 +11,7 @@ import Village from '~/pages/Village';
 import Product from '~/pages/Product';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
-import DetailVillage from '~/pages/DetailVillage';
+import DetailVillage from '~/pages/Village/components/DetailVillage';
 import DetailSmallHolder from '~/pages/DetailSmallHolder';
 
 //Admin
@@ -23,6 +23,7 @@ import AdminVillage from '~/pages/Admin/Village';
 import AdminDetailVillage from '~/pages/Admin/Village/components/DetailVillage';
 import AdminSmallHolder from '~/pages/Admin/SmallHolder';
 import AdminUser from '~/pages/Admin/User';
+import AdminUserDetail from '~/pages/Admin/User/components/UserDetail';
 import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
 
 // AdminSmallHolder
@@ -120,6 +121,11 @@ const privateRoutes = [
   {
     path: config.routesAdmin.adminUser,
     component: AdminUser,
+    admin: true,
+  },
+  {
+    path: config.routesAdmin.adminUserDetail,
+    component: AdminUserDetail,
     admin: true,
   },
   {
