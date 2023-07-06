@@ -1,24 +1,21 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { Stack, Typography, Pagination } from '@mui/material';
-import { NavLink } from 'react-router-dom';
-import { error } from 'console';
+import { Stack, Pagination } from '@mui/material';
 import { toast } from 'react-toastify';
-import { ToastHeader } from 'react-bootstrap';
+import Swal from 'sweetalert2'
 import moment from 'moment';
 
 import styles from './User.module.scss';
 import config from '~/config';
 import Button from '~/components/Button';
-import { getAllUser } from '~/features/user/userService';
+import { getAllUser, deleteUser } from '~/features/user/userService';
 import { useAppSelector } from '~/app/hooks';
-
 const cx = classNames.bind(styles);
 
 type Props = {};
 
 const UserList = (props: Props) => {
-  const { user } = useAppSelector((state: { auth: any }) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const [userList, setUserList] = useState([]);
 
   const fetchData = async () => {
@@ -41,8 +38,39 @@ const UserList = (props: Props) => {
     fetchData();
   }, []);
 
-  const handleDelete = (id: string) => {
-    alert(id);
+  const handleDelete = async (id: string) => {
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          if (user?.accessToken) {
+            const res = await deleteUser(id, user.accessToken);
+            if (res) {
+              Swal.fire(
+                'Deleted!',
+                res.message,
+                'success'
+              )
+              fetchData();
+            }
+          }
+        }
+        catch (err) {
+          console.log(err);
+          if (err) {
+            toast.error(err.response.data.message)
+          }
+        }
+      }
+    })
   };
 
   const [table, setTable] = useState(1);

@@ -67,24 +67,39 @@ const SmallHolderDetail = (props: props) => {
 
   const formik = useFormik({
     initialValues: {
-      name: 'a',
-      address: 'a',
-      city: 'a',
-      district: 'a',
-      ward: 'a',
-      majorWork: 'a',
+      name: 'Nông hộ Hậu Giang',
+      address: 'Vị Thủy, thị trấn Nàng Mau',
+      city: 'Hậu Giang',
+      district: 'Vị Thủy',
+      ward: 'Vị Thủy',
+      majorWork: 'Nón lá',
       // materials: [],
-      quantityWorkers: 'a',
-      qrCode: 'a',
-      description: 'a',
-      exp: 'a',
-      quantityProduct: 'a',
+      quantityWorkers: '1000',
+      qrCode: 'http://localhost:3000/id',
+      description: 'Hình thành từ hồi đó',
+      exp: '10 năm kinh nghiệm',
+      quantityProduct: '2000',
     },
     validationSchema: smallHolderSchema,
-    onSubmit: (values): void => {
-      console.log('Form data', values);
-      console.log(file);
-
+    onSubmit: async (values, { resetForm }): Promise<void> => {
+      try {
+        if (user?.accessToken) {
+          const res = await updateProfile(user.smallHolderId, { avatar: file, ...values }, user.accessToken)
+          if (res) {
+            toast.success(res.message)
+            setIsEdit(false)
+            resetForm();
+            fetchData();
+          }
+        }
+      }
+      catch (err) {
+        console.log(err);
+        if (err) {
+          toast.error(err.response.data.message)
+        }
+        resetForm();
+      }
     },
   });
   return <>
@@ -426,7 +441,8 @@ const SmallHolderDetail = (props: props) => {
                 </div>
               </section>
             )}
-          </Dropzone>) : ""}
+          </Dropzone>) : (<img src={smallHolder?.avatar} className={cx('fileUploadedImage')} alt="image" style={{ maxWidth: '70%' }} />
+          )}
           {isEdit && (
             <div className={cx('form-btn')}>
               <Button

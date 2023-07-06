@@ -15,6 +15,13 @@ export const getUser = (_id: string, accessToken: string) => {
         }
     })
 };
+export const deleteUser = (_id: string, accessToken: string) => {
+    return httpRequest.deleteOne(API_URL + `deleteAccount/${_id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+};
 export const getAllUser = (accessToken: string) => {
     return httpRequest.get(API_URL + `getAllUser/`, {
         headers: {

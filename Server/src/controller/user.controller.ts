@@ -189,13 +189,20 @@ export const updateProfile = async (
 // };
 
 export const deleteAccount = (req: any, res: any, next: NextFunction): void => {
-  const user = req.user as UserDocument;
-  UserModel.deleteOne({ _id: user.id })
+  console.log(req.params.id);
+
+  UserModel.deleteOne({ _id: req.params.id })
     .then(() => {
-      req.logout();
-      return res
-        .status(200)
-        .json({ message: "Your account has been deleted.", status: true });
+      SmallHolderModel.deleteOne({ adminId: req.params.id })
+        .then(() => {
+          return res
+            .status(200)
+            .json({ message: "Account has been deleted.", status: true });
+        })
+        .catch((err) => {
+          console.log(err);
+          return next(err);
+        });
     })
     .catch((err) => {
       console.log(err);

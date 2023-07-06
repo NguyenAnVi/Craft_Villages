@@ -11,7 +11,7 @@ export const getSmallHolder = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  SmallHolderModel.find({ _id: req.params.id })
+  SmallHolderModel.findOne({ _id: req.params.id })
     .then((SmallHolder) => {
       return res.status(200).json({ data: SmallHolder });
     })
@@ -44,7 +44,10 @@ export const updateSmallHolder = async (
   SmallHolderModel.findById(req.params.id)
     .then((SmallHolder) => {
       if (SmallHolder) {
-        UserModel.updateOne({ _id: SmallHolder._id }, req.body)
+        SmallHolderModel.updateOne(
+          { _id: req.params.id },
+          { $set: { ...req.body } }
+        )
           .then(() => {
             return res.status(200).json({
               message: "SmallHolder information has been updated.",

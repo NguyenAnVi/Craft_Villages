@@ -19,7 +19,7 @@ export default (router: express.Router) => {
     getAllSmallHolder
   );
   router.post(
-    "/SmallHolder/updateSmallHolder/:id",
+    "/SmallHolder/updateProfile/:id",
     passport.authenticate("jwt", { session: false }),
     updateSmallHolder
   );

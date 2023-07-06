@@ -53,7 +53,7 @@ export default (router: express.Router) => {
   //   updatePassword
   // );
   router.delete(
-    "/user/deleteAccount",
+    "/user/deleteAccount/:id",
     passport.authenticate("jwt", { session: false }),
     deleteAccount
   );

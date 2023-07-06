@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useAppSelector } from '~/app/hooks';
 import { createUser } from '~/features/user/userService';
 import { toast } from 'react-toastify';
+import config from '~/config';
 const cx = classNames.bind(styles);
 
 type props = {};
@@ -173,9 +174,18 @@ const UserCreate = (props: props) => {
           {formik.errors.cPassword && formik.touched.cPassword && (
             <p className={cx('mess-error')}>{formik.errors.cPassword}</p>
           )}
-          <Button type="submit" color="shadeYellow" border="round">
-            Save
-          </Button>
+          <div className={cx('form-btn')}>
+            <Button
+              type="submit"
+              color="shadeYellow"
+              border="round"
+            >
+              Lưu
+            </Button>
+            <Button color="secondary" border="round" to={config.routesAdmin.adminUser}>
+              Hủy
+            </Button>
+          </div>
         </form>
       </Formik>
     </div>

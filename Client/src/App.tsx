@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import 'sweetalert2/src/sweetalert2.scss'
 import { publicRoutes, privateRoutes, privateRoutesAdminSmallHolder } from '~/routes';
 import DefaultLayout from '~/layouts/DefaultLayout';
 import AdminLayout from '~/layouts/AdminLayout';
