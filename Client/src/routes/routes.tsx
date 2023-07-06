@@ -9,6 +9,7 @@ import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
 import Village from '~/pages/Village';
 import Product from '~/pages/Product';
+import ProductDetail from '~/pages/Product/ProductDetail';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
 import DetailVillage from '~/pages/Village/components/DetailVillage';
@@ -71,6 +72,10 @@ const publicRoutes = [
   {
     path: config.routes.products,
     component: Product,
+  },
+  {
+    path: config.routes.productDetail,
+    component: ProductDetail,
   },
   {
     path: config.routes.introduce,

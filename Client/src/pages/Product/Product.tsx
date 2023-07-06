@@ -58,7 +58,7 @@ function Product() {
               {products.map((product, index) => {
                 if (index >= (page - 1) * perPage && index < page * perPage) {
                   return (
-                    <Link className={cx('product-item')} to="#" key={index}>
+                    <Link className={cx('product-item')} to={config.routes.productDetail} key={index}>
                       {product}
                     </Link>
                   );
