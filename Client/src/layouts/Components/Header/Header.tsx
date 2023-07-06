@@ -10,41 +10,42 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { logout, reset, clearData } from '~/features/auth/authSlice';
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify';
+
 const cx = classNames.bind(styles);
 
 function Header() {
   const { user, message, isSuccessLogout, isErrorLogout } = useAppSelector(
-    (state) => state.auth,
+    (state: { auth: any }) => state.auth,
   );
   const [navBarMobile, setNavBarMobile] = useState(false);
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const isNavMobile = () => {
     setNavBarMobile(!navBarMobile);
   };
 
   useEffect(() => {
     if (isSuccessLogout) {
-      toast.success(message)
+      toast.success(message);
     }
     if (isErrorLogout) {
-      toast.error(message)
+      toast.error(message);
     }
-    dispatch(reset())
-  }, [message, isSuccessLogout, isErrorLogout, dispatch])
+    dispatch(reset());
+  }, [message, isSuccessLogout, isErrorLogout, dispatch]);
   const handleLogout = () => {
-    dispatch(clearData())
+    dispatch(clearData());
     if (user?.accessToken) {
       dispatch(logout(user.accessToken));
     }
-  }
+  };
   const handleNav = () => {
     if (user?.isAdmin && user?.isAdminWebsite)
-      navigate(config.routesAdmin.adminUserCreate)
+      navigate(config.routesAdmin.adminUser);
     else if (user?.isAdmin && user?.isAdminSmallHolder)
-      navigate(config.routesAdminSmallHolder.adminSmallHolderUserDetail)
-  }
+      navigate(config.routesAdminSmallHolder.adminSmallHolderUserDetail);
+  };
 
   return (
     <div className={cx('navbar')}>
@@ -82,23 +83,20 @@ function Header() {
         </div>
         <div className={cx('right-header')}>
           <Search />
-          {user ?
-            (
-              <div className={cx('right-header-nav')}>
-                <Button color="yellow" border="circle" onClick={handleNav} >
-                  Admin
-                </Button>
-                <Button color="yellow" border="circle" onClick={handleLogout} >
-                  Logout
-                </Button>
-              </div>
-            ) :
-            (
-              <Button color="yellow" border="circle" to={config.routes.signin}>
-                Đăng nhập
+          {user ? (
+            <div className={cx('right-header-nav')}>
+              <Button color="yellow" border="circle" onClick={handleNav}>
+                Admin
               </Button>
-            )
-          }
+              <Button color="yellow" border="circle" onClick={handleLogout}>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Button color="yellow" border="circle" to={config.routes.signin}>
+              Đăng nhập
+            </Button>
+          )}
         </div>
         <Button className={cx('navbars-btn')} onClick={isNavMobile}>
           <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
