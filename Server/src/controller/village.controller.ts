@@ -1,9 +1,6 @@
 import { NextFunction } from "express";
 import UserModel from "@models/user.model";
 import VillageModel from "@models/village.model";
-import UserDocument from "@interfaces/model/user";
-import VillageDocument from "@interfaces/model/village";
-import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
 
@@ -12,7 +9,7 @@ export const createVillage = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.create(...req.body)
+  VillageModel.create(req.body)
     .then((village) => {
       if (village) {
         return res.status(200).json({ message: "Create village successfully" });
@@ -29,7 +26,7 @@ export const getVillage = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.find({ _id: req.param.id })
+  VillageModel.find({ _id: req.params.id })
     .then((village) => {
       return res.status(200).json({ data: village });
     })
@@ -39,7 +36,7 @@ export const getVillage = async (
     });
 };
 
-export const getAllVillage = async (
+export const getAllVillages = async (
   req: any,
   res: any,
   next: NextFunction
@@ -59,10 +56,10 @@ export const updateVillage = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.findById(req.param.id)
+  VillageModel.findById(req.params.id)
     .then((village) => {
       if (village) {
-        UserModel.updateOne({ _id: village._id }, req.body)
+        UserModel.updateOne({ _id: village._id }, { $set: { ...req.body } })
           .then(() => {
             return res.status(200).json({
               message: "Village information has been updated.",
@@ -82,7 +79,7 @@ export const updateVillage = async (
 };
 
 export const deleteVillage = (req: any, res: any, next: NextFunction): void => {
-  VillageModel.deleteOne({ _id: req.param.id })
+  VillageModel.deleteOne({ _id: req.params.id })
     .then(() => {
       return res
         .status(200)

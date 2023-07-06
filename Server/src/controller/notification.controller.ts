@@ -44,7 +44,7 @@ export const createNewNotification = (
             response.status = true;
             response.message = `Created notification`;
             // if Send mails is included
-            if (data.sendEmail) {
+            if (data.sendEmail === true) {
               doSendEmail(noti)
                 .then((failedEmails: string[]) => {
                   response.failedEmails = failedEmails; // receiverId[] which is not in Users collection

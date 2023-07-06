@@ -14,7 +14,7 @@ export const createProduct = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  ProductModel.create(...req.body)
+  ProductModel.create({...req.body})
     .then((product) => {
       if (product) {
         return res.status(200).json({ message: "Create product successfully" });
@@ -31,7 +31,7 @@ export const getProduct = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  ProductModel.find({ _id: req.param.id })
+  ProductModel.find({ _id: req.params.id })
     .then((product) => {
       return res.status(200).json({ data: product });
     })
@@ -61,7 +61,7 @@ export const updateProduct = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  ProductModel.findById(req.param.id)
+  ProductModel.findById(req.params.id)
     .then((product) => {
       if (product) {
         ProductModel.updateOne({ _id: product._id }, req.body)
@@ -84,7 +84,7 @@ export const updateProduct = async (
 };
 
 export const deleteProduct = (req: any, res: any, next: NextFunction): void => {
-  ProductModel.deleteOne({ _id: req.param.id })
+  ProductModel.deleteOne({ _id: req.params.id })
     .then(() => {
       return res
         .status(200)

@@ -14,7 +14,7 @@ export const createWorkers = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  WorkersModel.create(...req.body)
+  WorkersModel.create({...req.body})
     .then((Workers) => {
       if (Workers) {
         return res.status(200).json({ message: "Create workers successfully" });
@@ -31,7 +31,7 @@ export const getWorkers = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  WorkersModel.find({ _id: req.param.id })
+  WorkersModel.find({ _id: req.params.id })
     .then((Workers) => {
       return res.status(200).json({ data: Workers });
     })
@@ -61,7 +61,7 @@ export const updateWorkers = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  WorkersModel.findById(req.param.id)
+  WorkersModel.findById(req.params.id)
     .then((Workers) => {
       if (Workers) {
         WorkersModel.updateOne({ _id: Workers._id }, req.body)
@@ -84,7 +84,7 @@ export const updateWorkers = async (
 };
 
 export const deleteWorkers = (req: any, res: any, next: NextFunction): void => {
-  WorkersModel.deleteOne({ _id: req.param.id })
+  WorkersModel.deleteOne({ _id: req.params.id })
     .then(() => {
       return res
         .status(200)

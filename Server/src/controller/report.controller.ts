@@ -25,6 +25,7 @@ export const getAllReports = async (
 ): Promise<void> => {
   // Hiện tại hệ thống chưa có JWT token nên dùng tạm parameter :id ở đây
   const adminId = new mongoose.Types.ObjectId(req.params.id);
+
   if (!checkValidObjectId(adminId)) {
     return res.status(500).json({
       status: false,
@@ -34,42 +35,47 @@ export const getAllReports = async (
 
   let reportResults: any = [];
 
-  // find villages whom admin manages
-  await SmallHolderModel.find({ adminId })
-    .then(async (smallHolderResults) => {
-      if (smallHolderResults) {
-        await Promise.all([
-          ...smallHolderResults.map(
-            async (smallHolderResult: any): Promise<any> => {
-              console.log(smallHolderResult._id + ":");
-              const smallHolderId = new mongoose.Types.ObjectId(
-                smallHolderResult._id
-              );
-              const reportResult = await ReportModel.find(
-                { smallHolderId },
-                null,
-                {
-                  limit: -1,
-                }
-              );
-              console.log(reportResult);
-              reportResults = [...reportResults, ...reportResult];
-            }
-          ),
-        ]).then(() => {
-          res.status(200).json({
-            status: true,
-            data: reportResults,
-          });
-        });
-      } else {
-        return res.status(200).json({
+  const filter:any = {}
+
+  // get filter {village_id, dateReport}
+  if(req.query.village_id) filter.village_id = req.query.village_id;
+  if(req.query.dateReport) filter.dateReport = req.query.dateReport;
+  console.log("prefilter:"+filter.dateReport);
+  console.log(`Find by village_id - ${filter}`);
+
+  // find villages whom were managed by user(admin_id)
+  await SmallHolderModel.find({ admin_id: adminId })
+  .then(async (smallHolderResults) => {
+    if (smallHolderResults) {
+      await Promise.all([
+        ...smallHolderResults.map(async (smallHolderResult: any): Promise<any> => {
+          if ((req.query.village_id && smallHolderResult.id === req.query.village_id) || (!req.query.village_id)){
+            console.log(smallHolderResult.id + ":");
+            filter.village_id = smallHolderResult.id;
+            console.log(filter);
+            const reportResult = await ReportModel.find( { ...filter });
+            console.log(`DateReportType: ${new Date(reportResult[0].dateReport).getTime()}`);
+            reportResults = [...reportResults, ...reportResult];
+          } else {
+            console.log(filter);
+            console.log(smallHolderResult.id+"is not in filter");
+          }
+        }),
+      ]).then(() => {
+        res.status(200).json({
           status: true,
           data: reportResults,
         });
-      }
-    })
-    .catch((err) => res.status(500).json(err.message));
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        data: reportResults,
+      });
+    }
+  })
+  .catch((err) => res.status(500).json(err.message));
+
 };
 
 export const createNewReport = async (
