@@ -3,7 +3,7 @@ const routesAdminSmallHolder = {
     adminSmallHolderMail: '/adminSmallHolder/Mail',
     adminSmallHolderProduct: '/adminSmallHolder/Product',
     adminSmallHolderProductCreate: '/adminSmallHolder/ProductCreate',
-    adminSmallHolderProductDetailEdit: '/adminSmallHolder/ProductDetailEdit',
+    adminSmallHolderProductDetailEdit: '/adminSmallHolder/ProductDetailEdit/:id',
     adminSmallHolderWorkers: '/adminSmallHolder/Workers',
     adminSmallHolderWorkersEdit: '/adminSmallHolder/WorkersEdit',
     adminSmallHolderWorkersDetail: '/adminSmallHolder/WorkersDetail',

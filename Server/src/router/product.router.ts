@@ -26,7 +26,7 @@ export default (router: express.Router) => {
     getAllProduct
   );
   router.post(
-    "/Product/updateProduct/:id",
+    "/Product/updateProfile/:id",
     passport.authenticate("jwt", { session: false }),
     updateProduct
   );

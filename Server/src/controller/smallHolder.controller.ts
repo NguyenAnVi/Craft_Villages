@@ -41,6 +41,9 @@ export const updateSmallHolder = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
+  if (Object.values(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing something???" });
+  }
   SmallHolderModel.findById(req.params.id)
     .then((SmallHolder) => {
       if (SmallHolder) {

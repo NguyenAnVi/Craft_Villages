@@ -85,7 +85,14 @@ const SmallHolderDetail = (props: props) => {
     onSubmit: async (values, { resetForm }): Promise<void> => {
       try {
         if (user?.accessToken) {
-          const res = await updateProfile(user.smallHolderId, { avatar: file, ...values }, user.accessToken)
+          let dataSmallHolder: any = values;
+          for (let prop in dataSmallHolder) {
+            if (dataSmallHolder.hasOwnProperty(prop) && dataSmallHolder[prop] === '') {
+              delete dataSmallHolder[prop];
+            }
+          }
+          dataSmallHolder = file ? { avatar: file, ...dataSmallHolder } : { ...dataSmallHolder }
+          const res = await updateProfile(user.smallHolderId, dataSmallHolder, user.accessToken)
           if (res) {
             toast.success(res.message)
             setIsEdit(false)

@@ -45,7 +45,7 @@ export const getProduct = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  ProductModel.find({ _id: req.params.id })
+  ProductModel.findOne({ _id: req.params.id })
     .then((product) => {
       return res.status(200).json({ data: product });
     })
@@ -75,10 +75,13 @@ export const updateProduct = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
+  if (Object.values(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing something???" });
+  }
   ProductModel.findById(req.params.id)
     .then((product) => {
       if (product) {
-        ProductModel.updateOne({ _id: product._id }, req.body)
+        ProductModel.updateOne({ _id: product._id }, { $set: { ...req.body } })
           .then(() => {
             return res.status(200).json({
               message: "Product information has been updated.",
