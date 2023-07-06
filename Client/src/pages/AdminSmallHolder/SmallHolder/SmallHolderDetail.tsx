@@ -1,14 +1,15 @@
 import classNames from 'classnames/bind';
 import * as yup from 'yup';
 import { Formik, useFormik } from 'formik';
+import Dropzone, { DropzoneState } from 'react-dropzone';
+import { toast } from "react-toastify"
+import { useEffect, useState } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
 
 import styles from './SmallHolderDetail.module.scss';
 import Button from '~/components/Button';
-import { useEffect, useState } from 'react';
 import { getSmallHolder, updateProfile } from "~/features/smallHolder/smallHolderService"
 import { useAppSelector } from '~/app/hooks';
-import { toast } from "react-toastify"
-import Dropzone, { DropzoneState } from 'react-dropzone';
 const cx = classNames.bind(styles);
 
 type props = {};
@@ -75,7 +76,7 @@ const SmallHolderDetail = (props: props) => {
       majorWork: 'Nón lá',
       // materials: [],
       quantityWorkers: '1000',
-      qrCode: 'http://localhost:3000/id',
+      qrCode: 'http://localhost:3000/nongho/',
       description: 'Hình thành từ hồi đó',
       exp: '10 năm kinh nghiệm',
       quantityProduct: '2000',
@@ -341,11 +342,37 @@ const SmallHolderDetail = (props: props) => {
                 }
                 placeholder=""
               />
-            ) : (
-              <p>
-                {smallHolder?.qrCode}
-              </p>
-            )}
+            ) :
+              (
+                <p>
+                  {`${smallHolder?.qrCode}${smallHolder?._id}`}
+                </p>
+              )}
+          </label>
+          <label>
+            {smallHolder?.qrCode ?
+              <>
+                <h6>Mã QrCode:</h6>
+                <QRCodeCanvas
+                  value={`${smallHolder?.qrCode}${smallHolder?._id}`}
+                  className={cx('qrImage')}
+                  size={200}
+                  bgColor={'#ffffff'}
+                  fgColor={'#000000'}
+                  level={'L'}
+                  includeMargin={false}
+                  imageSettings={{
+                    src: '',
+                    x: undefined,
+                    y: undefined,
+                    height: 24,
+                    width: 24,
+                    excavate: true
+                  }}
+                />
+              </>
+              : ""
+            }
           </label>
           {formik.errors.qrCode && formik.touched.qrCode && (
             <p className={cx('mess-error')}>{formik.errors.qrCode}</p>
@@ -436,7 +463,11 @@ const SmallHolderDetail = (props: props) => {
                   {file ? (
                     <img className={cx('fileUploadImage')} src={file} alt="preview" style={{ maxWidth: '20%' }} />
                   ) : (
-                    <p className={cx('fileUpload')}>Drag and drop an image here or click to select a file</p>
+                    <p className={cx('fileUpload')}>
+                      <i>
+                        Drag and drop an image here or click to select a file
+                      </i>
+                    </p>
                   )}
                 </div>
               </section>

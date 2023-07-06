@@ -33,8 +33,8 @@ import adminSmallHolderMainDetail from '~/pages/AdminSmallHolder/SmallHolder';
 import adminSmallHolderMail from '~/pages/AdminSmallHolder/Mail';
 import adminSmallHolderReport from '~/pages/AdminSmallHolder/Report';
 import adminSmallHolderProduct from '~/pages/AdminSmallHolder/Product';
-import adminSmallHolderProductEdit from '~/pages/AdminSmallHolder/Product/components/ProductEdit';
-import adminSmallHolderProductDetail from '~/pages/AdminSmallHolder/Product/components/ProductDetail';
+import adminSmallHolderProductCreate from '~/pages/AdminSmallHolder/Product/components/ProductCreate';
+import adminSmallHolderProductDetailEdit from '~/pages/AdminSmallHolder/Product/components/ProductDetailEdit';
 import adminSmallHolderWorkers from '~/pages/AdminSmallHolder/Workers';
 import adminSmallHolderWorkersEdit from '~/pages/AdminSmallHolder/Workers/components/WorkersEdit';
 import adminSmallHolderWorkersDetail from '~/pages/AdminSmallHolder/Workers/components/WorkersDetail';
@@ -158,13 +158,13 @@ const privateRoutesAdminSmallHolder = [
     admin: true,
   },
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderProductDetail,
-    component: adminSmallHolderProductDetail,
+    path: config.routesAdminSmallHolder.adminSmallHolderProductCreate,
+    component: adminSmallHolderProductCreate,
     admin: true,
   },
   {
-    path: config.routesAdminSmallHolder.adminSmallHolderProductEdit,
-    component: adminSmallHolderProductEdit,
+    path: config.routesAdminSmallHolder.adminSmallHolderProductDetailEdit,
+    component: adminSmallHolderProductDetailEdit,
     admin: true,
   },
   {

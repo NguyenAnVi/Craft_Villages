@@ -1,5 +1,5 @@
 import express from "express";
-
+import passport from "@config/passport";
 import {
   createWorkers,
   getWorkers,
@@ -9,9 +9,29 @@ import {
 } from "@controller/workers.controller";
 
 export default (router: express.Router) => {
-  router.post("/Workers/createWorkers", createWorkers);
-  router.get("/Workers/getWorkers/:id", getWorkers);
-  router.get("/Workers/getAllWorkers", getAllWorkers);
-  router.post("/Workers/updateWorkers/:id", updateWorkers);
-  router.delete("/Workers/deleteWorkers/:id", deleteWorkers);
+  router.post(
+    "/Workers/createWorkers",
+    passport.authenticate("jwt", { session: false }),
+    createWorkers
+  );
+  router.get(
+    "/Workers/getWorkers/:id",
+    passport.authenticate("jwt", { session: false }),
+    getWorkers
+  );
+  router.get(
+    "/Workers/getAllWorkers",
+    passport.authenticate("jwt", { session: false }),
+    getAllWorkers
+  );
+  router.post(
+    "/Workers/updateWorkers/:id",
+    passport.authenticate("jwt", { session: false }),
+    updateWorkers
+  );
+  router.delete(
+    "/Workers/deleteWorkers/:id",
+    passport.authenticate("jwt", { session: false }),
+    deleteWorkers
+  );
 };

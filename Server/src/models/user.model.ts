@@ -43,6 +43,7 @@ const UserSchema = new mongoose.Schema<UserDocument>(
           `${props.value} is not a valid phone number!`,
       },
     },
+    avatar: { type: String },
     fullName: { type: String },
     isAdmin: { type: Boolean, default: false },
     isAdminWebsite: { type: Boolean, default: false },

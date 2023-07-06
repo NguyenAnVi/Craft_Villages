@@ -9,5 +9,6 @@ export type ProductDocument = mongoose.Document & {
   avatar: string;
   photos: string[];
   description: string;
+  qrCode: string;
 };
 export default ProductDocument;

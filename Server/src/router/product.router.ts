@@ -1,4 +1,5 @@
 import express from "express";
+import passport from "@config/passport";
 
 import {
   createProduct,
@@ -9,9 +10,29 @@ import {
 } from "@controller/product.controller";
 
 export default (router: express.Router) => {
-  router.post("/Product/createProduct", createProduct);
-  router.get("/Product/getProduct/:id", getProduct);
-  router.get("/Product/getAllProduct", getAllProduct);
-  router.post("/Product/updateProduct/:id", updateProduct);
-  router.delete("/Product/deleteProduct/:id", deleteProduct);
+  router.post(
+    "/Product/createProduct/:id",
+    passport.authenticate("jwt", { session: false }),
+    createProduct
+  );
+  router.get(
+    "/Product/getProduct/:id",
+    passport.authenticate("jwt", { session: false }),
+    getProduct
+  );
+  router.get(
+    "/Product/getAllProduct/:id",
+    passport.authenticate("jwt", { session: false }),
+    getAllProduct
+  );
+  router.post(
+    "/Product/updateProduct/:id",
+    passport.authenticate("jwt", { session: false }),
+    updateProduct
+  );
+  router.delete(
+    "/Product/deleteProduct/:id",
+    passport.authenticate("jwt", { session: false }),
+    deleteProduct
+  );
 };

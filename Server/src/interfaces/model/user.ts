@@ -12,6 +12,7 @@ export type UserDocument = mongoose.Document & {
   password: string;
   fullName: string;
   phone: string;
+  avatar: string;
   isAdmin: boolean;
   isAdminWebsite: boolean;
   isAdminSmallHolder: boolean;

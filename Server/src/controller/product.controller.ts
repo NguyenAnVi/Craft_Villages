@@ -8,22 +8,36 @@ import ProductDocument from "@interfaces/model/product";
 import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
+import SmallHolderModel from "@models/smallHolder.model";
 
 export const createProduct = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  ProductModel.create({...req.body})
-    .then((product) => {
-      if (product) {
-        return res.status(200).json({ message: "Create product successfully" });
-      }
+  SmallHolderModel.findOne({ _id: req.params.id })
+    .then((SmallHolderResult) => {
+      ProductModel.create({ ...req.body, smallHolderId: SmallHolderResult._id })
+        .then((product) => {
+          if (product) {
+            SmallHolderModel.updateOne(
+              { _id: SmallHolderResult._id },
+              { $push: { productId: product._id } }
+            )
+              .then(() => {
+                return res
+                  .status(200)
+                  .json({ message: "Create product successfully" });
+              })
+              .catch((err) => next(err));
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          next(err);
+        });
     })
-    .catch((err) => {
-      console.log(err);
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 export const getProduct = async (
@@ -46,7 +60,7 @@ export const getAllProduct = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  ProductModel.find({})
+  ProductModel.find({ smallHolderId: req.params.id })
     .then((product) => {
       return res.status(200).json({ data: product });
     })

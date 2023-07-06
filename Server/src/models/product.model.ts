@@ -11,6 +11,7 @@ const ProductScheme = new mongoose.Schema<ProductDocument>(
     avatar: { type: String },
     photos: [{ type: String }],
     description: { type: String },
+    qrCode: { type: String },
   },
   { timestamps: true, collection: "Product" }
 );

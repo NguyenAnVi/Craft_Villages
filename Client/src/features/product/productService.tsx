@@ -8,22 +8,29 @@ export const getProduct = (_id: string, accessToken: string) => {
         }
     })
 };
-export const getAllProduct = (ProductId: string, accessToken: string) => {
-    return httpRequest.get(API_URL + `getAllProduct/${ProductId}`, {
+export const createProduct = (smallHolderId: string, data: object, accessToken: string) => {
+    return httpRequest.post(API_URL + `createProduct/${smallHolderId}`, data, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
     })
 };
-export const updateProfile = (ProductId: string, data: object, accessToken: string) => {
-    return httpRequest.post(API_URL + `updateProfile/${ProductId}`, data, {
+export const getAllProduct = (smallHolderId: string, accessToken: string) => {
+    return httpRequest.get(API_URL + `getAllProduct/${smallHolderId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+};
+export const updateProfile = (_id: string, data: object, accessToken: string) => {
+    return httpRequest.post(API_URL + `updateProfile/${_id}`, data, {
         headers: {
             "Authorization": `Bearer ${accessToken}`
         }
     })
 }
-export const deleteProduct = (ProductId: string, accessToken: string) => {
-    return httpRequest.deleteOne(API_URL + `deleteProduct/${ProductId}`, {
+export const deleteProduct = (_id: string, accessToken: string) => {
+    return httpRequest.deleteOne(API_URL + `deleteProduct/${_id}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
