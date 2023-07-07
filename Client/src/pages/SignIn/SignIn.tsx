@@ -43,9 +43,6 @@ const SignIn = (props: Props) => {
     dispatch(reset());
   }, [user, isSuccess, message, isError, navigate, dispatch]);
 
-
-
-
   let userSchema = yup.object().shape({
     email: yup
       .string()
