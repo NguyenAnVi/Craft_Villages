@@ -69,7 +69,6 @@ export const getAllProduct = async (
       return next(err);
     });
 };
-
 export const getAllProductV2 = async (
   req: any,
   res: any,
@@ -84,7 +83,6 @@ export const getAllProductV2 = async (
       return next(err);
     });
 };
-
 export const updateProduct = async (
   req: any,
   res: any,

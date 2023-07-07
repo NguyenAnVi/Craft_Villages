@@ -9,7 +9,6 @@
   }
   form {
     margin-top: 40px;
-    margin-bottom: 40px;
     margin-right: 150px;
     border: 2px solid yellow;
     border-radius: 50px;
@@ -112,64 +111,4 @@
   margin: -10px calc(20% + 30px) 10px;
   color: var(--red);
   font-size: 16px;
-}
-
-.workers {
-  margin: 40px 0;
-  h3 {
-    padding: 20px 0;
-    border-top: 0.5px solid black;
-  }
-}
-
-.table-custom {
-  margin: 20px 0;
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  thead th {
-    padding: 10px;
-    font-size: 20px;
-  }
-  tbody td {
-    padding: 10px 10px;
-  }
-
-  td button {
-    margin: 0;
-    box-shadow: none;
-    width: 100%;
-    height: 100%;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  tbody tr td:hover {
-    cursor: pointer;
-  }
-  tbody tr:nth-child(odd) td {
-    background-color: var(--yellow03);
-  }
-
-  tr td:first-child {
-    border-left-style: solid;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-  tr td:last-child {
-    border-right-style: solid;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-  }
-  tr:last-child td:first-child {
-    border-left-style: solid;
-    border-bottom-left-radius: 10px;
-  }
-  tr:last-child td:last-child {
-    border-right-style: solid;
-    border-bottom-right-radius: 10px;
-  }
-}
-.pagination {
-  display: flex;
-  justify-content: center;
 }

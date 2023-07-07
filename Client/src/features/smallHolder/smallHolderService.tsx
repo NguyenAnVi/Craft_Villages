@@ -15,6 +15,13 @@ export const getAllSmallHolder = (accessToken: string) => {
         }
     })
 };
+export const getAllSmallHolderV2 = (accessToken: string) => {
+    return httpRequest.get(API_URL + `getAllSmallHolderV2/`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+}
 export const updateProfile = (smallHolderId: string, data: object, accessToken: string) => {
     return httpRequest.post(API_URL + `updateProfile/${smallHolderId}`, data, {
         headers: {

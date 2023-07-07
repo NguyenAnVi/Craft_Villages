@@ -35,6 +35,20 @@ export const getAllSmallHolder = async (
       return next(err);
     });
 };
+export const getAllSmallHolderV2 = async (
+  req: any,
+  res: any,
+  next: NextFunction
+): Promise<void> => {
+  SmallHolderModel.find({})
+    .then((SmallHolder) => {
+      return res.status(200).json({ data: SmallHolder });
+    })
+    .catch((err) => {
+      console.log(err);
+      return next(err);
+    });
+};
 
 export const updateSmallHolder = async (
   req: any,
