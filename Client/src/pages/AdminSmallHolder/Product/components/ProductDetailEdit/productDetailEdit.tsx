@@ -69,7 +69,7 @@ export const ProductDetailEdit = (props: props) => {
       materials: "tre",
       price: 20000,
       type: 'Nón',
-      qrCode: 'http://localhost:3000/nongho/',
+      qrCode: `http://localhost:3000/nongho/`,
       description: 'Sản phẩm từ hồi đó',
     },
     validationSchema: productSchema,
@@ -225,33 +225,44 @@ export const ProductDetailEdit = (props: props) => {
           <label>
             <h6>Value mã QrCode:</h6>
             {isEdit ? (
-              <input
-                type="text"
-                name="qrCode"
-                id="qrCode"
-                value={formik.values.qrCode}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.qrCode && formik.touched.qrCode
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
+              <>
+                <input
+                  type="text"
+                  name="qrCode"
+                  id="qrCode"
+                  value={formik.values.qrCode}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.qrCode && formik.touched.qrCode
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+
+              </>
             ) :
               (
                 <p>
-                  {`${product?.qrCode}${product?._id}`}
+                  {`${product?.qrCode}`}
                 </p>
+
               )}
+          </label>
+          <label>
+            <h6>Mã nông hộ :</h6>
+            <p>
+              {`${product?.smallHolderId}`}
+            </p>
+
           </label>
           <label>
             {product?.qrCode ?
               <>
                 <h6>Mã QrCode:</h6>
                 <QRCodeCanvas
-                  value={`${product?.qrCode}${product?._id}`}
+                  value={`${product?.qrCode}`}
                   className={cx('qrImage')}
                   size={200}
                   bgColor={'#ffffff'}

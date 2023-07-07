@@ -2,6 +2,8 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
+import { QRCodeCanvas } from 'qrcode.react';
+
 
 import styles from './ProductDetail.module.scss';
 import { useAppSelector } from '~/app/hooks';
@@ -46,6 +48,23 @@ const ProductDetail = () => {
             <p>Số lượng: 1000 cái</p>
             <p>Mô tả: {product.description}</p>
           </div>
+          <QRCodeCanvas
+            value={`${product?.qrCode}`}
+            className={cx('qrImage')}
+            size={200}
+            bgColor={'#ffffff'}
+            fgColor={'#000000'}
+            level={'L'}
+            includeMargin={false}
+            imageSettings={{
+              src: '',
+              x: undefined,
+              y: undefined,
+              height: 24,
+              width: 24,
+              excavate: true
+            }}
+          />
         </div>
         <div className={cx('credit')}>
           <div>

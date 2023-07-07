@@ -76,7 +76,7 @@ const SmallHolderDetail = (props: props) => {
       majorWork: 'Nón lá',
       // materials: [],
       quantityWorkers: '1000',
-      qrCode: 'http://localhost:3000/nongho/',
+      qrCode: `http://localhost:3000/nongho/${user?.smallHolderId}`,
       description: 'Hình thành từ hồi đó',
       exp: '10 năm kinh nghiệm',
       quantityProduct: '2000',
@@ -352,7 +352,7 @@ const SmallHolderDetail = (props: props) => {
             ) :
               (
                 <p>
-                  {`${smallHolder?.qrCode}${smallHolder?._id}`}
+                  {`${smallHolder?.qrCode}`}
                 </p>
               )}
           </label>
@@ -361,7 +361,7 @@ const SmallHolderDetail = (props: props) => {
               <>
                 <h6>Mã QrCode:</h6>
                 <QRCodeCanvas
-                  value={`${smallHolder?.qrCode}${smallHolder?._id}`}
+                  value={`${smallHolder?.qrCode}}`}
                   className={cx('qrImage')}
                   size={200}
                   bgColor={'#ffffff'}
