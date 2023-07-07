@@ -9,6 +9,7 @@ const WorkersScheme = new mongoose.Schema<WorkersDocument>(
     exp: { type: String },
     gender: { type: String },
     phone: { type: String },
+    avatar: { type: String },
   },
   { timestamps: true, collection: "Workers" }
 );

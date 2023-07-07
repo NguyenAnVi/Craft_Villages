@@ -2,6 +2,8 @@ import { NextFunction } from "express";
 import UserModel from "@models/user.model";
 import VillageModel from "@models/smallHolder.model";
 import WorkersModel from "@models/workers.model";
+import SmallHolderModel from "@models/smallHolder.model";
+import SmallHolderDocument from "@interfaces/model/smallHolder";
 import UserDocument from "@interfaces/model/user";
 import VillageDocument from "@interfaces/model/smallHolder";
 import WorkersDocument from "@interfaces/model/workers";
@@ -14,16 +16,34 @@ export const createWorkers = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  WorkersModel.create({...req.body})
-    .then((Workers) => {
-      if (Workers) {
-        return res.status(200).json({ message: "Create workers successfully" });
+  SmallHolderModel.findOne({ _id: req.params.id })
+    .then((SmallHolderResult) => {
+      if (SmallHolderResult) {
+        WorkersModel.create({
+          ...req.body,
+          smallHolderId: SmallHolderResult._id,
+        })
+          .then((Workers) => {
+            if (Workers) {
+              SmallHolderModel.updateOne(
+                { _id: SmallHolderResult._id },
+                { $push: { workersId: Workers._id } }
+              )
+                .then(() => {
+                  return res
+                    .status(200)
+                    .json({ message: "Create Workers successfully" });
+                })
+                .catch((err) => next(err));
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            next(err);
+          });
       }
     })
-    .catch((err) => {
-      console.log(err);
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 export const getWorkers = async (
@@ -31,7 +51,7 @@ export const getWorkers = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  WorkersModel.find({ _id: req.params.id })
+  WorkersModel.findOne({ _id: req.params.id })
     .then((Workers) => {
       return res.status(200).json({ data: Workers });
     })
@@ -46,7 +66,7 @@ export const getAllWorkers = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  WorkersModel.find({})
+  WorkersModel.find({ smallHolderId: req.params.id })
     .then((Workers) => {
       return res.status(200).json({ data: Workers });
     })
@@ -55,16 +75,18 @@ export const getAllWorkers = async (
       return next(err);
     });
 };
-
 export const updateWorkers = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
+  if (Object.values(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing something???" });
+  }
   WorkersModel.findById(req.params.id)
     .then((Workers) => {
       if (Workers) {
-        WorkersModel.updateOne({ _id: Workers._id }, req.body)
+        WorkersModel.updateOne({ _id: Workers._id }, { $set: { ...req.body } })
           .then(() => {
             return res.status(200).json({
               message: "Workers information has been updated.",
@@ -83,12 +105,19 @@ export const updateWorkers = async (
     });
 };
 
-export const deleteWorkers = (req: any, res: any, next: NextFunction): void => {
-  WorkersModel.deleteOne({ _id: req.params.id })
-    .then(() => {
-      return res
-        .status(200)
-        .json({ message: "Workers has been deleted.", status: true });
+export const deleteWorkers = (req: any, res: any, next: NextFunction): any => {
+  WorkersModel.findOneAndDelete({ _id: req.params.id }, { new: true })
+    .then((deleteWorkersResult: any) => {
+      SmallHolderModel.updateOne(
+        { _id: deleteWorkersResult.smallHolderId },
+        { $pull: { workersId: deleteWorkersResult._id } }
+      )
+        .then(() => {
+          return res
+            .status(200)
+            .json({ message: "Workers has been deleted.", status: true });
+        })
+        .catch((err) => next(err));
     })
     .catch((err) => {
       console.log(err);

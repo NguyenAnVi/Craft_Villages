@@ -10,7 +10,7 @@ import {
 
 export default (router: express.Router) => {
   router.post(
-    "/Workers/createWorkers",
+    "/Workers/createWorkers/:id",
     passport.authenticate("jwt", { session: false }),
     createWorkers
   );
@@ -20,12 +20,12 @@ export default (router: express.Router) => {
     getWorkers
   );
   router.get(
-    "/Workers/getAllWorkers",
+    "/Workers/getAllWorkers/:id",
     passport.authenticate("jwt", { session: false }),
     getAllWorkers
   );
   router.post(
-    "/Workers/updateWorkers/:id",
+    "/Workers/updateProfile/:id",
     passport.authenticate("jwt", { session: false }),
     updateWorkers
   );

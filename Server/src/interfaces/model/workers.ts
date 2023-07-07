@@ -7,5 +7,6 @@ export type WorkersDocument = mongoose.Document & {
   exp: string;
   gender: string;
   phone: string;
+  avatar: string;
 };
 export default WorkersDocument;

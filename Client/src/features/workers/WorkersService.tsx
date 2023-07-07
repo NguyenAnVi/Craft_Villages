@@ -8,22 +8,30 @@ export const getWorkers = (_id: string, accessToken: string) => {
         }
     })
 };
-export const getAllWorkers = (WorkersId: string, accessToken: string) => {
-    return httpRequest.get(API_URL + `getAllWorkers/${WorkersId}`, {
+export const createWorkers = (smallHolderId: string, data: object, accessToken: string) => {
+    return httpRequest.post(API_URL + `createWorkers/${smallHolderId}`, data, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
     })
 };
-export const updateProfile = (WorkersId: string, data: object, accessToken: string) => {
-    return httpRequest.post(API_URL + `updateProfile/${WorkersId}`, data, {
+export const getAllWorkers = (smallHolderId: string, accessToken: string) => {
+    return httpRequest.get(API_URL + `getAllWorkers/${smallHolderId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+};
+
+export const updateProfile = (_id: string, data: object, accessToken: string) => {
+    return httpRequest.post(API_URL + `updateProfile/${_id}`, data, {
         headers: {
             "Authorization": `Bearer ${accessToken}`
         }
     })
 }
-export const deleteWorkers = (WorkersId: string, accessToken: string) => {
-    return httpRequest.deleteOne(API_URL + `deleteWorkers/${WorkersId}`, {
+export const deleteWorkers = (_id: string, accessToken: string) => {
+    return httpRequest.deleteOne(API_URL + `deleteWorkers/${_id}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }

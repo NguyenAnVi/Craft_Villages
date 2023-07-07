@@ -6,7 +6,7 @@ import villageRoute from "@router/village.router";
 import productRoute from "@router/product.router";
 import reportRoute from "@router/report.router";
 import smallHolderRouter from "@router/smallHolder.router";
-import workers from "@router/worker.router";
+import workers from "@router/workers.router";
 const router = express.Router();
 
 export default (): express.Router => {

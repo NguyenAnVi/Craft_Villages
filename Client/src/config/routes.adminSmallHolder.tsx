@@ -1,14 +1,14 @@
 const routesAdminSmallHolder = {
+    adminSmallHolderUserDetail: '/adminSmallHolder/UserDetail',
     adminSmallHolderMainDetail: '/adminSmallHolder/MainDetail',
-    adminSmallHolderMail: '/adminSmallHolder/Mail',
     adminSmallHolderProduct: '/adminSmallHolder/Product',
     adminSmallHolderProductCreate: '/adminSmallHolder/ProductCreate',
     adminSmallHolderProductDetailEdit: '/adminSmallHolder/ProductDetailEdit/:id',
     adminSmallHolderWorkers: '/adminSmallHolder/Workers',
-    adminSmallHolderWorkersEdit: '/adminSmallHolder/WorkersEdit',
-    adminSmallHolderWorkersDetail: '/adminSmallHolder/WorkersDetail',
+    adminSmallHolderWorkersCreate: '/adminSmallHolder/WorkersCreate',
+    adminSmallHolderWorkersDetailEdit: '/adminSmallHolder/WorkersDetailEdit/:id',
     adminSmallHolderReport: '/adminSmallHolder/Report',
-    adminSmallHolderUserDetail: '/adminSmallHolder/UserDetail',
+    adminSmallHolderMail: '/adminSmallHolder/Mail',
 };
 
 export default routesAdminSmallHolder;
