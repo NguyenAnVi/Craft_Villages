@@ -8,8 +8,8 @@ export const getSmallHolder = (_id: string, accessToken: string) => {
         }
     })
 };
-export const getAllSmallHolder = (smallHolderId: string, accessToken: string) => {
-    return httpRequest.get(API_URL + `getAllSmallHolder/${smallHolderId}`, {
+export const getAllSmallHolder = (accessToken: string) => {
+    return httpRequest.get(API_URL + `getAllSmallHolder`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }

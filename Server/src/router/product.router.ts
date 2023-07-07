@@ -5,6 +5,7 @@ import {
   createProduct,
   getProduct,
   getAllProduct,
+  getAllProductV2,
   updateProduct,
   deleteProduct,
 } from "@controller/product.controller";
@@ -24,6 +25,11 @@ export default (router: express.Router) => {
     "/Product/getAllProduct/:id",
     passport.authenticate("jwt", { session: false }),
     getAllProduct
+  );
+  router.get(
+    "/Product/getAllProductV2",
+    passport.authenticate("jwt", { session: false }),
+    getAllProductV2
   );
   router.post(
     "/Product/updateProfile/:id",

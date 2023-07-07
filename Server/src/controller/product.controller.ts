@@ -70,6 +70,21 @@ export const getAllProduct = async (
     });
 };
 
+export const getAllProductV2 = async (
+  req: any,
+  res: any,
+  next: NextFunction
+): Promise<void> => {
+  ProductModel.find({})
+    .then((product) => {
+      return res.status(200).json({ data: product });
+    })
+    .catch((err) => {
+      console.log(err);
+      return next(err);
+    });
+};
+
 export const updateProduct = async (
   req: any,
   res: any,
