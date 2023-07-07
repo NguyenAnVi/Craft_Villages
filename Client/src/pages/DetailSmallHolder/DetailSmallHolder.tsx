@@ -1,15 +1,45 @@
 import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
 
 import styles from './DetailSmallHolder.module.scss';
 import left from '~/assets/left.svg';
 import right from '~/assets/right.svg';
-import { Link } from 'react-router-dom';
+import { useAppSelector } from '~/app/hooks';
+import { getSmallHolder } from '~/features/smallHolder/smallHolderService';
 
 const cx = classNames.bind(styles);
 
 type Props = {};
 
 const DetailSmallHolder = (props: Props) => {
+  const { id } = useParams() as { id: string };
+  const { user } = useAppSelector((state) => state.auth);
+
+  const [smallHolder, setSmallHolder] = useState([]) as any;
+
+  const fetchData = async () => {
+    try {
+      if (user?.accessToken) {
+        const res = await getSmallHolder(id, user.accessToken);
+        // console.log(res.data);
+
+        setSmallHolder(res.data);
+      }
+    } catch (err) {
+      console.error(err);
+      if (err) {
+        toast.error(err.response.data.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className={cx('wrapper')}>
       <h1>Xóm nghề đan rổ rế truyền thống ở xã Hòa Bình, huyện Chợ Mới</h1>
@@ -22,16 +52,17 @@ const DetailSmallHolder = (props: Props) => {
         </div>
         <div className={cx('detail')}>
           <ul>
-            <li>Mã nông hộ: 001</li>
-            <li>Địa chỉ: Ấp A, xã Hòa Bình, huyện Chợ Mới, tỉnh An Giang</li>
-            <li>Tên người đại diện: chị 9 Nê</li>
+            <li>Mã nông hộ: {smallHolder._id}</li>
+            <li>Địa chỉ: {smallHolder.address}</li>
+            <li>Tên người đại diện: {smallHolder.adminId}</li>
             <li>Số điện thoại: 0386666707 </li>
             <li>Email: chi9ne@gmail.com </li>
-            <li>Số thành viên: 10 người</li>
+            <li>Số nhân công: {smallHolder.quantityWorkders} người</li>
+            <li>Chuyên môn: {smallHolder.majorWork}</li>
             <li>Sản phẩm: Rổ rế</li>
-            <li>Nguyên liệu: Tre, trúc, mây</li>
-            <li>Kinh nghiệm: 10 năm</li>
-            <li>Sản lượng: 5 sản phẩm/ngày</li>
+            <li>Nguyên liệu: {smallHolder.materials}</li>
+            <li>Kinh nghiệm: {smallHolder.exp} năm</li>
+            <li>Sản lượng: {smallHolder.quantityProduct} sản phẩm/ngày</li>
           </ul>
         </div>
         <div className={cx('title')}>

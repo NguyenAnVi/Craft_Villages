@@ -5,6 +5,7 @@ import { Stack, Typography, Pagination, useMediaQuery } from '@mui/material';
 
 import styles from './Product.module.scss';
 import config from '~/config';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
 
 const cx = classNames.bind(styles);
 
@@ -23,26 +24,15 @@ function Product() {
     }
   }, [HighPC, PC, Tablet, Mobile]);
 
+  const { user } = useAppSelector((state) => state.auth);
+  const { products } = useAppSelector(
+    (state) => state.persistedReducer.products,
+  );
+
   const [page, setPage] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-
-  const products = [];
-  for (let i = 0; i < 60; i++) {
-    products.push(
-      <>
-        <img
-          className={cx('product-image')}
-          src="https://lzd-img-global.slatic.net/g/p/97b7e675dd7c37d52d8cd11e38c4654a.jpg_720x720q80.jpg"
-          alt=""
-        />
-        <div className={cx('product-link')}>Xem chi tiết</div>
-        <div className={cx('product-title')}>Giỏ mây {i + 1}</div>
-        <div className={cx('product-quantity')}>39.000đ</div>
-      </>,
-    );
-  }
 
   return (
     <>
@@ -55,11 +45,27 @@ function Product() {
           </div>
           <Stack spacing={2}>
             <Typography component={'div'} className={cx('products')}>
-              {products.map((product, index) => {
+              {products.map((product: any, index) => {
                 if (index >= (page - 1) * perPage && index < page * perPage) {
                   return (
-                    <Link className={cx('product-item')} to={config.routes.productDetail} key={index}>
-                      {product}
+                    <Link
+                      className={cx('product-item')}
+                      to={config.routes.productD + product._id}
+                      key={index}
+                    >
+                      <img
+                        className={cx('product-image')}
+                        src={product.avatar}
+                        alt=""
+                      />
+                      <div className={cx('product-link')}>Xem chi tiết</div>
+                      <div className={cx('product-title')}>{product.name}</div>
+                      <div className={cx('product-quantity')}>
+                        {product.price?.toLocaleString('vi', {
+                          style: 'currency',
+                          currency: 'VND',
+                        })}
+                      </div>
                     </Link>
                   );
                 }

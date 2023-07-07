@@ -32,7 +32,7 @@ import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
 import adminSmallHolderMainDetail from '~/pages/AdminSmallHolder/SmallHolder';
 import adminSmallHolderProduct from '~/pages/AdminSmallHolder/Product';
 import adminSmallHolderProductCreate from '~/pages/AdminSmallHolder/Product/components/ProductCreate';
-import adminSmallHolderProductDetailEdit from '~/pages/AdminSmallHolder/Product/components/ProductDetailEdit';
+import { adminSmallHolderProductDetailEdit } from '~/pages/AdminSmallHolder/Product/components/ProductDetailEdit';
 import adminSmallHolderWorkers from '~/pages/AdminSmallHolder/Workers';
 import adminSmallHolderWorkersCreate from '~/pages/AdminSmallHolder/Workers/components/WorkersCreate';
 import adminSmallHolderWorkersDetailEdit from '~/pages/AdminSmallHolder/Workers/components/WorkersDetailEdit';

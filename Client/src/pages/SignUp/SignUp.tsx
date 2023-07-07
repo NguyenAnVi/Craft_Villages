@@ -32,9 +32,7 @@ const SignUp = (props: Props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { isError, isSuccess, message } = useAppSelector(
-    (state) => state.auth,
-  );
+  const { isError, isSuccess, message } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (isError) {
@@ -42,7 +40,7 @@ const SignUp = (props: Props) => {
     }
 
     if (isSuccess) {
-      toast.success(message)
+      toast.success(message);
       navigate('/dangnhap');
     }
 

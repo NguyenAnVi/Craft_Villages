@@ -28,7 +28,7 @@ export default (router: express.Router) => {
   );
   router.get(
     "/Product/getAllProductV2",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getAllProductV2
   );
   router.post(
