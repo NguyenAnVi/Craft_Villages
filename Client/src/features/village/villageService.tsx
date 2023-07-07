@@ -8,8 +8,8 @@ export const getVillage = (_id: string, accessToken: string) => {
         }
     })
 };
-export const getAllVillage = (VillageId: string, accessToken: string) => {
-    return httpRequest.get(API_URL + `getAllVillage/${VillageId}`, {
+export const getAllVillage = (accessToken: string) => {
+    return httpRequest.get(API_URL + `getAllVillage`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }

@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { body, check, validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
+import { IVerifyOptions } from "passport-local";
 
+import passport from "@config/passport";
+import Locals from "@provider/locals";
 import UserModel from "@models/user.model";
 import { UserDocument } from "@interfaces/model/user";
-import Locals from "@provider/locals";
-import jwt from "jsonwebtoken";
-import passport from "@config/passport";
-import { IVerifyOptions } from "passport-local";
 
 export const signIn = async (
   req: any,
@@ -135,13 +135,3 @@ export const signUp = async (
       return next(err);
     });
 };
-
-// let role;
-// if (user.village !== undefined) {
-//   console.log(Date.now() + " - a village has logged in");
-//   role = "VILLAGE";
-// }
-// if (user.admin !== undefined) {
-//   console.log(Date.now() + " - an admin has logged in");
-//   role = "ADMIN";
-// }

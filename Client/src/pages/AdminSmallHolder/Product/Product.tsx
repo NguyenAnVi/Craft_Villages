@@ -124,7 +124,7 @@ const Product = (props: Props) => {
                                                 <Button
                                                     color="yellow"
                                                     border="round"
-                                                    to={`/adminSmallHolder/ProductDetailEdit/${item._id}`}
+                                                    to={`/adminSmallHolder/Product/DetailEdit/${item._id}`}
                                                 >
                                                     Xem chi tiết
                                                 </Button>

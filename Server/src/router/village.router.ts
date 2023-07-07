@@ -3,7 +3,7 @@ import passport from "@config/passport";
 import {
   createVillage,
   getVillage,
-  getAllVillages,
+  getAllVillage,
   updateVillage,
   deleteVillage,
 } from "@controller/village.controller";
@@ -16,16 +16,16 @@ export default (router: express.Router) => {
   );
   router.get(
     "/village/getVillage/:id",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getVillage
   );
   router.get(
-    "/village/getAllVillages",
-    passport.authenticate("jwt", { session: false }),
-    getAllVillages
+    "/village/getAllVillage",
+    // passport.authenticate("jwt", { session: false }),
+    getAllVillage
   );
   router.post(
-    "/village/updateVillage/:id",
+    "/village/updateProfile/:id",
     passport.authenticate("jwt", { session: false }),
     updateVillage
   );

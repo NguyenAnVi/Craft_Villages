@@ -36,7 +36,7 @@ export const getVillage = async (
     });
 };
 
-export const getAllVillages = async (
+export const getAllVillage = async (
   req: any,
   res: any,
   next: NextFunction

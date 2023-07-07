@@ -124,7 +124,7 @@ const Workers = (props: Props) => {
                                                 <Button
                                                     color="yellow"
                                                     border="round"
-                                                    to={`/adminSmallHolder/WorkersDetailEdit/${item._id}`}
+                                                    to={`/adminSmallHolder/Workers/DetailEdit/${item._id}`}
                                                 >
                                                     Xem chi tiết
                                                 </Button>

@@ -1,9 +1,8 @@
 import { NextFunction } from "express";
 import UserModel from "@models/user.model";
-import SmallHolderModel from "@models/smallHolder.model";
 import UserDocument from "@interfaces/model/user";
+import SmallHolderModel from "@models/smallHolder.model";
 import SmallHolderDocument from "@interfaces/model/smallHolder";
-import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
 export const getSmallHolder = async (

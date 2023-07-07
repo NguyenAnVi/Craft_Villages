@@ -1,13 +1,8 @@
 import { NextFunction } from "express";
-import UserModel from "@models/user.model";
-import VillageModel from "@models/smallHolder.model";
 import WorkersModel from "@models/workers.model";
+import WorkersDocument from "@interfaces/model/workers";
 import SmallHolderModel from "@models/smallHolder.model";
 import SmallHolderDocument from "@interfaces/model/smallHolder";
-import UserDocument from "@interfaces/model/user";
-import VillageDocument from "@interfaces/model/smallHolder";
-import WorkersDocument from "@interfaces/model/workers";
-import { body, check, validationResult } from "express-validator";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
 

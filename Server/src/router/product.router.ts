@@ -18,12 +18,12 @@ export default (router: express.Router) => {
   );
   router.get(
     "/Product/getProduct/:id",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getProduct
   );
   router.get(
     "/Product/getAllProduct/:id",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getAllProduct
   );
   router.get(

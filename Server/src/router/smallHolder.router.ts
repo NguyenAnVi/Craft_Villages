@@ -11,17 +11,17 @@ import {
 export default (router: express.Router) => {
   router.get(
     "/SmallHolder/getSmallHolder/:id",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getSmallHolder
   );
   router.get(
     "/SmallHolder/getAllSmallHolder",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getAllSmallHolder
   );
   router.get(
     "/SmallHolder/getAllSmallHolderV2/:id",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     getAllSmallHolderV2
   );
   router.post(
