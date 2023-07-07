@@ -101,7 +101,7 @@ export const updateProduct = async (
 };
 
 export const deleteProduct = (req: any, res: any, next: NextFunction): any => {
-  ProductModel.deleteOne({ _id: req.params.id })
+  ProductModel.findOneAndDelete({ _id: req.params.id }, { new: true })
     .then((deleteProductResult: any) => {
       SmallHolderModel.updateOne(
         { _id: deleteProductResult.smallHolderId },
