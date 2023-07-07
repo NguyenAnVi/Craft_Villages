@@ -2,13 +2,17 @@ import classNames from 'classnames/bind';
 import * as yup from 'yup';
 import { Formik, useFormik } from 'formik';
 import Dropzone, { DropzoneState } from 'react-dropzone';
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
+import { Stack, Typography, Pagination } from '@mui/material';
 
 import styles from './SmallHolderDetail.module.scss';
 import Button from '~/components/Button';
-import { getSmallHolder, updateProfile } from "~/features/smallHolder/smallHolderService"
+import {
+  getSmallHolder,
+  updateProfile,
+} from '~/features/smallHolder/smallHolderService';
 import { useAppSelector } from '~/app/hooks';
 const cx = classNames.bind(styles);
 
@@ -17,11 +21,44 @@ type props = {};
 const SmallHolderDetail = (props: props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [file, setFile] = useState<string | null>(null);
-  const [smallHolder, setSmallHolder] = useState<any | null>(null)
-  const { user } = useAppSelector((state) => state.auth)
+  const [smallHolder, setSmallHolder] = useState<any | null>(null);
+  const { user } = useAppSelector((state) => state.auth);
 
+  // set workers data
+  let workers = [];
+  const [table, setTable] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setTable(value);
+  };
 
+  for (let i = 0; i < 30; i++) {
+    workers.push(
+      <>
+        <td>
+          #{i}
+          {i}
+          {i}
+          {i}
+        </td>
 
+        <td>chị 9 Nê</td>
+        <td>0386666707</td>
+        <td>chi9ne@gmail.com</td>
+        <td>40 tuổi</td>
+        <td>10 năm</td>
+        <td>
+          <Button color="yellow" border="round">
+            Xem chi tiết
+          </Button>
+        </td>
+        <td>
+          <Button color="red" border="round">
+            Xóa
+          </Button>
+        </td>
+      </>,
+    );
+  }
 
   const handleDrop = (acceptedFiles: File[]) => {
     const reader = new FileReader();
@@ -34,19 +71,23 @@ const SmallHolderDetail = (props: props) => {
   const fetchData = async () => {
     try {
       if (user?.accessToken) {
-        const res = await getSmallHolder(user?.smallHolderId, user?.accessToken)
-        setSmallHolder(res.data)
+        const res = await getSmallHolder(
+          user?.smallHolderId,
+          user?.accessToken,
+        );
+        setSmallHolder(res.data);
+      }
+    } catch (err) {
+      console.log(err);
+      if (err) {
+        toast.error(err.response.data.message);
       }
     }
-    catch (err) {
-      console.log(err);
-      if (err) { toast.error(err.response.data.message) }
-    }
-  }
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const handleIsEdit = () => {
     setIsEdit(!isEdit);
@@ -59,11 +100,15 @@ const SmallHolderDetail = (props: props) => {
     ward: yup.string().required('Tên xã/ phường không được trống'),
     majorWork: yup.string().required('Chuyên môn không được trống'),
     // materials: yup.string().required('Chất liệu không được trống'),
-    quantityWorkers: yup.string().required('Số lượng nhân công không được trống'),
+    quantityWorkers: yup
+      .string()
+      .required('Số lượng nhân công không được trống'),
     qrCode: yup.string().required('Value QrCode không được trống'),
     description: yup.string().required('Mô tả không được trống'),
     exp: yup.string().required('Kinh nghiệm không được trống'),
-    quantityProduct: yup.string().required('Số lượng sản phẩm không được trống'),
+    quantityProduct: yup
+      .string()
+      .required('Số lượng sản phẩm không được trống'),
   });
 
   const formik = useFormik({
@@ -87,228 +132,225 @@ const SmallHolderDetail = (props: props) => {
         if (user?.accessToken) {
           let dataSmallHolder: any = values;
           for (let prop in dataSmallHolder) {
-            if (dataSmallHolder.hasOwnProperty(prop) && dataSmallHolder[prop] === '') {
+            if (
+              dataSmallHolder.hasOwnProperty(prop) &&
+              dataSmallHolder[prop] === ''
+            ) {
               delete dataSmallHolder[prop];
             }
           }
-          dataSmallHolder = file ? { avatar: file, ...dataSmallHolder } : { ...dataSmallHolder }
-          const res = await updateProfile(user.smallHolderId, dataSmallHolder, user.accessToken)
+          dataSmallHolder = file
+            ? { avatar: file, ...dataSmallHolder }
+            : { ...dataSmallHolder };
+          const res = await updateProfile(
+            user.smallHolderId,
+            dataSmallHolder,
+            user.accessToken,
+          );
           if (res) {
-            toast.success(res.message)
-            setIsEdit(false)
+            toast.success(res.message);
+            setIsEdit(false);
             resetForm();
             fetchData();
           }
         }
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
         if (err) {
-          toast.error(err.response.data.message)
+          toast.error(err.response.data.message);
         }
         resetForm();
       }
     },
   });
-  return <>
-    <div className={cx('wrapper')}>
-      <div className={cx('heading')}>
-        <h2>
-          Thông tin nông hộ
-        </h2>
-        {!isEdit && (
-          <Button color="shadeYellow" border="round" onClick={handleIsEdit}>
-            Chỉnh sửa
-          </Button>
-        )}
-      </div>
-      <Formik
-        initialValues={formik.initialValues}
-        validationSchema={smallHolderSchema}
-        onSubmit={() => formik.handleSubmit()}
-      >
-        <form onSubmit={formik.handleSubmit}>
-          <label>
-            <h6>Tên nông hộ:</h6>
-            {isEdit ? (
-              <textarea
-                name="name"
-                id="name"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.name && formik.touched.name
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder="ex: Xóm nghề đan đát rổ truyền thống xã Hòa Bình, huyện Chợ Mới, tỉnh An Giang"
-              />
-            ) : (
-              <p>
-                {smallHolder?.name}
-              </p>
-            )}
-          </label>
-          {formik.errors.name && formik.touched.name && (
-            <p className={cx('mess-error')}>{formik.errors.name}</p>
+  return (
+    <>
+      <div className={cx('wrapper')}>
+        <div className={cx('heading')}>
+          <h2>Thông tin nông hộ</h2>
+          {!isEdit && (
+            <Button color="shadeYellow" border="round" onClick={handleIsEdit}>
+              Chỉnh sửa
+            </Button>
           )}
-          <label>
-            <h6>Địa chỉ nông hộ:</h6>
-            {isEdit ? (
-              <textarea
-                name="address"
-                id="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.address && formik.touched.address
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder="ex: Ấp A, xã Hòa Bình, huyện Chợ Mới, An Giang"
-              />
-            ) : (
-              <p>
-                {smallHolder?.address}
-              </p>
+        </div>
+        <Formik
+          initialValues={formik.initialValues}
+          validationSchema={smallHolderSchema}
+          onSubmit={() => formik.handleSubmit()}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <label>
+              <h6>Tên nông hộ:</h6>
+              {isEdit ? (
+                <textarea
+                  name="name"
+                  id="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.name && formik.touched.name
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder="ex: Xóm nghề đan đát rổ truyền thống xã Hòa Bình, huyện Chợ Mới, tỉnh An Giang"
+                />
+              ) : (
+                <p>{smallHolder?.name}</p>
+              )}
+            </label>
+            {formik.errors.name && formik.touched.name && (
+              <p className={cx('mess-error')}>{formik.errors.name}</p>
             )}
-          </label>
-          {formik.errors.address && formik.touched.address && (
-            <p className={cx('mess-error')}>{formik.errors.address}</p>
-          )}
-          <label>
-            <h6>Thành phố / Tỉnh:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="city"
-                id="city"
-                value={formik.values.city}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.city && formik.touched.city
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.city}
-              </p>
+            <label>
+              <h6>Địa chỉ nông hộ:</h6>
+              {isEdit ? (
+                <textarea
+                  name="address"
+                  id="address"
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.address && formik.touched.address
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder="ex: Ấp A, xã Hòa Bình, huyện Chợ Mới, An Giang"
+                />
+              ) : (
+                <p>{smallHolder?.address}</p>
+              )}
+            </label>
+            {formik.errors.address && formik.touched.address && (
+              <p className={cx('mess-error')}>{formik.errors.address}</p>
             )}
-          </label>
-          {formik.errors.city && formik.touched.city && (
-            <p className={cx('mess-error')}>{formik.errors.city}</p>
-          )}
-          <label>
-            <h6>Quận / Huyện:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="district"
-                id="district"
-                value={formik.values.district}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.district && formik.touched.district
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.district}
-              </p>
+            <label>
+              <h6>Thành phố / Tỉnh:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  value={formik.values.city}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.city && formik.touched.city
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.city}</p>
+              )}
+            </label>
+            {formik.errors.city && formik.touched.city && (
+              <p className={cx('mess-error')}>{formik.errors.city}</p>
             )}
-          </label>
-          {formik.errors.district && formik.touched.district && (
-            <p className={cx('mess-error')}>{formik.errors.district}</p>
-          )}
-          <label>
-            <h6>Phường / Xã:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="ward"
-                id="ward"
-                value={formik.values.ward}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.ward && formik.touched.ward
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.ward}
-              </p>
+            <label>
+              <h6>Quận / Huyện:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="district"
+                  id="district"
+                  value={formik.values.district}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.district && formik.touched.district
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.district}</p>
+              )}
+            </label>
+            {formik.errors.district && formik.touched.district && (
+              <p className={cx('mess-error')}>{formik.errors.district}</p>
             )}
-          </label>
-          {formik.errors.ward && formik.touched.ward && (
-            <p className={cx('mess-error')}>{formik.errors.ward}</p>
-          )}
-          <label>
-            <h6>Chuyên môn nông hộ:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="majorWork"
-                id="majorWork"
-                value={formik.values.majorWork}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.majorWork && formik.touched.majorWork
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.majorWork}
-              </p>
+            <label>
+              <h6>Phường / Xã:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="ward"
+                  id="ward"
+                  value={formik.values.ward}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.ward && formik.touched.ward
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.ward}</p>
+              )}
+            </label>
+            {formik.errors.ward && formik.touched.ward && (
+              <p className={cx('mess-error')}>{formik.errors.ward}</p>
             )}
-          </label>
-          {formik.errors.majorWork && formik.touched.majorWork && (
-            <p className={cx('mess-error')}>{formik.errors.majorWork}</p>
-          )}
-          <label>
-            <h6>Số nhân công:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="quantityWorkers"
-                id="quantityWorkers"
-                value={formik.values.quantityWorkers}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.quantityWorkers && formik.touched.quantityWorkers
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.quantityWorkers}
-              </p>
+            <label>
+              <h6>Chuyên môn nông hộ:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="majorWork"
+                  id="majorWork"
+                  value={formik.values.majorWork}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.majorWork && formik.touched.majorWork
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.majorWork}</p>
+              )}
+            </label>
+            {formik.errors.majorWork && formik.touched.majorWork && (
+              <p className={cx('mess-error')}>{formik.errors.majorWork}</p>
             )}
-          </label>
-          {formik.errors.quantityWorkers && formik.touched.quantityWorkers && (
-            <p className={cx('mess-error')}>{formik.errors.quantityWorkers}</p>
-          )}
-          {/* <label>
+            <label>
+              <h6>Số nhân công:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="quantityWorkers"
+                  id="quantityWorkers"
+                  value={formik.values.quantityWorkers}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.quantityWorkers &&
+                    formik.touched.quantityWorkers
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.quantityWorkers}</p>
+              )}
+            </label>
+            {formik.errors.quantityWorkers &&
+              formik.touched.quantityWorkers && (
+                <p className={cx('mess-error')}>
+                  {formik.errors.quantityWorkers}
+                </p>
+              )}
+            {/* <label>
             <h6>Chất liệu sử dụng:</h6>
             {isEdit ? (
               <input
@@ -332,174 +374,221 @@ const SmallHolderDetail = (props: props) => {
           {formik.errors.materials && formik.touched.materials && (
             <p className={cx('mess-error')}>{formik.errors.materials}</p>
           )} */}
-          <label>
-            <h6>Value mã QrCode:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="qrCode"
-                id="qrCode"
-                value={formik.values.qrCode}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.qrCode && formik.touched.qrCode
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) :
-              (
-                <p>
-                  {`${smallHolder?.qrCode}${smallHolder?._id}`}
+            <label>
+              <h6>Value mã QrCode:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="qrCode"
+                  id="qrCode"
+                  value={formik.values.qrCode}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.qrCode && formik.touched.qrCode
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{`${smallHolder?.qrCode}${smallHolder?._id}`}</p>
+              )}
+            </label>
+            <label>
+              {smallHolder?.qrCode ? (
+                <>
+                  <h6>Mã QrCode:</h6>
+                  <QRCodeCanvas
+                    value={`${smallHolder?.qrCode}${smallHolder?._id}`}
+                    className={cx('qrImage')}
+                    size={200}
+                    bgColor={'#ffffff'}
+                    fgColor={'#000000'}
+                    level={'L'}
+                    includeMargin={false}
+                    imageSettings={{
+                      src: '',
+                      x: undefined,
+                      y: undefined,
+                      height: 24,
+                      width: 24,
+                      excavate: true,
+                    }}
+                  />
+                </>
+              ) : (
+                ''
+              )}
+            </label>
+            {formik.errors.qrCode && formik.touched.qrCode && (
+              <p className={cx('mess-error')}>{formik.errors.qrCode}</p>
+            )}
+
+            <label>
+              <h6>Mô tả:</h6>
+              {isEdit ? (
+                <textarea
+                  name="description"
+                  id="description"
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.description && formik.touched.description
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.description}</p>
+              )}
+            </label>
+            {formik.errors.description && formik.touched.description && (
+              <p className={cx('mess-error')}>{formik.errors.description}</p>
+            )}
+            <label>
+              <h6>Kinh nghiệm:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="exp"
+                  id="exp"
+                  value={formik.values.exp}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.exp && formik.touched.exp
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.exp}</p>
+              )}
+            </label>
+            {formik.errors.exp && formik.touched.exp && (
+              <p className={cx('mess-error')}>{formik.errors.exp}</p>
+            )}
+            <label>
+              <h6>Số lượng sản phẩm:</h6>
+              {isEdit ? (
+                <input
+                  type="text"
+                  name="quantityProduct"
+                  id="quantityProduct"
+                  value={formik.values.quantityProduct}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={
+                    formik.errors.quantityProduct &&
+                    formik.touched.quantityProduct
+                      ? cx('input-error')
+                      : ''
+                  }
+                  placeholder=""
+                />
+              ) : (
+                <p>{smallHolder?.quantityProduct}</p>
+              )}
+            </label>
+            {formik.errors.quantityProduct &&
+              formik.touched.quantityProduct && (
+                <p className={cx('mess-error')}>
+                  {formik.errors.quantityProduct}
                 </p>
               )}
-          </label>
-          <label>
-            {smallHolder?.qrCode ?
-              <>
-                <h6>Mã QrCode:</h6>
-                <QRCodeCanvas
-                  value={`${smallHolder?.qrCode}${smallHolder?._id}`}
-                  className={cx('qrImage')}
-                  size={200}
-                  bgColor={'#ffffff'}
-                  fgColor={'#000000'}
-                  level={'L'}
-                  includeMargin={false}
-                  imageSettings={{
-                    src: '',
-                    x: undefined,
-                    y: undefined,
-                    height: 24,
-                    width: 24,
-                    excavate: true
-                  }}
-                />
-              </>
-              : ""
-            }
-          </label>
-          {formik.errors.qrCode && formik.touched.qrCode && (
-            <p className={cx('mess-error')}>{formik.errors.qrCode}</p>
-          )}
+            {isEdit ? (
+              <Dropzone onDrop={handleDrop}>
+                {({ getRootProps, getInputProps }: DropzoneState) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {file ? (
+                        <img
+                          className={cx('fileUploadImage')}
+                          src={file}
+                          alt="preview"
+                          style={{ maxWidth: '20%' }}
+                        />
+                      ) : (
+                        <p className={cx('fileUpload')}>
+                          <i>
+                            Drag and drop an image here or click to select a
+                            file
+                          </i>
+                        </p>
+                      )}
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            ) : (
+              <img
+                src={smallHolder?.avatar}
+                className={cx('fileUploadedImage')}
+                alt="image"
+                style={{ maxWidth: '70%' }}
+              />
+            )}
+            {isEdit && (
+              <div className={cx('form-btn')}>
+                <Button type="submit" color="shadeYellow" border="round">
+                  Lưu
+                </Button>
+                <Button color="secondary" border="round" onClick={handleIsEdit}>
+                  Hủy
+                </Button>
+              </div>
+            )}
+          </form>
+        </Formik>
+        <div className={cx('workers')}>
+          <h3>Danh sách nhân công</h3>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button color="green" border="round">
+              Thêm nhân công
+            </Button>
+          </div>
 
-          <label>
-            <h6>Mô tả:</h6>
-            {isEdit ? (
-              <textarea
-                name="description"
-                id="description"
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.description && formik.touched.description
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.description}
-              </p>
-            )}
-          </label>
-          {formik.errors.description && formik.touched.description && (
-            <p className={cx('mess-error')}>{formik.errors.description}</p>
-          )}
-          <label>
-            <h6>Kinh nghiệm:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="exp"
-                id="exp"
-                value={formik.values.exp}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.exp && formik.touched.exp
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.exp}
-              </p>
-            )}
-          </label>
-          {formik.errors.exp && formik.touched.exp && (
-            <p className={cx('mess-error')}>{formik.errors.exp}</p>
-          )}
-          <label>
-            <h6>Số lượng sản phẩm:</h6>
-            {isEdit ? (
-              <input
-                type="text"
-                name="quantityProduct"
-                id="quantityProduct"
-                value={formik.values.quantityProduct}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={
-                  formik.errors.quantityProduct && formik.touched.quantityProduct
-                    ? cx('input-error')
-                    : ''
-                }
-                placeholder=""
-              />
-            ) : (
-              <p>
-                {smallHolder?.quantityProduct}
-              </p>
-            )}
-          </label>
-          {formik.errors.quantityProduct && formik.touched.quantityProduct && (
-            <p className={cx('mess-error')}>{formik.errors.quantityProduct}</p>
-          )}
-          {isEdit ? (<Dropzone onDrop={handleDrop}>
-            {({ getRootProps, getInputProps }: DropzoneState) => (
-              <section>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  {file ? (
-                    <img className={cx('fileUploadImage')} src={file} alt="preview" style={{ maxWidth: '20%' }} />
-                  ) : (
-                    <p className={cx('fileUpload')}>
-                      <i>
-                        Drag and drop an image here or click to select a file
-                      </i>
-                    </p>
-                  )}
-                </div>
-              </section>
-            )}
-          </Dropzone>) : (<img src={smallHolder?.avatar} className={cx('fileUploadedImage')} alt="image" style={{ maxWidth: '70%' }} />
-          )}
-          {isEdit && (
-            <div className={cx('form-btn')}>
-              <Button
-                type="submit"
-                color="shadeYellow"
-                border="round"
-              >
-                Lưu
-              </Button>
-              <Button color="secondary" border="round" onClick={handleIsEdit}>
-                Hủy
-              </Button>
-            </div>
-          )}
-        </form>
-      </Formik>
-    </div>
-  </>
+          <Stack className={cx('stack')} spacing={2}>
+            <Typography component={'div'}>
+              <table className={cx('table-custom')}>
+                <thead>
+                  <tr>
+                    <th style={{ width: '10%' }}>Mã nhân công</th>
+                    <th style={{ width: '15%' }}>Họ và tên</th>
+                    <th style={{ width: '10%' }}>Số điện thoại</th>
+                    <th style={{ width: '15%' }}>Email</th>
+                    <th style={{ width: '10%' }}>Tuổi</th>
+                    <th style={{ width: '10%' }}>Kinh nghiệm</th>
+                    <th style={{ width: '10%' }}></th>
+                    <th style={{ width: '10%' }}></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {workers.map((item, index) => {
+                    if (index >= (table - 1) * 10 && index < table * 10 - 1) {
+                      return <tr key={index}>{item}</tr>;
+                    }
+                  })}
+                </tbody>
+              </table>
+            </Typography>
+            <Pagination
+              className={cx('pagination')}
+              count={workers.length / 10}
+              page={table}
+              shape="rounded"
+              onChange={handleChange}
+            />
+          </Stack>
+        </div>
+      </div>
+    </>
+  );
 };
-
 
 export default SmallHolderDetail;
