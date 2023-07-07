@@ -4,7 +4,6 @@ import { Formik, useFormik } from 'formik';
 import Dropzone, { DropzoneState } from 'react-dropzone';
 import { toast } from "react-toastify"
 import { useEffect, useState } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
 import { useParams } from 'react-router-dom';
 
 import styles from './WorkersDetailEdit.module.scss';

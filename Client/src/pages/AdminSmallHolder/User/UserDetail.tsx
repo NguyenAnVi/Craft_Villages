@@ -1,13 +1,15 @@
 import classNames from 'classnames/bind';
 import * as yup from 'yup';
 import { Formik, useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
+import Dropzone, { DropzoneState } from 'react-dropzone';
+
 
 import styles from './UserDetail.module.scss';
 import Button from '~/components/Button';
-import { useState, useEffect } from 'react';
 import { useAppSelector } from '~/app/hooks';
 import { updateProfile, getUser } from "~/features/user/userService"
-import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 type props = {};
@@ -15,10 +17,21 @@ type props = {};
 
 const UserDetail = (props: props) => {
     const [isEdit, setIsEdit] = useState(false);
+    const [file, setFile] = useState<string | null>(null);
+
     const [userData, setUserData] = useState<any | null>(null);
     const { user } = useAppSelector(
         (state) => state.auth,
     );
+
+    const handleDrop = (acceptedFiles: File[]) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(acceptedFiles[0]);
+        reader.onload = () => {
+            setFile(reader.result as string);
+        };
+    };
+
     const fetchData = async () => {
         try {
             if (user?.accessToken) {
@@ -65,18 +78,21 @@ const UserDetail = (props: props) => {
         validationSchema: UserSchema,
         onSubmit: async (values, { resetForm }): Promise<void> => {
             try {
-                const dataUser: values = values;
+                let dataUser: any = values;
                 for (let prop in dataUser) {
                     if ((dataUser.hasOwnProperty(prop) && dataUser[prop] === '') || prop === "cPassword") {
                         delete dataUser[prop];
                     }
                 }
+                dataUser = file ? { avatar: file, ...dataUser } : { ...dataUser }
                 if (user?.accessToken) {
                     const res = await updateProfile(dataUser, user.accessToken)
-                    fetchData();
-                    toast.success(res.message);
-                    setIsEdit(!isEdit);
-                    resetForm();
+                    if (res) {
+                        fetchData();
+                        toast.success(res.message);
+                        setIsEdit(!isEdit);
+                        resetForm();
+                    }
                 }
             }
             catch (err) {
@@ -223,6 +239,25 @@ const UserDetail = (props: props) => {
                     ) : ""}
                     {formik.errors.cPassword && formik.touched.cPassword && (
                         <p className={cx('mess-error')}>{formik.errors.cPassword}</p>
+                    )}
+                    {isEdit ? (<Dropzone onDrop={handleDrop}>
+                        {({ getRootProps, getInputProps }: DropzoneState) => (
+                            <section>
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    {file ? (
+                                        <img className={cx('fileUploadImage')} src={file} alt="preview" style={{ maxWidth: '20%' }} />
+                                    ) : (
+                                        <p className={cx('fileUpload')}>
+                                            <i>
+                                                Drag and drop an image here or click to select a file
+                                            </i>
+                                        </p>
+                                    )}
+                                </div>
+                            </section>
+                        )}
+                    </Dropzone>) : (<img src={userData?.avatar} className={cx('fileUploadedImage')} alt="" style={{ maxWidth: '70%' }} />
                     )}
                     {isEdit && (
                         <div className={cx('form-btn')}>

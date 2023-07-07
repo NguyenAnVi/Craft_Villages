@@ -59,6 +59,24 @@
         border-color: var(--red);
       }
     }
+    .fileUpload {
+      padding: 10px 10px 10px 20px;
+      border-radius: 50px;
+      border: 2px dashed yellow;
+      cursor: pointer;
+      color: blue;
+    }
+    .fileUploadImage {
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px dashed yellow;
+      cursor: pointer;
+    }
+    .fileUploadedImage {
+      padding: 20px;
+      border-radius: 50px;
+      border: 2px dashed blue;
+    }
     .form-btn {
       margin: 10px calc(20% + 30px);
       width: 100%;
