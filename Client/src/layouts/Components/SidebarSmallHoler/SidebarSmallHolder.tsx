@@ -9,7 +9,7 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-interface ISidebarProps { }
+interface ISidebarProps {}
 
 function SidebarSmallHolder() {
   return (
@@ -42,12 +42,6 @@ function SidebarSmallHolder() {
       >
         Người dân
       </NavLink>
-      {/* <NavLink
-        className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routesAdminSmallHolder.adminSmallHolderReport}
-      >
-        Báo cáo
-      </NavLink> */}
     </div>
   );
 }

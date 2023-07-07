@@ -26,7 +26,7 @@ export const getVillage = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  VillageModel.find({ _id: req.params.id })
+  VillageModel.findOne({ _id: req.params.id })
     .then((village) => {
       return res.status(200).json({ data: village });
     })
@@ -56,10 +56,13 @@ export const updateVillage = async (
   res: any,
   next: NextFunction
 ): Promise<void> => {
+  if (Object.values(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing something???" });
+  }
   VillageModel.findById(req.params.id)
-    .then((village) => {
-      if (village) {
-        UserModel.updateOne({ _id: village._id }, { $set: { ...req.body } })
+    .then((Village) => {
+      if (Village) {
+        VillageModel.updateOne({ _id: Village._id }, { $set: { ...req.body } })
           .then(() => {
             return res.status(200).json({
               message: "Village information has been updated.",

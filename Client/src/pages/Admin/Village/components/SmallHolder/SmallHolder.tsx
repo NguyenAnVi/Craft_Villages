@@ -5,29 +5,29 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 
-import styles from './Village.module.scss';
+import styles from './SmallHolder.module.scss';
 import config from '~/config';
 import Button from '~/components/Button';
 import {
-  getAllVillage,
-  deleteVillage,
-} from '~/features/village/villageService';
+  getAllSmallHolder,
+  deleteSmallHolder,
+} from '~/features/smallHolder/smallHolderService';
 import { useAppSelector } from '~/app/hooks';
 const cx = classNames.bind(styles);
 
 type Props = {};
 
-const Village = (props: Props) => {
+const SmallHolder = (props: Props) => {
   const { user } = useAppSelector((state) => state.auth);
-  const [VillageList, setVillageList] = useState([]);
+  const [SmallHolderList, setSmallHolderList] = useState([]);
 
   const fetchData = async () => {
     try {
-      if (user?.accessToken) {
-        const res = await getAllVillage(user.accessToken);
+      if (user?.accessToken && user?.smallHolderId) {
+        const res = await getAllSmallHolder(user.accessToken);
         console.log(res.data);
 
-        setVillageList(res.data);
+        setSmallHolderList(res.data);
       }
     } catch (err) {
       console.error(err);
@@ -54,7 +54,7 @@ const Village = (props: Props) => {
       if (result.isConfirmed) {
         try {
           if (user?.accessToken) {
-            const res = await deleteVillage(id, user.accessToken);
+            const res = await deleteSmallHolder(id, user.accessToken);
             if (res) {
               Swal.fire('Deleted!', res.message, 'success');
               fetchData();
@@ -78,41 +78,31 @@ const Village = (props: Props) => {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('smallholder')}>
-        <h3>Quản lý sản phẩm</h3>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
-            color="green"
-            border="round"
-            to={config.routesAdmin.adminVillageCreate}
-          >
-            Tạo làng nghề
-          </Button>
-        </div>
+        <h3>Nông hộ nằm trong làng nghề</h3>
 
         <Stack className={cx('stack')} spacing={2}>
           <table className={cx('table-custom')}>
             <thead>
               <tr>
-                <th style={{ width: '10%' }}>ID</th>
-                <th style={{ width: '20%' }}>Tên</th>
-                <th style={{ width: '10%' }}>Địa chỉ</th>
-                <th style={{ width: '10%' }}>Chuyên môn</th>
-                <th style={{ width: '10%' }}>CreatedAt</th>
-                <th style={{ width: '10%' }}></th>
+                <th style={{ width: '15%' }}>ID</th>
+                <th style={{ width: '20%' }}>Tên sản phẩm</th>
+                <th style={{ width: '20%' }}>Giá</th>
+                <th style={{ width: '10%' }}>Loại</th>
+                <th style={{ width: '15%' }}>CreatedAt</th>
                 <th style={{ width: '10%' }}></th>
                 <th style={{ width: '10%' }}></th>
               </tr>
             </thead>
             <tbody>
-              {VillageList.map((item: any, index) => {
+              {SmallHolderList.map((item: any, index) => {
                 if (index >= (table - 1) * 10 && index < table * 10 - 1) {
                   return (
                     <tr key={index}>
                       <td>{item._id}</td>
 
                       <td>{item.name}</td>
-                      <td>{item.address}</td>
-                      <td>{item.majorWork}</td>
+                      <td>{item.price}</td>
+                      <td>{item.type}</td>
                       <td>
                         {moment(Date.parse(item.createdAt)).format(
                           'DD/MM/YYYY',
@@ -120,18 +110,9 @@ const Village = (props: Props) => {
                       </td>
                       <td>
                         <Button
-                          color="primary"
-                          border="round"
-                          to={`/admin/village/smallHolder/${item._id}`}
-                        >
-                          Nông hộ
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
                           color="yellow"
                           border="round"
-                          to={`/admin/village/DetailEdit/${item._id}`}
+                          to={`/adminSmallHolder/SmallHolder/DetailEdit/${item._id}`}
                         >
                           Xem chi tiết
                         </Button>
@@ -154,7 +135,7 @@ const Village = (props: Props) => {
 
           <Pagination
             className={cx('pagination')}
-            count={Math.ceil(VillageList.length / 10)}
+            count={Math.ceil(SmallHolderList.length / 10)}
             page={table}
             shape="rounded"
             onChange={handleChange}
@@ -165,4 +146,4 @@ const Village = (props: Props) => {
   );
 };
 
-export default Village;
+export default SmallHolder;

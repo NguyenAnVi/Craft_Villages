@@ -32,12 +32,6 @@ function Sidebar() {
       </NavLink>
       <NavLink
         className={(nav) => cx('navlink', { active: nav.isActive })}
-        to={config.routesAdmin.adminSmallHolder}
-      >
-        Quản lý nông hộ
-      </NavLink>
-      <NavLink
-        className={(nav) => cx('navlink', { active: nav.isActive })}
         to={config.routesAdmin.adminOrders}
       >
         Báo cáo

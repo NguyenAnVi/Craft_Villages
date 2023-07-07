@@ -18,11 +18,11 @@ import DetailSmallHolder from '~/pages/DetailSmallHolder';
 //Admin
 import AdminMail from '~/pages/Admin/Mail';
 import AdminOrders from '~/pages/Admin/Orders';
-import AdminProduct from '~/pages/Admin/Product';
-import AdminReport from '~/pages/Admin/Report';
 import AdminVillage from '~/pages/Admin/Village';
-import AdminDetailVillage from '~/pages/Admin/Village/components/DetailVillage';
-import AdminSmallHolder from '~/pages/Admin/SmallHolder';
+import AdminVillageSmallHolder from '~/pages/Admin/Village/components/SmallHolder';
+import AdminVillageSmallHolderProduct from '~/pages/Admin/Village/components/Product';
+import AdminVillageCreate from '~/pages/Admin/Village/components/VillageCreate';
+import AdminDetailVillageDetailEdit from '~/pages/Admin/Village/components/VillageDetailEdit';
 import AdminUser from '~/pages/Admin/User';
 import AdminUserDetail from '~/pages/Admin/User/components/UserDetail';
 import AdminUserCreate from '~/pages/Admin/User/components/UserCreate';
@@ -38,7 +38,6 @@ import adminSmallHolderWorkersCreate from '~/pages/AdminSmallHolder/Workers/comp
 import adminSmallHolderWorkersDetailEdit from '~/pages/AdminSmallHolder/Workers/components/WorkersDetailEdit';
 import adminSmallHolderUserDetail from '~/pages/AdminSmallHolder/User';
 import adminSmallHolderMail from '~/pages/AdminSmallHolder/Mail';
-// import adminSmallHolderReport from '~/pages/AdminSmallHolder/Report';
 
 const publicRoutes = [
   {
@@ -99,28 +98,29 @@ const privateRoutes = [
     admin: true,
   },
   {
-    path: config.routesAdmin.adminProduct,
-    component: AdminProduct,
-    admin: true,
-  },
-  {
-    path: config.routesAdmin.adminReport,
-    component: AdminReport,
-    admin: true,
-  },
-  {
     path: config.routesAdmin.adminVillage,
     component: AdminVillage,
     admin: true,
   },
   {
-    path: config.routesAdmin.adminDetailVillage,
-    component: AdminDetailVillage,
+    path: config.routesAdmin.adminVillageSmallHolder,
+    component: AdminVillageSmallHolder,
     admin: true,
   },
   {
-    path: config.routesAdmin.adminSmallHolder,
-    component: AdminSmallHolder,
+    path: config.routesAdmin.adminVillageSmallHolderProduct,
+    component: AdminVillageSmallHolderProduct,
+    admin: true,
+  },
+
+  {
+    path: config.routesAdmin.adminVillageCreate,
+    component: AdminVillageCreate,
+    admin: true,
+  },
+  {
+    path: config.routesAdmin.adminVillageDetailEdit,
+    component: AdminDetailVillageDetailEdit,
     admin: true,
   },
   {
@@ -182,11 +182,6 @@ const privateRoutesAdminSmallHolder = [
     component: adminSmallHolderWorkersDetailEdit,
     admin: true,
   },
-  // {
-  //   path: config.routesAdminSmallHolder.adminSmallHolderReport,
-  //   components: adminSmallHolderReport,
-  //   admin: true,
-  // },
   {
     path: config.routesAdminSmallHolder.adminSmallHolderUserDetail,
     component: adminSmallHolderUserDetail,

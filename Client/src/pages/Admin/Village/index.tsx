@@ -1,1 +1,1 @@
-export { default } from './Village';
+export { default } from "./Village"

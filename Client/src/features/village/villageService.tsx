@@ -8,6 +8,13 @@ export const getVillage = (_id: string, accessToken: string) => {
         }
     })
 };
+export const createVillage = (data: object, accessToken: string) => {
+    return httpRequest.post(API_URL + `createVillage`, data, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+};
 export const getAllVillage = (accessToken: string) => {
     return httpRequest.get(API_URL + `getAllVillage`, {
         headers: {
