@@ -48,6 +48,7 @@ const UserSchema = new mongoose.Schema<UserDocument>(
     isAdmin: { type: Boolean, default: false },
     isAdminWebsite: { type: Boolean, default: false },
     isAdminSmallHolder: { type: Boolean, default: false },
+    refreshToken: { type: String },
   },
   { timestamps: true, collection: "User" }
 );

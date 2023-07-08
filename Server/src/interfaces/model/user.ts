@@ -16,6 +16,7 @@ export type UserDocument = mongoose.Document & {
   isAdmin: boolean;
   isAdminWebsite: boolean;
   isAdminSmallHolder: boolean;
+  refreshToken: string;
   comparePassword: comparePasswordFunction;
 };
 export default UserDocument;
