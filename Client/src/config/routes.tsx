@@ -1,7 +1,7 @@
 const routes = {
   home: '/',
   villages: '/langnghe',
-  detailVillage: '/langnghe/01',
+  detailVillage: '/langnghe/:id',
   detailSmallHolder: '/nongho/:id',
   products: '/sanpham',
   productDetail: '/sanpham/chitiet/:id',

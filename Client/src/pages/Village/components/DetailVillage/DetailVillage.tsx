@@ -3,23 +3,40 @@ import classNames from 'classnames/bind';
 import styles from './DetailVillage.module.scss';
 import left from '~/assets/left.svg';
 import right from '~/assets/right.svg';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useAppSelector } from '~/app/hooks';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
 type Props = {};
 
 const DetailSmallHolder = (props: Props) => {
+  const { id } = useParams() as { id: string };
+
+  const { villages } = useAppSelector(
+    (state) => state.persistedReducer.villages,
+  );
+
+  const [village, setVillage] = useState({}) as any;
+
+  useEffect(() => {
+    villages.map((village) => {
+      if (village._id === id) {
+        setVillage(village);
+        return;
+      }
+    });
+  }, [id]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('heading')}>
         <div className={cx('image-cropper')}>
-          <img
-            src="https://langthangangiang.net/wp-content/uploads/2022/12/1-1024x576.jpg"
-            alt=""
-          />
+          <img src={village?.avatar} alt="" />
         </div>
-        <h1>Xóm nghề đan rổ rế truyền thống ở xã Hòa Bình, huyện Chợ Mới</h1>
+        <h1>{village?.name}</h1>
       </div>
       <div className={cx('detail-body')}>
         <div className={cx('title')}>
@@ -30,11 +47,14 @@ const DetailSmallHolder = (props: Props) => {
         <div className={cx('details')}>
           <div className={cx('detail')}>
             <ul>
-              <li>Ngày thành lập: 12/9/2016</li>
-              <li>Chuyên môn: Đan đát</li>
+              <li>
+                Ngày thành lập:{' '}
+                {moment(Date.parse(village.createdAt)).format('DD/MM/YYYY')}
+              </li>
+              <li>Chuyên môn: {village.majorWork}</li>
               <li>Nguyên liệu: Tre, trúc, mây</li>
-              <li>Số thành viên: 20 hộ dân</li>
-              <li>Địa chỉ: Ấp A, xã Hòa Bình, huyện Chợ Mới, tỉnh An Giang</li>
+              <li>Số thành viên: {village.smallHolderId?.length} hộ dân</li>
+              <li>Địa chỉ: {village.address}</li>
               <li>Số điện thoại: 0386666707 (chị 9 Nê) </li>
             </ul>
             <img
@@ -43,39 +63,16 @@ const DetailSmallHolder = (props: Props) => {
             ></img>
           </div>
           <div className={cx('detail')}>
-            <img
-              src="https://langthangangiang.net/wp-content/uploads/2022/12/1-1024x576.jpg"
-              alt=""
-            />
+            <img src={village.avatar} alt="" />
             <div className={cx('description')}>
-              <p>
-                Nghề đan đát Hoà Bình có từ rất lâu rồi, nhiều ông bà làm nghề
-                này từ 50-60 năm về trước, các gia đình đan đát rổ rế ở đây tập
-                trung chủ yếu ở các khu dân cư xung quanh Nhà thờ Cái Đôi.
-              </p>
-              <p>
-                Nguồn nguyên liệu chủ yếu xóm nghề sử dụng là các vật liệu có
-                sẵn ở địa phương như tre, trúc,...
-              </p>
+              <p>{village.description}</p>
             </div>
           </div>
           <div className={cx('detail')}>
             <div className={cx('description')}>
-              <p>
-                Xóm nghề chuyên sản xuất các sản phẩm như rổ, rế, xề,... cung
-                cấp cho địa phương và một số tỉnh thành khác.
-              </p>
-              <p>
-                Mỗi sản phẩm của làng nghề đan đát đều toát lên cái hồn quê qua
-                sự khéo léo của người thợ. Họ trau chuốt, tỉ mỉ đến từng chi
-                tiết, các sản phẩm rất chắc và bền, “tuổi thọ” có thể lên đến 5
-                hoặc 10 năm.
-              </p>
+              <p>{village.description}</p>
             </div>
-            <img
-              src="https://langthangangiang.net/wp-content/uploads/2022/12/1-1024x576.jpg"
-              alt=""
-            />
+            <img src={village.avatar} alt="" />
           </div>
         </div>
         <div className={cx('title')}>
