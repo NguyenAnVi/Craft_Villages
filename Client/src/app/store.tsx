@@ -1,22 +1,39 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
-import { persistReducer, persistStore } from 'redux-persist';
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 
 import authReducer from '~/features/auth/authSlice';
 import productReducer from '~/features/product/productSlice';
+import smallHolderReducer from '~/features/smallHolder/smallHolderSlice';
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: storageSession,
 };
 
 const productPersistConfig = {
   key: 'products',
   storage: storageSession,
 };
+const smallHolderPersistConfig = {
+  key: 'smallHolders',
+  storage: storageSession,
+};
 const rootReducer = combineReducers({
-  products: persistReducer(productPersistConfig, productReducer),
+  // products: persistReducer(productPersistConfig, productReducer),
+  // smallHolders: persistReducer(smallHolderPersistConfig, smallHolderReducer),
+  smallHolders: smallHolderReducer,
+  products: productReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -26,6 +43,12 @@ export const store = configureStore({
     auth: authReducer,
     persistedReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export const persistor = persistStore(store);

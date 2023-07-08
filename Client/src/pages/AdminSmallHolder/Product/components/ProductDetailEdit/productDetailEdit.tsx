@@ -9,8 +9,8 @@ import { useParams } from 'react-router-dom';
 
 import styles from './ProductDetailEdit.module.scss';
 import Button from '~/components/Button';
-import { getProduct, updateProfile } from '~/features/product/productService';
-import { useAppSelector } from '~/app/hooks';
+import { updateProduct } from '~/features/product/productSlice';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
 const cx = classNames.bind(styles);
 
 type props = {};
@@ -22,6 +22,11 @@ export const ProductDetailEdit = (props: props) => {
   const [file, setFile] = useState<string | null>(null);
   const [product, setProduct] = useState<any | null>(null);
   const { user } = useAppSelector((state) => state.auth);
+  const { products } = useAppSelector(
+    (state) => state.persistedReducer.products,
+  );
+
+  const dispatch = useAppDispatch();
 
   const handleDrop = (acceptedFiles: File[]) => {
     const reader = new FileReader();
@@ -31,23 +36,16 @@ export const ProductDetailEdit = (props: props) => {
     };
   };
 
-  const fetchData = async () => {
-    try {
-      if (user?.accessToken) {
-        const res = await getProduct(id, user?.accessToken);
-        setProduct(res.data);
-      }
-    } catch (err) {
-      console.log(err);
-      if (err) {
-        toast.error(err.response.data.message);
-      }
-    }
-  };
-
   useEffect(() => {
-    fetchData();
-  }, []);
+    products.map((product) => {
+      if (product._id === id) {
+        setProduct(product);
+        console.log(product);
+
+        return;
+      }
+    });
+  }, [id, products]);
 
   const handleIsEdit = () => {
     setIsEdit(!isEdit);
@@ -63,13 +61,20 @@ export const ProductDetailEdit = (props: props) => {
 
   const formik = useFormik({
     initialValues: {
-      name: 'Nón lá',
-      materials: 'tre',
-      price: 20000,
-      type: 'Nón',
-      qrCode: `http://localhost:3000/nongho/`,
-      description: 'Sản phẩm từ hồi đó',
+      name: '',
+      materials: '',
+      price: 0,
+      type: '',
+      qrCode: '',
+      description: '',
+      // name: product.name as string,
+      // materials: product.materials as string,
+      // price: product.price as number,
+      // type: product.type as string,
+      // qrCode: product.qrCode as string,
+      // description: product.description as string,
     },
+    enableReinitialize: true,
     validationSchema: productSchema,
     onSubmit: async (values, { resetForm }): Promise<void> => {
       try {
@@ -84,14 +89,16 @@ export const ProductDetailEdit = (props: props) => {
           : { ...dataProduct };
 
         if (user?.accessToken) {
-          const res = await updateProfile(id, dataProduct, user.accessToken);
-          console.log(res);
-
+          const dataUpdate = {
+            id: id as string,
+            data: dataProduct as object,
+            token: user.accessToken as string,
+          };
+          const res = await dispatch(updateProduct(dataUpdate));
           if (res) {
-            toast.success(res.message);
+            toast.success(res.payload.message);
             setIsEdit(false);
             resetForm();
-            fetchData();
           }
         }
       } catch (err) {

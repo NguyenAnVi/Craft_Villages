@@ -3,14 +3,14 @@ import * as yup from 'yup';
 import { Formik, useFormik } from 'formik';
 import Dropzone, { DropzoneState } from 'react-dropzone';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '~/config';
 
 import styles from './ProductCreate.module.scss';
 import Button from '~/components/Button';
-import { createProduct } from '~/features/product/productService';
-import { useAppSelector } from '~/app/hooks';
+import { createProduct, reset } from '~/features/product/productSlice';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
 const cx = classNames.bind(styles);
 
 type props = {};
@@ -18,7 +18,22 @@ type props = {};
 const ProductCreate = (props: props) => {
   const [file, setFile] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
+  const { products } = useAppSelector(
+    (state) => state.persistedReducer.products,
+  );
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  let dataCreate = {
+    id: '',
+    data: {},
+    token: '',
+  };
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [products]);
+
   const handleDrop = (acceptedFiles: File[]) => {
     const reader = new FileReader();
     reader.readAsDataURL(acceptedFiles[0]);
@@ -49,15 +64,14 @@ const ProductCreate = (props: props) => {
     onSubmit: async (values, { resetForm }): Promise<void> => {
       try {
         if (user?.accessToken) {
-          const res = await createProduct(
-            user.smallHolderId,
-            { avatar: file, ...values },
-            user.accessToken,
-          );
-          console.log(res);
-
+          dataCreate = {
+            id: user.smallHolderId,
+            data: { avatar: file, ...values },
+            token: user.accessToken,
+          };
+          const res = await dispatch(createProduct(dataCreate));
           if (res) {
-            toast.success(res.message);
+            toast.success(res.payload.message);
             resetForm();
             navigate(config.routesAdminSmallHolder.adminSmallHolderProduct);
           }
