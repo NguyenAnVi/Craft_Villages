@@ -26,7 +26,10 @@ export const createProduct = async (
               .then(() => {
                 return res
                   .status(200)
-                  .json({ message: "Create product successfully" });
+                  .json({
+                    message: "Create product successfully",
+                    data: product,
+                  });
               })
               .catch((err) => next(err));
           }
@@ -93,10 +96,15 @@ export const updateProduct = async (
   ProductModel.findById(req.params.id)
     .then((product) => {
       if (product) {
-        ProductModel.updateOne({ _id: product._id }, { $set: { ...req.body } })
-          .then(() => {
+        ProductModel.findOneAndUpdate(
+          { _id: product._id },
+          { $set: { ...req.body } },
+          { new: true }
+        )
+          .then((ProductUpdate) => {
             return res.status(200).json({
               message: "Product information has been updated.",
+              data: ProductUpdate,
               status: true,
             });
           })
@@ -120,9 +128,11 @@ export const deleteProduct = (req: any, res: any, next: NextFunction): any => {
         { $pull: { productId: deleteProductResult._id } }
       )
         .then(() => {
-          return res
-            .status(200)
-            .json({ message: "Product has been deleted.", status: true });
+          return res.status(200).json({
+            message: "Product has been deleted.",
+            data: deleteProductResult,
+            status: true,
+          });
         })
         .catch((err) => next(err));
     })
