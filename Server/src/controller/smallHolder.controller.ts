@@ -17,7 +17,7 @@ export const getSmallHolder = async (
         UserModel.findOne({ smallHolderId: SmallHolderRedult._id })
           .then((UserResult) => {
             if (UserResult) {
-              ProductModel.findOne({
+              ProductModel.find({
                 smallHolderId: SmallHolderRedult._id,
               })
                 .then((ProductResult) => {
