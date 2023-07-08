@@ -19,6 +19,7 @@ import {
   getAllSmallHolders,
   reset as smallHolderReset,
 } from './features/smallHolder/smallHolderSlice';
+import { getAllVillages, reset as villageReset } from './features/village/villageSlice';
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
@@ -27,6 +28,9 @@ function App() {
   );
   const { smallHolders } = useAppSelector(
     (state) => state.persistedReducer.smallHolders,
+  );
+  const { villages } = useAppSelector(
+    (state) => state.persistedReducer.villages,
   );
 
   const dispatch = useAppDispatch();
@@ -38,6 +42,9 @@ function App() {
     if (smallHolders.length === 0) {
       dispatch(getAllSmallHolders(user?.accessToken as string));
     }
+    if (villages.length === 0) {
+      dispatch(getAllVillages(user?.accessToken as string));
+    }
   }, [user]);
   useEffect(() => {
     if (products.length !== 0) {
@@ -45,6 +52,9 @@ function App() {
     }
     if (smallHolders.length !== 0) {
       dispatch(smallHolderReset());
+    }
+    if (villages.length !== 0) {
+      dispatch(villageReset());
     }
   }, [dispatch]);
 
