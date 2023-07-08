@@ -9,7 +9,7 @@ import styles from './SmallHolder.module.scss';
 import config from '~/config';
 import Button from '~/components/Button';
 import {
-  getAllSmallHolder,
+  getAllSmallHolderV2,
   deleteSmallHolder,
 } from '~/features/smallHolder/smallHolderService';
 import { useAppSelector } from '~/app/hooks';
@@ -24,7 +24,7 @@ const SmallHolder = (props: Props) => {
   const fetchData = async () => {
     try {
       if (user?.accessToken && user?.smallHolderId) {
-        const res = await getAllSmallHolder(user.accessToken);
+        const res = await getAllSmallHolderV2(user.accessToken);
         console.log(res.data);
 
         setSmallHolderList(res.data);

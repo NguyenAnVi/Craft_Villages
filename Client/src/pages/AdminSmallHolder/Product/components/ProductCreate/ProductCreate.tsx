@@ -57,7 +57,7 @@ const ProductCreate = (props: props) => {
       materials: 'tre',
       price: 20000,
       type: 'Nón',
-      qrCode: 'http://localhost:3000/nongho/',
+      qrCode: `http://localhost:3000/nongho/${user?.smallHolderId}`,
       description: 'Sản phẩm từ hồi đó',
     },
     validationSchema: productSchema,
@@ -201,7 +201,10 @@ const ProductCreate = (props: props) => {
             {formik.errors.qrCode && formik.touched.qrCode && (
               <p className={cx('mess-error')}>{formik.errors.qrCode}</p>
             )}
-
+            <label>
+              <h6>Mã nông hộ :</h6>
+              <p>{`${user?.smallHolderId}`}</p>
+            </label>
             <label>
               <h6>Mô tả:</h6>
 

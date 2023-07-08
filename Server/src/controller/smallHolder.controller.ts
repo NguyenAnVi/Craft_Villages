@@ -19,13 +19,12 @@ export const getSmallHolder = async (
       return next(err);
     });
 };
-
 export const getAllSmallHolder = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
-  SmallHolderModel.find({})
+  SmallHolderModel.find({ villageId: req.params.id })
     .then((SmallHolder) => {
       return res.status(200).json({ data: SmallHolder });
     })
@@ -34,6 +33,7 @@ export const getAllSmallHolder = async (
       return next(err);
     });
 };
+
 export const getAllSmallHolderV2 = async (
   req: any,
   res: any,

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useParams } from 'react-router-dom';
 
-import styles from './ProductDetailEdit.module.scss';
+import styles from './productDetailEdit.module.scss';
 import Button from '~/components/Button';
 import { updateProduct } from '~/features/product/productSlice';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
@@ -61,18 +61,12 @@ export const ProductDetailEdit = (props: props) => {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      materials: '',
-      price: 0,
-      type: '',
-      qrCode: '',
-      description: '',
-      // name: product.name as string,
-      // materials: product.materials as string,
-      // price: product.price as number,
-      // type: product.type as string,
-      // qrCode: product.qrCode as string,
-      // description: product.description as string,
+      name: product?.name as string,
+      materials: product?.materials as string,
+      price: product?.price as number,
+      type: product?.type as string,
+      qrCode: product?.qrCode as string,
+      description: product?.description as string,
     },
     enableReinitialize: true,
     validationSchema: productSchema,

@@ -15,12 +15,12 @@ export default (router: express.Router) => {
     getSmallHolder
   );
   router.get(
-    "/SmallHolder/getAllSmallHolder",
+    "/SmallHolder/getAllSmallHolder/:id",
     // passport.authenticate("jwt", { session: false }),
     getAllSmallHolder
   );
   router.get(
-    "/SmallHolder/getAllSmallHolderV2/",
+    "/SmallHolder/getAllSmallHolderV2",
     // passport.authenticate("jwt", { session: false }),
     getAllSmallHolderV2
   );
