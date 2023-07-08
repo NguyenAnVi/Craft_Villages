@@ -8,8 +8,12 @@ import { toast } from 'react-toastify';
 import styles from './DetailSmallHolder.module.scss';
 import left from '~/assets/left.svg';
 import right from '~/assets/right.svg';
-import { useAppSelector } from '~/app/hooks';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { getSmallHolder } from '~/features/smallHolder/smallHolderService';
+import { getUser } from '~/features/user/userService';
+import { getAllProduct } from '~/features/product/productService';
+import { AsyncResource } from 'async_hooks';
+import config from '~/config/index';
 
 const cx = classNames.bind(styles);
 
@@ -18,28 +22,33 @@ type Props = {};
 const DetailSmallHolder = (props: Props) => {
   const { id } = useParams() as { id: string };
   const { user } = useAppSelector((state) => state.auth);
+  const { smallHolders } = useAppSelector(
+    (state) => state.persistedReducer.smallHolders,
+  );
 
-  const [smallHolder, setSmallHolder] = useState([]) as any;
+  const dispatch = useAppDispatch();
 
-  const fetchData = async () => {
-    try {
-      if (user?.accessToken) {
-        const res = await getSmallHolder(id, user.accessToken);
-        // console.log(res.data);
-
-        setSmallHolder(res.data);
-      }
-    } catch (err) {
-      console.error(err);
-      if (err) {
-        toast.error(err.response.data.message);
-      }
-    }
-  };
+  const [smallHolder, setSmallHolder] = useState({}) as any;
+  const [productList, setProductList] = useState([]);
+  const [workerList, setWorkerList] = useState([]);
+  const [adminSmallHolder, setAdminSmallHolder] = useState({}) as any;
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    smallHolders.map(async (smallHolder) => {
+      if (smallHolder._id === id) {
+        setSmallHolder(smallHolder);
+        const res = await getSmallHolder(
+          smallHolder._id as string,
+          user?.accessToken as string,
+        );
+        setAdminSmallHolder(res.data.userData);
+        setWorkerList(res.data.workerData);
+        setProductList(res.data.productData);
+        return;
+      }
+    });
+  }, [id]);
+
   return (
     <div className={cx('wrapper')}>
       <h1>Xóm nghề đan rổ rế truyền thống ở xã Hòa Bình, huyện Chợ Mới</h1>
@@ -54,14 +63,17 @@ const DetailSmallHolder = (props: Props) => {
           <ul>
             <li>Mã nông hộ: {smallHolder._id}</li>
             <li>Địa chỉ: {smallHolder.address}</li>
-            <li>Tên người đại diện: {smallHolder.adminId}</li>
-            <li>Số điện thoại: 0386666707 </li>
-            <li>Email: chi9ne@gmail.com </li>
-            <li>Số nhân công: {smallHolder.quantityWorkders} người</li>
+            <li>Tên người đại diện: {adminSmallHolder.name}</li>
+            <li>Số điện thoại: {adminSmallHolder.phone} </li>
+            <li>Email: {adminSmallHolder.email} </li>
+            <li>Số nhân công: {smallHolder.workersId?.length} người</li>
             <li>Chuyên môn: {smallHolder.majorWork}</li>
-            <li>Sản phẩm: Rổ rế</li>
-            <li>Nguyên liệu: {smallHolder.materials}</li>
-            <li>Kinh nghiệm: {smallHolder.exp} năm</li>
+            <li>
+              Nguyên liệu:
+              {smallHolder.materials?.map((item: string) => `${item} `) &&
+                ' Chưa rõ'}
+            </li>
+            <li>Kinh nghiệm: {smallHolder.exp}</li>
             <li>Sản lượng: {smallHolder.quantityProduct} sản phẩm/ngày</li>
           </ul>
         </div>
@@ -75,26 +87,22 @@ const DetailSmallHolder = (props: Props) => {
             <thead>
               <tr>
                 <th>Họ và tên</th>
+                <th>Giới tính</th>
                 <th>Tuổi</th>
                 <th>Kinh nghiệm</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Nguyễn Văn An</td>
-                <td>40</td>
-                <td>10 năm</td>
-              </tr>
-              <tr>
-                <td>Nguyễn Văn An</td>
-                <td>40</td>
-                <td>10 năm</td>
-              </tr>
-              <tr>
-                <td>Nguyễn Văn An</td>
-                <td>40</td>
-                <td>10 năm</td>
-              </tr>
+              {workerList.map((worker: any) => {
+                return (
+                  <tr key={worker._id}>
+                    <td>{worker.fullName}</td>
+                    <td>{worker.gender}</td>
+                    <td>{worker.age}</td>
+                    <td>{worker.exp}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -104,46 +112,29 @@ const DetailSmallHolder = (props: Props) => {
           <img className={cx('line', 'line-right')} src={right} />
         </div>
         <div className={cx('products')}>
-          <Link className={cx('product-item')} to="#">
-            <img
-              className={cx('product-image')}
-              src="https://lzd-img-global.slatic.net/g/p/97b7e675dd7c37d52d8cd11e38c4654a.jpg_720x720q80.jpg"
-              alt=""
-            />
-            <div className={cx('product-link')}>Xem chi tiết</div>
-            <div className={cx('product-title')}>Giỏ mây</div>
-            <div className={cx('product-quantity')}>39.000đ</div>
-          </Link>
-          <Link className={cx('product-item')} to="#">
-            <img
-              className={cx('product-image')}
-              src="https://lzd-img-global.slatic.net/g/p/97b7e675dd7c37d52d8cd11e38c4654a.jpg_720x720q80.jpg"
-              alt=""
-            />
-            <div className={cx('product-link')}>Xem chi tiết</div>
-            <div className={cx('product-title')}>Giỏ mây</div>
-            <div className={cx('product-quantity')}>39.000đ</div>
-          </Link>
-          <Link className={cx('product-item')} to="#">
-            <img
-              className={cx('product-image')}
-              src="https://lzd-img-global.slatic.net/g/p/97b7e675dd7c37d52d8cd11e38c4654a.jpg_720x720q80.jpg"
-              alt=""
-            />
-            <div className={cx('product-link')}>Xem chi tiết</div>
-            <div className={cx('product-title')}>Giỏ mây</div>
-            <div className={cx('product-quantity')}>39.000đ</div>
-          </Link>
-          <Link className={cx('product-item')} to="#">
-            <img
-              className={cx('product-image')}
-              src="https://lzd-img-global.slatic.net/g/p/97b7e675dd7c37d52d8cd11e38c4654a.jpg_720x720q80.jpg"
-              alt=""
-            />
-            <div className={cx('product-link')}>Xem chi tiết</div>
-            <div className={cx('product-title')}>Giỏ mây</div>
-            <div className={cx('product-quantity')}>39.000đ</div>
-          </Link>
+          {productList.map((product: any) => {
+            return (
+              <Link
+                className={cx('product-item')}
+                to={config.routes.productD + product._id}
+                key={product._id}
+              >
+                <img
+                  className={cx('product-image')}
+                  src={product.avatar}
+                  alt=""
+                />
+                <div className={cx('product-link')}>Xem chi tiết</div>
+                <div className={cx('product-title')}>{product.name}</div>
+                <div className={cx('product-quantity')}>
+                  {product.price?.toLocaleString('vi', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>

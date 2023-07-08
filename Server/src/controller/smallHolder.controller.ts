@@ -1,5 +1,6 @@
 import { NextFunction } from "express";
 import UserModel from "@models/user.model";
+import WorkerModel from "@models/workers.model";
 import UserDocument from "@interfaces/model/user";
 import SmallHolderModel from "@models/smallHolder.model";
 import SmallHolderDocument from "@interfaces/model/smallHolder";
@@ -17,21 +18,28 @@ export const getSmallHolder = async (
         UserModel.findOne({ smallHolderId: SmallHolderRedult._id })
           .then((UserResult) => {
             if (UserResult) {
-              ProductModel.find({
+              WorkerModel.find({
                 smallHolderId: SmallHolderRedult._id,
-              })
-                .then((ProductResult) => {
-                  if (ProductResult) {
-                    return res.status(200).json({
-                      data: {
-                        ...SmallHolderRedult,
-                        userData: UserResult,
-                        productData: ProductResult,
-                      },
-                    });
-                  }
-                })
-                .catch((err) => next(err));
+              }).then((WorkerResult) => {
+                if (WorkerResult) {
+                  ProductModel.find({
+                    smallHolderId: SmallHolderRedult._id,
+                  })
+                    .then((ProductResult) => {
+                      if (ProductResult) {
+                        return res.status(200).json({
+                          data: {
+                            ...SmallHolderRedult,
+                            workerData: WorkerResult,
+                            userData: UserResult,
+                            productData: ProductResult,
+                          },
+                        });
+                      }
+                    })
+                    .catch((err) => next(err));
+                }
+              });
             }
           })
           .catch((err) => next(err));
