@@ -15,23 +15,15 @@ import {
 import authReducer from '~/features/auth/authSlice';
 import productReducer from '~/features/product/productSlice';
 import smallHolderReducer from '~/features/smallHolder/smallHolderSlice';
+import villageReducer from '~/features/village/villageSlice';
 
 const persistConfig = {
   key: 'root',
   storage: storageSession,
 };
 
-const productPersistConfig = {
-  key: 'products',
-  storage: storageSession,
-};
-const smallHolderPersistConfig = {
-  key: 'smallHolders',
-  storage: storageSession,
-};
 const rootReducer = combineReducers({
-  // products: persistReducer(productPersistConfig, productReducer),
-  // smallHolders: persistReducer(smallHolderPersistConfig, smallHolderReducer),
+  villages: villageReducer,
   smallHolders: smallHolderReducer,
   products: productReducer,
 });
