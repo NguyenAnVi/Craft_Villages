@@ -32,7 +32,7 @@ export default (router: express.Router) => {
     getAllProductV2
   );
   router.post(
-    "/Product/updateProfile/:id",
+    "/Product/updateProduct/:id",
     passport.authenticate("jwt", { session: false }),
     updateProduct
   );

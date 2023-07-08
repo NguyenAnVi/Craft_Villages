@@ -1,1 +1,1 @@
-export { default as adminSmallHolderProductDetailEdit } from './ProductDetailEdit';
+export { default } from './ProductDetailEdit';

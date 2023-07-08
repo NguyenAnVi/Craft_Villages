@@ -8,38 +8,20 @@ import moment from 'moment';
 import styles from './Product.module.scss';
 import config from '~/config';
 import Button from '~/components/Button';
-import {
-  getAllProduct,
-  deleteProduct,
-} from '~/features/product/productService';
-import { useAppSelector } from '~/app/hooks';
+import { deleteProduct } from '~/features/product/productSlice';
+import { useAppDispatch, useAppSelector } from '~/app/hooks';
 const cx = classNames.bind(styles);
 
 type Props = {};
 
 const Product = (props: Props) => {
   const { user } = useAppSelector((state) => state.auth);
-  const [productList, setProductList] = useState([]);
+  const { products } = useAppSelector(
+    (state) => state.persistedReducer.products,
+  );
+  const dispatch = useAppDispatch();
 
-  const fetchData = async () => {
-    try {
-      if (user?.accessToken && user?.smallHolderId) {
-        const res = await getAllProduct(user.smallHolderId, user.accessToken);
-        // console.log(res.data);
-
-        setProductList(res.data);
-      }
-    } catch (err) {
-      console.error(err);
-      if (err) {
-        toast.error(err.response.data.message);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => {}, []);
 
   const handleDelete = async (id: string) => {
     Swal.fire({
@@ -54,12 +36,13 @@ const Product = (props: Props) => {
       if (result.isConfirmed) {
         try {
           if (user?.accessToken) {
-            const res = await deleteProduct(id, user.accessToken);
-            console.log(res);
-
+            const dataDelete = {
+              id: id as string,
+              token: user.accessToken as string,
+            };
+            const res = await dispatch(deleteProduct(dataDelete));
             if (res) {
-              Swal.fire('Deleted!', res.message, 'success');
-              fetchData();
+              Swal.fire('Deleted!', res.payload.message, 'success');
             }
           }
         } catch (err) {
@@ -105,7 +88,7 @@ const Product = (props: Props) => {
               </tr>
             </thead>
             <tbody>
-              {productList.map((item: any, index) => {
+              {products.map((item: any, index) => {
                 if (index >= (table - 1) * 10 && index < table * 10 - 1) {
                   return (
                     <tr key={index}>
@@ -146,7 +129,7 @@ const Product = (props: Props) => {
 
           <Pagination
             className={cx('pagination')}
-            count={Math.ceil(productList.length / 10)}
+            count={Math.ceil(products.length / 10)}
             page={table}
             shape="rounded"
             onChange={handleChange}

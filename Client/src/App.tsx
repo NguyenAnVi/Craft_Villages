@@ -15,11 +15,18 @@ import {
   getAllProducts,
   reset as productReset,
 } from './features/product/productSlice';
+import {
+  getAllSmallHolders,
+  reset as smallHolderReset,
+} from './features/smallHolder/smallHolderSlice';
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
   const { products } = useAppSelector(
     (state) => state.persistedReducer.products,
+  );
+  const { smallHolders } = useAppSelector(
+    (state) => state.persistedReducer.smallHolders,
   );
 
   const dispatch = useAppDispatch();
@@ -28,7 +35,17 @@ function App() {
     if (products.length === 0) {
       dispatch(getAllProducts(user?.accessToken as string));
     }
-    dispatch(productReset());
+    if (smallHolders.length === 0) {
+      dispatch(getAllSmallHolders(user?.accessToken as string));
+    }
+  }, [user]);
+  useEffect(() => {
+    if (products.length !== 0) {
+      dispatch(productReset());
+    }
+    if (smallHolders.length !== 0) {
+      dispatch(smallHolderReset());
+    }
   }, [dispatch]);
 
   const isAdmin = user?.isAdmin;
