@@ -3,6 +3,7 @@ import UserModel from "@models/user.model";
 import UserDocument from "@interfaces/model/user";
 import SmallHolderModel from "@models/smallHolder.model";
 import SmallHolderDocument from "@interfaces/model/smallHolder";
+import ProductModel from "@models/product.model";
 import { WriteError } from "mongodb";
 import { CallbackError } from "mongoose";
 export const getSmallHolder = async (
@@ -11,13 +12,30 @@ export const getSmallHolder = async (
   next: NextFunction
 ): Promise<void> => {
   SmallHolderModel.findOne({ _id: req.params.id })
-    .then((SmallHolder) => {
-      return res.status(200).json({ data: SmallHolder });
+    .then((SmallHolderRedult) => {
+      if (SmallHolderRedult) {
+        UserModel.findOne({ smallHolderId: SmallHolderRedult._id })
+          .then((UserResult) => {
+            if (UserResult) {
+              ProductModel.findOne({
+                smallHolderId: SmallHolderRedult._id,
+              })
+                .then((ProductResult) => {
+                  if (ProductResult) {
+                    return res.status(200).json({
+                      data: SmallHolderRedult,
+                      userData: UserResult,
+                      productData: ProductResult,
+                    });
+                  }
+                })
+                .catch((err) => next(err));
+            }
+          })
+          .catch((err) => next(err));
+      }
     })
-    .catch((err) => {
-      console.log(err);
-      return next(err);
-    });
+    .catch((err) => next(err));
 };
 export const getAllSmallHolder = async (
   req: any,
