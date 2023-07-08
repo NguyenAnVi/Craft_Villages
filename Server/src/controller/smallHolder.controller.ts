@@ -23,9 +23,11 @@ export const getSmallHolder = async (
                 .then((ProductResult) => {
                   if (ProductResult) {
                     return res.status(200).json({
-                      data: SmallHolderRedult,
-                      userData: UserResult,
-                      productData: ProductResult,
+                      data: {
+                        ...SmallHolderRedult,
+                        userData: UserResult,
+                        productData: ProductResult,
+                      },
                     });
                   }
                 })
