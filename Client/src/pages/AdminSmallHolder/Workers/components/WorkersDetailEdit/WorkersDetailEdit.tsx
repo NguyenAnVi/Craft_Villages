@@ -65,11 +65,11 @@ export const WorkersDetailEdit = (props: props) => {
 
   const formik = useFormik({
     initialValues: {
-      fullName: 'Nguyễn Văn Ai',
-      age: "40",
-      exp: "10 năm kinh nghiệm",
-      gender: 'Male',
-      phone: '0819878765',
+      fullName: '',
+      age: "",
+      exp: "",
+      gender: '',
+      phone: '',
     },
     validationSchema: WorkersSchema,
     onSubmit: async (values, { resetForm }): Promise<void> => {

@@ -53,12 +53,12 @@ const ProductCreate = (props: props) => {
 
   const formik = useFormik({
     initialValues: {
-      name: 'Nón lá',
-      materials: 'tre',
-      price: 20000,
-      type: 'Nón',
+      name: '',
+      materials: '',
+      price: '',
+      type: '',
       qrCode: `http://localhost:3000/nongho/${user?.smallHolderId}`,
-      description: 'Sản phẩm từ hồi đó',
+      description: '',
     },
     validationSchema: productSchema,
     onSubmit: async (values, { resetForm }): Promise<void> => {

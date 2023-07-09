@@ -64,11 +64,11 @@ export const VillageDetailEdit = (props: props) => {
 
   const formik = useFormik({
     initialValues: {
-      name: 'Làng nghề Vị Thủy',
-      address: 'Hậu Giang',
-      majorWork: 'Nón',
-      group: 'Nhóm',
-      description: 'Làng nghề từ hồi đó',
+      name: '',
+      address: '',
+      majorWork: '',
+      group: '',
+      description: '',
     },
     validationSchema: VillageSchema,
     onSubmit: async (values, { resetForm }): Promise<void> => {
