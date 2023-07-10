@@ -25,16 +25,16 @@ npm start
 ****
 
 # Usage
-Available routes, use **Postman** for more info
+Available routes:
 * POST - **/auth/signup**, **/auth/signin**  with the body look like this:
   ```
   {
     "password":"11111111",
-    "confirmPassword":"11111111",
+    "cPassword":"11111111",
     "email":"abc@handicraft.vn",
   }
   ```
-nav122333 - 12/06/2023
+nav122333 - July 3rd 2023
 * POST - **/notification/create**  with the body look like this:
   ```
   {
@@ -78,10 +78,4 @@ nav122333 - 12/06/2023
   ```
 * GET - **/report/getallreports/64867268e0b4093f7089f5af** retrieve all reports whose villages _user(64867268e0b4093f7089f5af)_ manages:
 
-* POST - **/report/getallreports/64867268e0b4093f7089f5af** retrieve all reports with filters as request's body:
-  ```
-  {
-    // coming soon (find by village, find by date, )
-  }
-  ```
 nav122333 - 15/06/2023

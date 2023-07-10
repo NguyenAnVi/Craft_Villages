@@ -8,11 +8,65 @@ import Locals from "@provider/locals";
 import UserModel from "@models/user.model";
 import { UserDocument } from "@interfaces/model/user";
 
+var refreshTokens = [] as string[];
+
+const generateAccessToken = (user: UserDocument) => {
+  return jwt.sign({ id: user._id }, Locals.config().jwtSecretKey, {
+    expiresIn: Locals.config().jwtExpiresIn,
+  });
+}
+
+const generateRefreshToken = (user: UserDocument) => {
+  return jwt.sign({ id: user._id }, Locals.config().jwtRefreshKey, {
+    expiresIn: Locals.config().jwtRefreshExpiresIn
+  });
+}
+
+export const requestRefreshTokens = async(
+  req: any, 
+  res: any, 
+  next: NextFunction
+  ):Promise<void> => {
+    console.log('RefreshTokens:');
+    console.log(">"+refreshTokens);
+    const oldRefreshToken = req.cookies.refreshToken;
+    if(!oldRefreshToken) 
+    {  return res.status(401).json({
+        status:false,
+        message:"Not authenticated"
+      });
+    } else {
+      if (!refreshTokens.includes(oldRefreshToken)) return res.status(401).json({
+        status: false, 
+        message: "Invalid refreshToken"
+      });
+      const user:UserDocument = new UserModel;
+      jwt.verify(oldRefreshToken, Locals.config().jwtRefreshKey, (err: Error, user: UserDocument)=>{
+        if(err) console.log(err.message); 
+        refreshTokens.filter(token => token !== oldRefreshToken);
+      })
+      const accessToken = generateAccessToken(user);
+      const refreshToken = generateRefreshToken(user);
+      refreshTokens.push(refreshToken);
+      res.cookie("refreshToken", refreshToken);
+
+      console.log(">"+refreshTokens+">");
+
+      return res.status(200).json({
+        status:true,
+        message:"accessToken has been refreshed",
+        accessToken
+      });
+    }
+}
+
 export const signIn = async (
   req: any,
   res: any,
   next: NextFunction
 ): Promise<void> => {
+  console.log("Login:");
+  console.log(">"+refreshTokens);
   await check("email", "E-mail cannot be blank").notEmpty().run(req);
   await check("email", "E-mail is not valid").isEmail().run(req);
   await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
@@ -43,9 +97,10 @@ export const signIn = async (
           return next(errorLogin);
         }
 
-        const token = jwt.sign({ id: user._id }, Locals.config().jwtSecretKey, {
-          expiresIn: Locals.config().jwtExpiresIn,
-        });
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        refreshTokens.push(refreshToken);
+        console.log(">"+refreshTokens+">");
 
         const {
           _id,
@@ -55,7 +110,10 @@ export const signIn = async (
           isAdminWebsite,
           isAdminSmallHolder,
         } = user;
-
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly:true,
+          path:"/"
+        })
         return res.status(200).json({
           message: "Login successfully",
           status: true,
@@ -66,7 +124,7 @@ export const signIn = async (
             isAdmin,
             isAdminWebsite,
             isAdminSmallHolder,
-            accessToken: token,
+            accessToken
           },
         });
       });
@@ -81,6 +139,9 @@ export const logout = async (
 ): Promise<void> => {
   try {
     req.user = null;
+
+    res.clearCookie("refreshToken");
+    refreshTokens.filter(token => token !== req.cookies.refreshToken);
     return res
       .status(200)
       .json({ message: "Logout successfully", status: true });
